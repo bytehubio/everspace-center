@@ -1,0 +1,13 @@
+.DS_Store
+/.build
+/Packages
+/*.xcodeproj
+xcuserdata/
+DerivedData/
+.swiftpm
+Package.resolved
+Api/Gemfile.lock
+Api/tg*
+.byebug*
+.env*
+Keys/*
