@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-name = "everspace-center"
+name = "everspace.center"
 system("eval \"$(ssh-agent -s)\" || true && ssh-add ~/.ssh/#{name} || true && git reset --hard HEAD || true && git pull origin master")
  system("swift package resolve")
 #system("swift package update")
