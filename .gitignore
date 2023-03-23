@@ -10,3 +10,4 @@ Api/tg*
 .byebug*
 .env*
 Keys/*
+Dependencies
