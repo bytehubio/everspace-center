@@ -10,19 +10,34 @@ import Foundation
 import Vapor
 import FCM
 import FileUtils
+import IkigaJSON
 
 public func configure(_ app: Application) throws {
-
-    /// Vapor config
-    /// print enviroment
+    /// GET ENV
     let env = try Environment.detect()
     app.logger.warning("\(env)")
-    
-    guard let vaporStringPort = Environment.get("vapor_port"),
-          let vaporPort = Int(vaporStringPort)
-    else { fatalError("Set vapor_port to .env.your_evironment") }
+    guard let vaporStringPort = Environment.get("vapor_port"), let vaporPort = Int(vaporStringPort) else {
+        fatalError("Set vapor_port to .env.your_evironment")
+    }
     guard let vaporIp = Environment.get("vapor_ip") else { fatalError("Set vapor_ip to .env.your_evironment") }
+    
+    /// START VAPOR CONFIGURING
     app.http.server.configuration.address = BindAddress.hostname(vaporIp, port: vaporPort)
-    app.logger.logLevel = .notice    
+    app.logger.logLevel = .notice
+    
+    /// CUSTOM JSON ENCODER
+//    var decoder = IkigaJSONDecoder()
+//    decoder.settings.dateDecodingStrategy = .iso8601
+//    ContentConfiguration.global.use(decoder: decoder, for: .json)
+    var encoder = IkigaJSONEncoder()
+    encoder.settings.dateDecodingStrategy = .iso8601
+    ContentConfiguration.global.use(encoder: encoder, for: .json)
+    
+    /// CUSTOM ERROR
+    app.middleware = .init()
+    app.middleware.use(RouteLoggingMiddleware())
+    app.middleware.use(CustomErrorMiddleware.default(environment: try Environment.detect()))
+    
+    /// ROUTES
     try routes(app)
 }

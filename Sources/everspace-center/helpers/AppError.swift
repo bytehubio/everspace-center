@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import SwiftExtensionsPack
 
-struct AppError: ErrorCommon {
-    var title: String = "Ever Api Error"
-    var reason: String = ""
+public struct AppError: ErrorCommon, Encodable {
+    public var title: String = "Ever Api Error"
+    public var reason: String = ""
+    public init() {}
 }

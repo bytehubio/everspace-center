@@ -20,3 +20,11 @@ var pathToRootDirectory: String {
     }
     return workingDirectory
 }
+
+/// asdf print
+public func pe(_ line: Any...) {
+    #if DEBUG
+    let content: [Any] = ["asdf"] + line
+    print(content.map{"\($0)"}.join(" "))
+    #endif
+}

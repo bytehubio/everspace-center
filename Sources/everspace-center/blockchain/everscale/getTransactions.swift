@@ -192,77 +192,60 @@ query {
     }
     
     
-    //        func getTransactionsCount(client: TSDKClientModule = EverClient.shared.client,
-    //                                  address: String,
-    //                                  filter: AnyValue? = nil,
-    //                                  _ handler: @escaping (Result<BigInt, TSDKClientError>) -> Void
-    //        ) {
-    //            let currentFilter: AnyValue = filter ?? ["account_addr": ["eq": address]].toAnyValue()
-    //            let paramsOfAggregateCollection: TSDKParamsOfAggregateCollection = .init(collection: "transactions",
-    //                                                                                     filter: currentFilter)
-    //            print("asdf", "start getTransactionsCount")
-    //            try client.net.aggregate_collection(paramsOfAggregateCollection)
-    //            { (response: TSDKBindingResponse<TSDKResultOfAggregateCollection, TSDKClientError>) in
-    //                print("asdf", "getTransactionsCount \(response.rawResponse)")
-    //                if response.finished {
-    //                    try resultWrapper(response, handler) { result, handler in
-    //                        if
-    //                            let values = result.values.toAny() as? Array<String>,
-    //                            values.count > 0,
-    //                            let bigInt: BigInt = BigInt(values[0])
-    //                        {
-    //                            try handler(.success(bigInt))
-    //                        } else {
-    //                            try handler(.success(0))
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //        }
     
     class func getTransactions(client: TSDKClientModule = EverClient.shared.client,
                                address: String,
                                limit: UInt32?,
-                               lastLt: String? = nil,
+                               lt: String? = nil,
+                               to_lt: String? = nil,
                                hashId: String? = nil,
-                               _ handler: @escaping (Result<[TransactionHistoryModel], TSDKClientError>) throws -> Void
-    ) {
+                               tempArray: [TransactionHistoryModel] = []
+    ) async throws -> [TransactionHistoryModel] {
         let defaultLimit: UInt32 = 50
-        do {
-            var currentFilter: [String: Any] = ["account_addr": ["eq": address]]
-            if let lastLt = lastLt {
-                currentFilter["lt"] = ["lt": lastLt]
-            } else if let hashId = hashId {
-                currentFilter["id"] = ["eq": hashId]
-            }
-            let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "transactions",
-                                                                             filter: currentFilter.toAnyValue(),
-                                                                             result: "id account_addr balance_delta(format: DEC) in_message{id dst value(format: DEC) src body} out_messages{id dst value(format: DEC) body} out_msgs total_fees(format: DEC) now lt",
-                                                                             order: [
-                                                                                TSDKOrderBy(path: "now", direction: .DESC),
-                                                                                TSDKOrderBy(path: "lt", direction: .DESC)
-                                                                             ],
-                                                                             limit: limit ?? defaultLimit)
-            
-            var resultArray: [TransactionHistoryModel] = .init()
-            try client.net.query_collection(paramsOfQueryCollection)
-            { (response: TSDKBindingResponse<TSDKResultOfQueryCollection, TSDKClientError>) in
-                if response.finished {
-                    do {
-                        try resultWrapper(response, handler) { result, resultHandler in
-                            for transaction in result.result {
-                                resultArray.append(try transaction.toModel(TransactionHistoryModel.self))
-                            }
-                            try handler(.success(resultArray))
-                        }
-                    } catch {
-                        try handler(.failure(TSDKClientError(code: 0, message: error.localizedDescription, data: [:].toAnyValue())))
-                    }
+        if tempArray.count >= limit ?? defaultLimit { return tempArray }
+        
+        var currentFilter: [String: Any] = ["account_addr": ["eq": address]]
+        if let lt = lt {
+            currentFilter["lt"] = ["lt": lt]
+        } else if let hashId = hashId {
+            currentFilter["id"] = ["eq": hashId]
+        }
+        let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "transactions",
+                                                                         filter: currentFilter.toAnyValue(),
+                                                                         result: "id account_addr balance_delta(format: DEC) in_message{id dst value(format: DEC) src body} out_messages{id dst value(format: DEC) body} out_msgs total_fees(format: DEC) now lt",
+                                                                         order: [
+                                                                            TSDKOrderBy(path: "now", direction: .DESC),
+                                                                            TSDKOrderBy(path: "lt", direction: .DESC)
+                                                                         ],
+                                                                         limit: limit ?? defaultLimit)
+        
+        var resultArray: [TransactionHistoryModel] = tempArray
+        let transactions = try await client.net.query_collection(paramsOfQueryCollection).result
+        
+        for transaction in transactions {
+            let tx: TransactionHistoryModel = try transaction.toModel(TransactionHistoryModel.self)
+            if
+                let intLt = to_lt?.toDecimalFromHex(),
+                let intLt2 = tx.lt.toDecimalFromHex()
+            {
+                pe(intLt, "<", intLt2)
+                if intLt >= intLt2 {
+                    resultArray.append(tx)
+                    return resultArray
                 }
             }
-        } catch {
-            try? handler(.failure(makeError(TSDKClientError.mess(error.localizedDescription))))
+            resultArray.append(tx)
         }
+        if transactions.isEmpty { return resultArray }
+        let lastTransaction: TransactionHistoryModel = try transactions.last!.toModel(TransactionHistoryModel.self)
+        if resultArray.last?.lt == lastTransaction.lt { return resultArray }
+        return try await getTransactions(address: address,
+                                         limit: limit ?? defaultLimit,
+                                         lt: lt,
+                                         to_lt: to_lt,
+                                         hashId: hashId,
+                                         tempArray: resultArray)
+        
     }
     
 }

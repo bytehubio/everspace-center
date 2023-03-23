@@ -14,7 +14,9 @@ let packageDependencies: [Package.Dependency] = [
     .package(name: "EverscaleClientSwift", url: "https://github.com/nerzh/everscale-client-swift", .upToNextMajor(from: "1.4.1")),
     .package(name: "FCM", url: "https://github.com/MihaelIsaev/FCM", .upToNextMajor(from: "2.8.0")),
     .package(name: "FileUtils", url: "https://github.com/nerzh/SwiftFileUtils", .upToNextMinor(from: "1.3.0")),
-    .package(name: "SwiftExtensionsPack", url: "https://github.com/nerzh/swift-extensions-pack", .upToNextMajor(from: "0.4.7")),
+    .package(name: "SwiftExtensionsPack", url: "https://github.com/nerzh/swift-extensions-pack", .upToNextMajor(from: "1.2.0")),
+    .package(name: "IkigaJSON", url: "https://github.com/orlandos-nl/IkigaJSON.git", from: "2.0.0"),
+    .package(name: "BigInt", url: "https://github.com/bytehubio/BigInt.git", .exact("5.3.0")),
 ]
 
 let mainTarget: [Target.Dependency] = [
@@ -27,6 +29,8 @@ let mainTarget: [Target.Dependency] = [
     .product(name: "FCM", package: "FCM"),
     .product(name: "FileUtils", package: "FileUtils"),
     .product(name: "SwiftExtensionsPack", package: "SwiftExtensionsPack"),
+    .product(name: "IkigaJSON", package: "IkigaJSON"),
+    .product(name: "BigInt", package: "BigInt"),
 ]
 
 let package = Package(
