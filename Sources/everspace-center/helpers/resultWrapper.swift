@@ -156,3 +156,17 @@ public func resultWrapper<T, T2: ErrorCommonMessage>(_ result: Result<T, T2>,
         throw makeError(error, funcName, line)
     }
 }
+
+
+
+
+//public func resultWrapperToModel<T, T2: Decodable>(_ response: T.Type,
+//                                                                           _ funcName: String = #function,
+//                                                                           _ line: Int = #line
+//) throws -> T2 {
+//    if let model = result.toJson()?.toModel(T2.self) {
+//        return model
+//    } else {
+//        throw makeError(T3.mess("\(#function) line: \(#line) Can not decode model"))
+//    }
+//}

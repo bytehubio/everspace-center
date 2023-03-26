@@ -42,7 +42,7 @@ public struct JsonRPCResponse<T: Codable>: Codable {
     var result: T? = nil
     var error: String? = nil
     
-    public init(id: String, jsonrpc: RPCVersion = .v2_0, result: T? = nil, error: String? = nil) {
+    public init(id: String = "1", jsonrpc: RPCVersion = .v2_0, result: T? = nil, error: String? = nil) {
         self.id = id
         self.jsonrpc = jsonrpc
         self.result = result

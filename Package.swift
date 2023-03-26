@@ -17,7 +17,7 @@ let packageDependencies: [Package.Dependency] = [
     .package(name: "IkigaJSON", url: "https://github.com/orlandos-nl/IkigaJSON.git", from: "2.0.0"),
     .package(name: "BigInt", url: "https://github.com/bytehubio/BigInt.git", .exact("5.3.0")),
 //    .package(path: "/Users/nerzh/mydata/swift_projects/Swiftgger"),
-    .package(url: "https://github.com/nerzh/Swiftgger", .upToNextMajor(from: "2.0.1")),
+    .package(url: "https://github.com/nerzh/Swiftgger", .upToNextMajor(from: "2.0.2")),
 ]
 
 let mainTarget: [Target.Dependency] = [

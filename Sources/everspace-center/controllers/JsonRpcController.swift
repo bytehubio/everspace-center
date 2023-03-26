@@ -12,14 +12,17 @@ import Vapor
 
 public enum RPCMethods: String, Content {
     case getTransactions
+    case getAccount
 }
 
 class JsonRpcController {
     
     static let transactionsController: TransactionsController = .init()
+    static let accountsController: AccountsController = .init()
     
     init() {
         Self.transactionsController.prepareSwagger(SwaggerController.openAPIBuilder)
+        Self.accountsController.prepareSwagger(SwaggerController.openAPIBuilder)
     }
     
     func jsonRpc(_ req: Request) async throws -> Response {
@@ -28,6 +31,8 @@ class JsonRpcController {
         switch method {
         case .getTransactions:
             return try await encodeResponse(for: req, json: try await Self.transactionsController.getTransactionsRpc(req))
+        case .getAccount:
+            return try await encodeResponse(for: req, json: try await Self.accountsController.getAccountRpc(req))
         }
     }
 }

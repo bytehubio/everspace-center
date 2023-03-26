@@ -13,34 +13,34 @@ import Vapor
 
 extension EverClient {
     struct TransactionHistoryModel: Codable, Content {
-        var id: String
-        var account_addr: String
-        var now: Double
-        var total_fees: String
-        var balance_delta: String
-        var out_msgs: [String]
-        var in_message: InMessage?
-        var out_messages: [OutMessage]
-        var lt: String
-        var cursor: String?
+        var id: String = "..."
+        var account_addr: String = "..."
+        var now: Double = 1
+        var total_fees: String = "..."
+        var balance_delta: String = "..."
+        var out_msgs: [String] = ["..."]
+        var in_message: InMessage? = .init()
+        var out_messages: [OutMessage] = [.init()]
+        var lt: String = "..."
+        var cursor: String? = "..."
         
         var isIncomingTransaction: Bool {
             out_messages.isEmpty
         }
         
         struct InMessage: Codable {
-            var id: String
-            var src: String
-            var value: String?
-            var dst: String
-            var body: String?
+            var id: String = "..."
+            var src: String = "..."
+            var value: String? = "..."
+            var dst: String = "..."
+            var body: String? = "..."
         }
         
         struct OutMessage: Codable {
-            var id: String
-            var dst: String
-            var value: String?
-            var body: String?
+            var id: String = "..."
+            var dst: String = "..."
+            var value: String? = "..."
+            var body: String? = "..."
         }
     }
     
@@ -228,7 +228,6 @@ query {
                 let intLt = to_lt?.toDecimalFromHex(),
                 let intLt2 = tx.lt.toDecimalFromHex()
             {
-                pe(intLt, "<", intLt2)
                 if intLt >= intLt2 {
                     resultArray.append(tx)
                     return resultArray

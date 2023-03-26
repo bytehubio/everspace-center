@@ -20,4 +20,6 @@ func routes(_ app: Application) throws {
     }
     
     try app.register(collection: JsonRpcController.transactionsController)
+    
+    try app.register(collection: JsonRpcController.accountsController)
 }
