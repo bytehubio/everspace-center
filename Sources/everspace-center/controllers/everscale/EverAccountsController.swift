@@ -12,31 +12,24 @@ import EverscaleClientSwift
 import Swiftgger
 
 
-final class AccountsController: RouteCollection {
+final class EverAccountsController: RouteCollection {
     
     typealias Response = String
-    
-    struct GetAccountRequest: Content {
-        var address: String = ""
-    }
-    
-    struct GetAccountsRequest: Content {
-        var addresses: [String] = [""]
-    }
+    static let shared: EverAccountsController = .init()
     
     func boot(routes: Vapor.RoutesBuilder) throws {
-        routes.get("everscale_getAccount", use: getAccount)
-        routes.get("everscale_getAccounts", use: getAccounts)
-        routes.get("everscale_getBalance", use: getBalance)
+        routes.get("getAccount", use: getAccount)
+        routes.get("getAccounts", use: getAccounts)
+        routes.get("getBalance", use: getBalance)
     }
-
+    
     func getAccount(_ req: Request) async throws -> Response {
         let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
         return try await getAccount(EverClient.shared.client, content).toJson()
     }
     
     func getAccountRpc(_ req: Request) async throws -> Response {
-        let content: JsonRPCRequest<GetAccountRequest> = try req.content.decode(JsonRPCRequest<GetAccountRequest>.self)
+        let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
         return try JsonRPCResponse<EverClient.Account>(id: content.id,
                                                        result: try await getAccount(EverClient.shared.client, content.params)).toJson()
     }
@@ -47,20 +40,32 @@ final class AccountsController: RouteCollection {
     }
     
     func getAccountsRpc(_ req: Request) async throws -> Response {
-        let content: JsonRPCRequest<GetAccountsRequest> = try req.content.decode(JsonRPCRequest<GetAccountsRequest>.self)
+        let content: EverJsonRPCRequest<GetAccountsRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountsRequest>.self)
         return try JsonRPCResponse<[EverClient.Account]>(id: content.id,
                                                          result: try await getAccounts(EverClient.shared.client, content.params)).toJson()
     }
     
-    func getBalance(_ req: Request) async throws -> Response {        
+    func getBalance(_ req: Request) async throws -> Response {
         let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
         return try await getBalance(EverClient.shared.client, content)
     }
     
     func getBalanceRpc(_ req: Request) async throws -> Response {
-        let content: JsonRPCRequest<GetAccountRequest> = try req.content.decode(JsonRPCRequest<GetAccountRequest>.self)
+        let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
         return try JsonRPCResponse<String>(id: content.id,
                                            result: try await getBalance(EverClient.shared.client, content.params)).toJson()
+    }
+}
+
+
+extension EverAccountsController {
+    
+    struct GetAccountRequest: Content {
+        var address: String = ""
+    }
+    
+    struct GetAccountsRequest: Content {
+        var addresses: [String] = [""]
     }
     
     func getAccount(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> EverClient.Account {
@@ -83,7 +88,7 @@ final class AccountsController: RouteCollection {
                           description: "Controller where we can manage users",
                           actions: [
                 APIAction(method: .get,
-                          route: "/everscale_getAccount",
+                          route: "/everscale/getAccount",
                           summary: "",
                           description: "Get Account Info",
                           parametersObject: GetAccountRequest(),
@@ -93,7 +98,7 @@ final class AccountsController: RouteCollection {
                                   type: .object(JsonRPCResponse<EverClient.Account>.self, asCollection: false))
                           ]),
                 APIAction(method: .get,
-                          route: "/everscale_getAccounts",
+                          route: "/everscale/getAccounts",
                           summary: "",
                           description: "Get Accounts",
                           parametersObject: GetAccountsRequest(),
@@ -103,7 +108,7 @@ final class AccountsController: RouteCollection {
                                   type: .object(JsonRPCResponse<[EverClient.Account]>.self, asCollection: false))
                           ]),
                 APIAction(method: .get,
-                          route: "/everscale_getBalance",
+                          route: "/everscale/getBalance",
                           summary: "",
                           description: "Get Balance",
                           parametersObject: GetAccountRequest(),

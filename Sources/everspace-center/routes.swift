@@ -9,22 +9,19 @@ import Vapor
 import Swiftgger
 
 func routes(_ app: Application) throws {
-    let swagger: SwaggerController = .init()
+
     try app.group("") { group in
-        try group.register(collection: swagger)
-    }
-    
-    let jsonRpc: JsonRpcController = .init()
-    try app.group("jsonRpc") { group in
-        try group.register(collection: jsonRpc)
+        try group.register(collection: SwaggerController.shared)
     }
     
     try app.group("everscale") { group in
-        try app.register(collection: JsonRpcController.transactionsController)
-        try app.register(collection: JsonRpcController.accountsController)
+        try group.register(collection: EverSwaggerController.shared)
+        try group.register(collection: EverJsonRpcController.shared)
+        try group.register(collection: EverTransactionsController.shared)
+        try group.register(collection: EverAccountsController.shared)
     }
     
-    try app.group("toncoin") { group in
-        try group.register(collection: swagger)
-    }
+//    try app.group("toncoin") { group in
+//        try group.register(collection: SwaggerController())
+//    }
 }

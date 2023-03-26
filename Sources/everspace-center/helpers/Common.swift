@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Vapor
 
 var pathToRootDirectory: String {
     /// Please, set custom working directory to project folder for your xcode scheme. This is necessary for the relative path "./" to the project folders to work.
@@ -27,4 +28,18 @@ public func pe(_ line: Any...) {
     let content: [Any] = ["asdf"] + line
     print(content.map{"\($0)"}.join(" "))
     #endif
+}
+
+public func encodeResponse(for request: Vapor.Request, html: String) async throws -> Vapor.Response {
+    let res = Response()
+    res.headers.add(name: "Content-Type", value: "text/html")
+    res.body = Response.Body(string: html)
+    return res
+}
+
+public func encodeResponse(for request: Vapor.Request, json: String) async throws -> Vapor.Response {
+    let res = Response()
+    res.headers.add(name: "Content-Type", value: "application/json")
+    res.body = Response.Body(string: json)
+    return res
 }

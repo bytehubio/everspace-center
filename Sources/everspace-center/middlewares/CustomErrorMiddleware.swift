@@ -89,7 +89,7 @@ public final class CustomErrorMiddleware: Middleware {
     }
     
     public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
-        if !request.url.string.contains("jsonRpc") || RPCMethods(rawValue: request.url.string.replace(#"\/"#, "")) == nil {
+        if !request.url.string.contains("everscale") || !request.url.string.contains("toncoin") {
             return next.respond(to: request).flatMapErrorThrowing { error in
                 let response = Response(body: Response.Body(string: error.localizedDescription))
                 return response

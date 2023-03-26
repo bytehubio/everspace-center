@@ -2,20 +2,25 @@
 //  File.swift
 //  
 //
-//  Created by Oleh Hudeichuk on 24.03.2023.
+//  Created by Oleh Hudeichuk on 26.03.2023.
 //
 
 import Foundation
 import Vapor
 import Swiftgger
 
-final class SwaggerController: RouteCollection {
+final class EverSwaggerController {
     
-    static let shared: SwaggerController = .init()
+    static let shared: EverSwaggerController = .init()
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("", use: index)
         routes.get("swagger", use: show)
+    }
+    
+    init() {
+        EverTransactionsController.shared.prepareSwagger(Self.openAPIBuilder)
+        EverAccountsController.shared.prepareSwagger(Self.openAPIBuilder)
     }
     
     func index(_ req: Request) async throws -> Response {
@@ -35,7 +40,7 @@ final class SwaggerController: RouteCollection {
             <div id="swagger-ui"></div>
             <script src="/js/swagger/swagger-ui-bundle.js" charset="UTF-8"> </script>
             <script src="/js/swagger/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-            <script src="/js/swagger/swagger-initializer.js" charset="UTF-8"> </script>
+            <script src="/js/swagger/swagger-initializer-everscale.js" charset="UTF-8"> </script>
           </body>
         </html>
         """
@@ -48,7 +53,7 @@ final class SwaggerController: RouteCollection {
     }
 }
 
-extension SwaggerController {
+extension EverSwaggerController: RouteCollection {
     
     static let openAPIBuilder: OpenAPIBuilder = .init(
         title: "Everspace Center API",
@@ -56,7 +61,22 @@ extension SwaggerController {
         description: """
                 This is incredible Everscale API.\n
         **Now temporarily without authorization.**\n
-        **Everscale API:** [Everscale API Link](https://everspace.center/everscale)\n
+        \n
+        You can use JSON RPC requests:\n
+            https://everspace.center/everscale/jsonRpc\n\n
+        Example request:\n
+            {\n
+                "id": "1",\n
+                "jsonrpc": "2.0",\n
+                "method": "getTransactions",\n
+                "params" {\n
+                    "address": "...",\n
+                    "limit": 1,\n
+                    "lt": "...",\n
+                    "to_lt": "...",\n
+                    "hash": "..."\n
+                }\n
+            }\n\n
         **Contact:** [Telegram](https://t.me/nerzh)\n
         """,
     //            termsOfService: "http://example.com/terms/",

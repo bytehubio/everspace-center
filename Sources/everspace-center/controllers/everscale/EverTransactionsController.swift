@@ -12,13 +12,15 @@ import EverscaleClientSwift
 import Swiftgger
 
 
-final class TransactionsController: RouteCollection {
+final class EverTransactionsController: RouteCollection {
     
     typealias ResponseValue = [EverClient.TransactionHistoryModel]
     typealias Response = String
     
+    static let shared: EverTransactionsController = .init()
+    
     func boot(routes: Vapor.RoutesBuilder) throws {
-        routes.get("everscale_getTransactions", use: getTransactions)
+        routes.get("getTransactions", use: getTransactions)
     }
 
     func getTransactions(_ req: Request) async throws -> Response {
@@ -27,13 +29,13 @@ final class TransactionsController: RouteCollection {
     }
     
     func getTransactionsRpc(_ req: Request) async throws -> Response {
-        let content: JsonRPCRequest<GetTransactionsRequest> = try req.content.decode(JsonRPCRequest<GetTransactionsRequest>.self)
+        let content: EverJsonRPCRequest<GetTransactionsRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionsRequest>.self)
         return try JsonRPCResponse<ResponseValue>(id: content.id,
                                                   result: try await getTransactions(EverClient.shared.client, content.params)).toJson()
     }
 }
 
-extension TransactionsController {
+extension EverTransactionsController {
     
     struct GetTransactionsRequest: Content {
         var address: String = ""
@@ -75,7 +77,7 @@ extension TransactionsController {
                           description: "Controller where we can manage users",
                           actions: [
                 APIAction(method: .get,
-                          route: "/everscale_getTransactions",
+                          route: "/everscale/getTransactions",
                           summary: "",
                           description: "Get Account Transactions",
                           parametersObject: GetTransactionsRequest(),
