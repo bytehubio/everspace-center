@@ -27,6 +27,7 @@ final class AccountsController: RouteCollection {
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("getAccount", use: getAccount)
         routes.get("getAccounts", use: getAccounts)
+        routes.get("getBalance", use: getBalance)
     }
 
     func getAccount(_ req: Request) async throws -> Response {
@@ -34,22 +35,41 @@ final class AccountsController: RouteCollection {
         return try await getAccount(content).toJson()
     }
     
+    func getAccountRpc(_ req: Request) async throws -> Response {
+        let content: JsonRPCRequest<GetAccountRequest> = try req.content.decode(JsonRPCRequest<GetAccountRequest>.self)
+        return try JsonRPCResponse<EverClient.Account>(id: content.id, result: try await getAccount(content.params)).toJson()
+    }
+    
     func getAccounts(_ req: Request) async throws -> Response {
         let content: GetAccountsRequest = try req.query.decode(GetAccountsRequest.self)
         return try await getAccounts(content).toJson()
     }
-
-    func getAccountRpc(_ req: Request) async throws -> Response {
-        let content: JsonRPCRequest<GetAccountRequest> = try req.content.decode(JsonRPCRequest<GetAccountRequest>.self)
-        return try JsonRPCResponse<EverClient.GetAccountResult.GetAccount>(id: content.id, result: try await getAccount(content.params)).toJson()
+    
+    func getAccountsRpc(_ req: Request) async throws -> Response {
+        let content: JsonRPCRequest<GetAccountsRequest> = try req.content.decode(JsonRPCRequest<GetAccountsRequest>.self)
+        return try JsonRPCResponse<[EverClient.Account]>(id: content.id, result: try await getAccounts(content.params)).toJson()
     }
     
-    private func getAccount(_ content: GetAccountRequest) async throws -> EverClient.GetAccountResult.GetAccount {
+    func getBalance(_ req: Request) async throws -> Response {        
+        let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
+        return try await getBalance(content)
+    }
+    
+    func getBalanceRpc(_ req: Request) async throws -> Response {
+        let content: JsonRPCRequest<GetAccountRequest> = try req.content.decode(JsonRPCRequest<GetAccountRequest>.self)
+        return try JsonRPCResponse<String>(id: content.id, result: try await getBalance(content.params)).toJson()
+    }
+    
+    private func getAccount(_ content: GetAccountRequest) async throws -> EverClient.Account {
         try await EverClient.getAccount(accountAddress: content.address)
     }
     
-    private func getAccounts(_ content: GetAccountsRequest) async throws -> [EverClient.GetAccountResult.GetAccount] {
+    private func getAccounts(_ content: GetAccountsRequest) async throws -> [EverClient.Account] {
         try await EverClient.getAccounts(accountAddresses: content.addresses)
+    }
+    
+    private func getBalance(_ content: GetAccountRequest) async throws -> Response {
+        try await EverClient.getBalance(accountAddress: content.address)
     }
     
     @discardableResult
@@ -67,26 +87,33 @@ final class AccountsController: RouteCollection {
                           responses: [
                             .init(code: "200",
                                   description: "",
-                                  type: .object(JsonRPCResponse<EverClient.GetAccountResult.GetAccount>.self, asCollection: false))
+                                  type: .object(JsonRPCResponse<EverClient.Account>.self, asCollection: false))
                           ]),
                 APIAction(method: .get,
                           route: "/getAccounts",
                           summary: "",
                           description: "Get Accounts",
-//                          parameters: [
-//                            .init(name: "aaaa", parameterLocation: .query, description: nil, required: true, deprecated: false, allowEmptyValue: false, dataType: APIDataType(type: "array", format: ""))
-//                          ],
                           parametersObject: GetAccountsRequest(),
                           responses: [
                             .init(code: "200",
                                   description: "",
-                                  type: .object(JsonRPCResponse<[EverClient.GetAccountResult.GetAccount]>.self, asCollection: false))
-                          ])
+                                  type: .object(JsonRPCResponse<[EverClient.Account]>.self, asCollection: false))
+                          ]),
+                APIAction(method: .get,
+                          route: "/getBalance",
+                          summary: "",
+                          description: "Get Balance",
+                          parametersObject: GetAccountRequest(),
+                          responses: [
+                            .init(code: "200",
+                                  description: "",
+                                  type: .object(JsonRPCResponse<String>.self, asCollection: false))
+                          ]),
             ])
         ).add([
-            APIObject(object: JsonRPCResponse<EverClient.GetAccountResult.GetAccount>(result: EverClient.GetAccountResult.GetAccount())),
-            APIObject(object: JsonRPCResponse<[EverClient.GetAccountResult.GetAccount]>(result: [EverClient.GetAccountResult.GetAccount()])),
-            APIObject(object: EverClient.GetAccountResult.GetAccount())
+            APIObject(object: JsonRPCResponse<EverClient.Account>(result: EverClient.Account())),
+            APIObject(object: JsonRPCResponse<[EverClient.Account]>(result: [EverClient.Account()])),
+            APIObject(object: EverClient.Account())
         ])
     }
 }

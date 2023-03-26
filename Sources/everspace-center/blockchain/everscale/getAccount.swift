@@ -13,27 +13,28 @@ import Vapor
 
 extension EverClient {
     
-    struct GetAccountResult: Codable {
-        var result: [GetAccount] = []
-        
-        public struct GetAccount: Codable {
-            var id: String = ""
-            var balance: String = ""
-            var acc_type: Int = 1
-            var acc_type_name: String = ""
-            var boc: String = ""
-            var code: String = ""
-            var code_hash: String = ""
-            var prev_code_hash: String = ""
-            var workchain_id: Int = 1
-            var data: String = ""
-        }
+    public struct Account: Codable {
+        var id: String = ""
+        var balance: String = ""
+        var acc_type: Int = 1
+        var acc_type_name: String = ""
+        var boc: String = ""
+        var code: String = ""
+        var code_hash: String = ""
+        var prev_code_hash: String = ""
+        var workchain_id: Int = 1
+        var data: String = ""
+    }
+    
+    public struct AccountBalance: Codable {
+        var id: String = ""
+        var balance: String = ""
     }
     
     class func getAccount(client: TSDKClientModule = EverClient.shared.client,
                           accountAddress: String
-    ) async throws -> GetAccountResult.GetAccount {
-        let response: [GetAccountResult.GetAccount] = try await getAccounts(accountAddresses: [accountAddress])
+    ) async throws -> Account {
+        let response: [Account] = try await getAccounts(accountAddresses: [accountAddress])
         
         if let first = response.first {
             return first
@@ -44,7 +45,7 @@ extension EverClient {
     
     class func getAccounts(client: TSDKClientModule = EverClient.shared.client,
                            accountAddresses: [String]
-    ) async throws -> [GetAccountResult.GetAccount] {
+    ) async throws -> [Account] {
         let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
                                                                          filter: [
                                                                             "id": [
@@ -64,6 +65,30 @@ extension EverClient {
                                                                             "balance(format: DEC)",
                                                                          ].joined(separator: " "))
         let response: TSDKResultOfQueryCollection = try await client.net.query_collection(paramsOfQueryCollection)
-        return try response.result.toJson().toModel([GetAccountResult.GetAccount].self)
+        return try response.result.toJson().toModel([Account].self)
+    }
+    
+    class func getBalance(client: TSDKClientModule = EverClient.shared.client,
+                          accountAddress: String
+    ) async throws -> String {
+        let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
+                                                                         filter: [
+                                                                            "id": [
+                                                                                "eq": accountAddress
+                                                                            ]
+                                                                         ].toAnyValue(),
+                                                                         result: [
+                                                                            "id",
+                                                                            "balance(format: DEC)",
+                                                                         ].joined(separator: " "))
+        let response: TSDKResultOfQueryCollection = try await client.net.query_collection(paramsOfQueryCollection)
+        
+        
+        
+        if let first = try response.result.toJson().toModel([AccountBalance].self).first?.balance {
+            return first
+        } else {
+            throw makeError(TSDKClientError.mess("Account not found"))
+        }
     }
 }
