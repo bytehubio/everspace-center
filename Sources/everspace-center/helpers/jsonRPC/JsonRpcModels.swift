@@ -9,6 +9,7 @@ import Foundation
 import SwiftExtensionsPack
 import Vapor
 import IkigaJSON
+import Swiftgger
 
 extension AnyValue: Content {}
 
@@ -28,13 +29,13 @@ public struct JsonRPCRequestDefault: Content {
 public struct JsonRPCVoid: Content {}
 
 public struct JsonRPCRequest<T: Content>: Content {
-    var id: String
-    var jsonrpc: RPCVersion
+    var id: String = "1"
+    var jsonrpc: RPCVersion = .v2_0
     var method: RPCMethods
     var params: T
 }
 
-public struct JsonRPCResponse<T: Encodable>: Encodable {
+public struct JsonRPCResponse<T: Codable>: Codable {
     
     var id: String
     var jsonrpc: RPCVersion
@@ -49,13 +50,13 @@ public struct JsonRPCResponse<T: Encodable>: Encodable {
     }
     
     public init(result: T) {
-        self.id = "undefined"
+        self.id = "1"
         self.jsonrpc = .v2_0
         self.result = result
     }
     
     public init(error: String) {
-        self.id = "undefined"
+        self.id = "1"
         self.jsonrpc = .v2_0
         self.error = error
     }

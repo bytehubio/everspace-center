@@ -8,7 +8,6 @@
 
 import Foundation
 import Vapor
-import FCM
 import FileUtils
 import IkigaJSON
 
@@ -36,8 +35,8 @@ public func configure(_ app: Application) throws {
     /// CUSTOM ERROR
     app.middleware = .init()
     app.middleware.use(RouteLoggingMiddleware())
+    app.middleware.use(CustomFileMiddleware(publicDirectory: "Public"))
     app.middleware.use(CustomErrorMiddleware.default(environment: try Environment.detect()))
-    
     /// ROUTES
     try routes(app)
 }

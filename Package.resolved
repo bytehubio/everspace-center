@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "AnyCodable",
+        "repositoryURL": "https://github.com/Flight-School/AnyCodable",
+        "state": {
+          "branch": null,
+          "revision": "862808b2070cd908cb04f9aafe7de83d35f81b05",
+          "version": "0.6.7"
+        }
+      },
+      {
         "package": "async-http-client",
         "repositoryURL": "https://github.com/swift-server/async-http-client.git",
         "state": {
@@ -56,39 +65,12 @@
         }
       },
       {
-        "package": "FCM",
-        "repositoryURL": "https://github.com/MihaelIsaev/FCM",
-        "state": {
-          "branch": null,
-          "revision": "5d35a93bde97fd34879bf1f7ca198f4efacd8eca",
-          "version": "2.11.1"
-        }
-      },
-      {
         "package": "IkigaJSON",
         "repositoryURL": "https://github.com/orlandos-nl/IkigaJSON.git",
         "state": {
           "branch": null,
           "revision": "07e5de4f593713333c10ca0f3cb15d67693086de",
           "version": "2.1.5"
-        }
-      },
-      {
-        "package": "jwt",
-        "repositoryURL": "https://github.com/vapor/jwt.git",
-        "state": {
-          "branch": null,
-          "revision": "d65f32bfd08fae5910d603028be5dec4f35b3482",
-          "version": "4.2.2"
-        }
-      },
-      {
-        "package": "jwt-kit",
-        "repositoryURL": "https://github.com/vapor/jwt-kit.git",
-        "state": {
-          "branch": null,
-          "revision": "dcd78f07e092ac9138327e2bfbb0687a55a80850",
-          "version": "4.8.0"
         }
       },
       {
@@ -278,6 +260,15 @@
           "branch": null,
           "revision": "98da47631a2768ddf6be0399165f70e10dd3abe8",
           "version": "1.3.0"
+        }
+      },
+      {
+        "package": "Swiftgger",
+        "repositoryURL": "https://github.com/nerzh/Swiftgger",
+        "state": {
+          "branch": null,
+          "revision": "8370555503d3ab6351f95afce6e0f73772181131",
+          "version": "2.0.1"
         }
       },
       {

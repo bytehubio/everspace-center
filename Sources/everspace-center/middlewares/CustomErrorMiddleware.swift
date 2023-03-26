@@ -25,7 +25,7 @@ public final class CustomErrorMiddleware: Middleware {
     ///
     /// - parameters:
     ///     - environment: The environment to respect when presenting errors.
-    public static func `default`(environment: Environment) -> ErrorMiddleware {
+    public static func `default`(environment: Environment) -> Self {
         .init { req, error in
             // variables to determine
             let status: HTTPResponseStatus
@@ -89,6 +89,12 @@ public final class CustomErrorMiddleware: Middleware {
     }
     
     public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
+        if !request.url.string.contains("jsonRpc") || RPCMethods(rawValue: request.url.string.replace(#"\/"#, "")) == nil {
+            return next.respond(to: request).flatMapErrorThrowing { error in
+                let response = Response(body: Response.Body(string: error.localizedDescription))
+                return response
+            }
+        }
         return next.respond(to: request).flatMapErrorThrowing { error in
             return self.closure(request, error)
         }

@@ -6,15 +6,18 @@
 //
 
 import Vapor
-
-public enum RPCMethods: String, Content {
-    case transactions_getTransactions
-}
+import Swiftgger
 
 func routes(_ app: Application) throws {
-    try app.register(collection: JsonRpcController())
-//    try app.group("transactions") { group in
-//        try group.register(collection: TransactionsController())
-//    }
+    let jsonRpc: JsonRpcController = .init()
+    try app.group("jsonRpc") { group in
+        try group.register(collection: jsonRpc)
+    }
+    
+    let swagger: SwaggerController = .init()
+    try app.group("") { group in
+        try group.register(collection: swagger)
+    }
+    
+    try app.register(collection: JsonRpcController.transactionsController)
 }
-

@@ -1,4 +1,5 @@
 import Vapor
+import Swiftgger
 
 var env = try Environment.detect()
 try LoggingSystem.bootstrap(from: &env)
