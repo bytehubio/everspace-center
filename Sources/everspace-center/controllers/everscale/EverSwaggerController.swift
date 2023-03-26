@@ -56,7 +56,7 @@ final class EverSwaggerController {
 extension EverSwaggerController: RouteCollection {
     
     static let openAPIBuilder: OpenAPIBuilder = .init(
-        title: "Everspace Center API",
+        title: "EVERSCALE API",
         version: "1.0.0",
         description: """
                 This is incredible Everscale API.\n
