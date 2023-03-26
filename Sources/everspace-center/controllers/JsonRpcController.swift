@@ -11,8 +11,9 @@ import EverscaleClientSwift
 import Vapor
 
 public enum RPCMethods: String, Content {
-    case getTransactions
-    case getAccount
+    case everscale_getTransactions
+    case everscale_getAccount
+    case everscale_getBalance
 }
 
 class JsonRpcController {
@@ -29,10 +30,12 @@ class JsonRpcController {
         let method: RPCMethods = try req.content.decode(JsonRPCRequestMethod.self).method
         
         switch method {
-        case .getTransactions:
+        case .everscale_getTransactions:
             return try await encodeResponse(for: req, json: try await Self.transactionsController.getTransactionsRpc(req))
-        case .getAccount:
+        case .everscale_getAccount:
             return try await encodeResponse(for: req, json: try await Self.accountsController.getAccountRpc(req))
+        case .everscale_getBalance:
+            return try await encodeResponse(for: req, json: try await Self.accountsController.getBalanceRpc(req))
         }
     }
 }

@@ -2,17 +2,17 @@
 //  File.swift
 //  
 //
-//  Created by Oleh Hudeichuk on 02.03.2023.
+//  Created by Oleh Hudeichuk on 26.03.2023.
 //
 
 import Foundation
 import EverscaleClientSwift
 import Vapor
 
-public final class EverClient {
+public final class ToncoinClient {
     
     public static var shared: EverClient = {
-        try! .init(clientConfig: EverClient.makeClientConfig(), emptyClient: EverClient.makeEmptyClientConfig())
+        try! .init(clientConfig: EverClient.makeClientConfig(), emptyClient: ToncoinClient.makeEmptyClientConfig())
     }()
  
     private class func getNetwork(networkName: String) throws -> [String] {
@@ -35,7 +35,7 @@ public final class EverClient {
     
     public static func makeClientConfig() -> TSDKClientConfig {
         let networkConfig: TSDKNetworkConfig = .init(server_address: nil,
-                                                     endpoints: try! EverClient.getNetwork(networkName: "mainnet")
+                                                     endpoints: try! Self.getNetwork(networkName: "toncoin_mainnet")
         )
         return .init(network: networkConfig, crypto: nil, abi: nil, boc: nil)
     }

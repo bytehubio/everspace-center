@@ -34,6 +34,7 @@ extension EverClient {
     class func getAccount(client: TSDKClientModule = EverClient.shared.client,
                           accountAddress: String
     ) async throws -> Account {
+        let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress)
         let response: [Account] = try await getAccounts(accountAddresses: [accountAddress])
         
         if let first = response.first {
@@ -46,10 +47,14 @@ extension EverClient {
     class func getAccounts(client: TSDKClientModule = EverClient.shared.client,
                            accountAddresses: [String]
     ) async throws -> [Account] {
+        var addresses: [String] = []
+        for address in accountAddresses {
+            addresses.append(try await tonConvertAddrToEverFormat(client: client, address))
+        }
         let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
                                                                          filter: [
                                                                             "id": [
-                                                                                "in": accountAddresses
+                                                                                "in": addresses
                                                                             ]
                                                                          ].toAnyValue(),
                                                                          result: [
@@ -71,6 +76,7 @@ extension EverClient {
     class func getBalance(client: TSDKClientModule = EverClient.shared.client,
                           accountAddress: String
     ) async throws -> String {
+        let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress)
         let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
                                                                          filter: [
                                                                             "id": [

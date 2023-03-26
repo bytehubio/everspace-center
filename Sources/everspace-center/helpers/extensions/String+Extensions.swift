@@ -10,6 +10,7 @@ import BigInt
 import SwiftRegularExpression
 import SwiftExtensionsPack
 
+
 extension String {
     
     init?(hexadecimal string: String, encoding: String.Encoding = .utf8) {
@@ -104,5 +105,41 @@ extension String {
             price *= 10
         }
         return doublePrice.round(toDecimalPlaces: UInt(roundNumber), rule: rule).toString()
+    }
+}
+
+extension String {
+    
+    var toDataFromHex: Data? {
+        Data(hexString: self.lowercased().hexClear.remove0x.addFirstZeroToHexIfNeeded)
+    }
+}
+
+
+extension String {
+    /// Encodes or decodes into a base64url safe representation
+    func base64ToBase64URL() -> String {
+        // Make base64 string safe for passing into URL query params
+        let base64url = self.replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "=", with: "")
+        
+        return base64url
+    }
+    
+    func base64URLToBase64() -> String {
+        // Return to base64 encoding
+        var base64 = self.replacingOccurrences(of: "_", with: "/")
+            .replacingOccurrences(of: "-", with: "+")
+        // Add any necessary padding with `=`
+        if base64.count % 4 != 0 {
+            base64.append(String(repeating: "=", count: 4 - base64.count % 4))
+        }
+        
+        return base64
+    }
+    
+    func base64ToByteArray() -> Array<UInt8> {
+        Array<UInt8>(Data(base64Encoded: self.base64URLToBase64())!)
     }
 }

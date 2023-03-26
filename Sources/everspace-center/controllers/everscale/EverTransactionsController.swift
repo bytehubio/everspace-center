@@ -18,17 +18,18 @@ final class TransactionsController: RouteCollection {
     typealias Response = String
     
     func boot(routes: Vapor.RoutesBuilder) throws {
-        routes.get("getTransactions", use: getTransactions)
+        routes.get("everscale_getTransactions", use: getTransactions)
     }
 
     func getTransactions(_ req: Request) async throws -> Response {
         let content: GetTransactionsRequest = try req.query.decode(GetTransactionsRequest.self)
-        return try await getTransactions(content).toJson()
+        return try await getTransactions(EverClient.shared.client, content).toJson()
     }
     
     func getTransactionsRpc(_ req: Request) async throws -> Response {
         let content: JsonRPCRequest<GetTransactionsRequest> = try req.content.decode(JsonRPCRequest<GetTransactionsRequest>.self)
-        return try JsonRPCResponse<ResponseValue>(id: content.id, result: try await getTransactions(content.params)).toJson()
+        return try JsonRPCResponse<ResponseValue>(id: content.id,
+                                                  result: try await getTransactions(EverClient.shared.client, content.params)).toJson()
     }
 }
 
@@ -42,9 +43,12 @@ extension TransactionsController {
         var hash: String? = nil
     }
     
-    private func getTransactions(_ content: GetTransactionsRequest) async throws -> ResponseValue {
+    func getTransactions(_ client: TSDKClientModule,
+                         _ content: GetTransactionsRequest
+    ) async throws -> ResponseValue {
+        let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, content.address)
         if content.hash != nil || content.lt != nil || content.to_lt != nil {
-            let transactions = try await EverClient.getTransactions(address: content.address,
+            let transactions = try await EverClient.getTransactions(address: accountAddress,
                                                                     limit: content.limit,
                                                                     lt: content.lt,
                                                                     to_lt: content.to_lt,
@@ -52,7 +56,7 @@ extension TransactionsController {
             return transactions
         } else {
             return try await withCheckedThrowingContinuation { continuation in
-                EverClient.getTransactions(address: content.address, limit: content.limit) { result in
+                EverClient.getTransactions(address: accountAddress, limit: content.limit) { result in
                     switch result {
                     case let .success(transactions):
                         continuation.resume(returning: transactions)
@@ -71,7 +75,7 @@ extension TransactionsController {
                           description: "Controller where we can manage users",
                           actions: [
                 APIAction(method: .get,
-                          route: "/getTransactions",
+                          route: "/everscale_getTransactions",
                           summary: "",
                           description: "Get Account Transactions",
                           parametersObject: GetTransactionsRequest(),
