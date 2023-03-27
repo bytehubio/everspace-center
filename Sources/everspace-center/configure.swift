@@ -32,9 +32,9 @@ public func configure(_ app: Application) throws {
 //    var decoder = IkigaJSONDecoder()
 //    decoder.settings.dateDecodingStrategy = .iso8601
 //    ContentConfiguration.global.use(decoder: decoder, for: .json)
-    var encoder = IkigaJSONEncoder()
-    encoder.settings.dateDecodingStrategy = .iso8601
-    ContentConfiguration.global.use(encoder: encoder, for: .json)
+//    var encoder = IkigaJSONEncoder()
+//    encoder.settings.dateDecodingStrategy = .iso8601
+//    ContentConfiguration.global.use(encoder: encoder, for: .json)
     
     /// CUSTOM ERROR
     app.middleware = .init()
