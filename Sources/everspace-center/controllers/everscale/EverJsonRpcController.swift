@@ -17,6 +17,8 @@ public enum EverRPCMethods: String, Content {
     case getAccount
     case getBalance
     case sendExternalMessage
+    case runGetMethodFift
+    case runGetMethodAbi
 }
 
 class EverJsonRpcController {
@@ -45,6 +47,10 @@ class EverJsonRpcController {
             return try await encodeResponse(for: req, json: try await EverAccountsController.shared.getBalanceRpc(req))
         case .sendExternalMessage:
             return try await encodeResponse(for: req, json: try await EverSendController.shared.sendExternalMessage(req))
+        case .runGetMethodAbi:
+            return try await encodeResponse(for: req, json: try await EverRunGetMethodsController.shared.runGetMethodAbi(req))
+        case .runGetMethodFift:
+            return try await encodeResponse(for: req, json: try await EverRunGetMethodsController.shared.runGetMethodFift(req))
         }
     }
 }

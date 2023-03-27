@@ -15,55 +15,104 @@ final class SwaggerController: RouteCollection {
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("", use: index)
-        routes.get("swagger", use: show)
     }
     
     func index(_ req: Request) async throws -> Response {
         let html: String = """
         <!DOCTYPE html>
         <html lang="en">
-          <head>
+
+        <head>
             <meta charset="UTF-8">
-            <title>Swagger UI</title>
-            <link rel="stylesheet" type="text/css" href="css/swagger/swagger-ui.css" />
-            <link rel="stylesheet" type="text/css" href="css/swagger/index.css" />
-            <link rel="icon" type="image/png" href="images/swagger/favicon-32x32.png" sizes="32x32" />
-            <link rel="icon" type="image/png" href="images/swagger/favicon-16x16.png" sizes="16x16" />
-          </head>
-        
-          <body>
-            <div id="swagger-ui"></div>
-            <script src="/js/swagger/swagger-ui-bundle.js" charset="UTF-8"> </script>
-            <script src="/js/swagger/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-            <script src="/js/swagger/swagger-initializer.js" charset="UTF-8"> </script>
-          </body>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Everspace Center</title>
+
+            <link href='https://fonts.googleapis.com/css?family=JetBrains Mono' rel='stylesheet'>
+
+            <style>
+                body {
+                    font-family: 'JetBrains Mono';
+                    font-size: 16px;
+                    max-width: 80vh;
+                    margin-left: auto;
+                    margin-right: auto;
+                    width: 95%;
+                }
+
+                a {
+                    color: blue;
+                }
+
+                .sep-top {
+                    margin-top: 10px;
+                }
+
+                .footer {
+                    width: 100%;
+                    text-align: center;
+                }
+            </style>
+        </head>
+
+        <body>
+            <h1 id="everspace-center-api">Everspace Center API</h1>
+
+            <p>Welcome! We provide access to HTTP API for TVM compatible blockchains.</p>
+            <p>(now temporarily without authorization)</p>
+
+            <h2 id="available-networks">Available networks</h2>
+            <ul>
+                <li><a href="https://everspace.center/everscale-mainnet"><code>Everscale Mainnet</code></a></li>
+                <li><a href="https://everspace.center/everscale-devnet"><code>Everscale Devnet</code></a></li>
+
+                <div class="sep-top"></div>
+                <li><a href="https://everspace.center/toncoin-devnet"><code>TON Mainnet</code></a></li>
+                <li><code>TON Testnet (soon)</code></li>
+        <!--
+                <div class="sep-top"></div>
+                <li><a href="https://everspace.center/venom-testnet"><code>Venom Testnet</code></a></li>
+                <div class="sep-top"></div>
+
+                <li><a href="https://everspace.center/everscale-n01-fld-dapp"><code>Everscale n01-fld-dapp</code></a></li>
+                <li><a href="https://everspace.center/everscale-n02-fld-dapp"><code>Everscale n02-fld-dapp</code></a></li>
+                <li><a href="https://everspace.center/everscale-n03-fld-dapp"><code>Everscale n03-fld-dapp</code></a></li>
+                <li><a href="https://everspace.center/everscale-n04-fld-dapp"><code>Everscale n04-fld-dapp</code></a></li> -->
+            </ul>
+
+            <footer>
+                <br>
+                <div class="footer">
+                    Made with ❤️ by <a href="https://everspace.app/" target="_blank">Everspace Team</a>
+                    | <a href="https://t.me/nerzh">Telegram</a>
+                    | <a href="mailto:admin@bytehub.io">E-mail</a>
+                </div>
+            </footer>
+
+        </body>
         </html>
         """
         
         return try await encodeResponse(for: req, html: html)
     }
-    
-    func show(_ req: Request) async throws -> Response {
-        try await encodeResponse(for: req, json: try Self.openAPIBuilder.built().toJson())
-    }
 }
-
-extension SwaggerController {
-    
-    static let openAPIBuilder: OpenAPIBuilder = .init(
-        title: "Everspace Center API",
-        version: "1.0.0",
-        description: """
-                This is incredible Everscale API.\n
-        **Now temporarily without authorization.**\n
-        **Everscale API:** [Everscale API Link](https://everspace.center/everscale)\n
-        **Contact:** [Telegram](https://t.me/nerzh)\n
-        """,
-    //            termsOfService: "http://example.com/terms/",
-        contact: APIContact(name: "Mail", email: "admin@bytehub.io", url: URL(string: "https://github.com/nerzh")),
-    //            license: APILicense(name: "MIT", url: URL(string: "http://mit.license")),
-        authorizations: [
-    //        .jwt(description: "You can get token from *sign-in* action from *Account* controller.")
-        ]
-    )
-}
+//
+//extension SwaggerController {
+//
+//    static let openAPIBuilder: OpenAPIBuilder = .init(
+//        title: "Everspace Center API",
+//        version: "1.0.0",
+//        description: """
+//                This is incredible Everscale API.\n
+//        **Now temporarily without authorization.**\n
+//        **Everscale API:** [Everscale API Link](https://everspace.center/everscale)\n
+//        **Contact:** [Telegram](https://t.me/nerzh)\n
+//        """,
+//    //            termsOfService: "http://example.com/terms/",
+//        contact: APIContact(name: "Mail", email: "admin@bytehub.io", url: URL(string: "https://github.com/nerzh")),
+//    //            license: APILicense(name: "MIT", url: URL(string: "http://mit.license")),
+//        authorizations: [
+//    //        .jwt(description: "You can get token from *sign-in* action from *Account* controller.")
+//        ]
+//    )
+//}

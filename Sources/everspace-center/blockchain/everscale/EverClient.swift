@@ -14,7 +14,7 @@ public final class EverClient {
     public static var shared: EverClient = {
         try! .init(clientConfig: EverClient.makeClientConfig(), emptyClient: EverClient.makeEmptyClientConfig())
     }()
- 
+    
     private class func getNetwork(networkName: String) throws -> [String] {
         guard let json = Environment.get(networkName) else { throw AppError(reason: "\(networkName) is not defined for env \(try Environment.detect().name)")  }
         let data = json.data(using: .utf8)
