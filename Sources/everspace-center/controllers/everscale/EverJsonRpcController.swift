@@ -46,7 +46,7 @@ class EverJsonRpcController {
 extension EverJsonRpcController: RouteCollection {
     
     func boot(routes: Vapor.RoutesBuilder) throws {
-        routes.post("", use: jsonRpc)
+        routes.post("jsonRpc", use: jsonRpc)
     }
     
     public func encodeResponse(for request: Vapor.Request, json: String) async throws -> Vapor.Response {
