@@ -19,8 +19,8 @@ final class EverRunGetMethodsController: RouteCollection {
     static let shared: EverRunGetMethodsController = .init()
     
     func boot(routes: Vapor.RoutesBuilder) throws {
-        routes.post("runGetMethodFift", use: runGetMethodFift)
-        routes.post("runGetMethodAbi", use: runGetMethodAbi)
+        routes.get("runGetMethodFift", use: runGetMethodFift)
+        routes.get("runGetMethodAbi", use: runGetMethodAbi)
     }
     
     func runGetMethodFift(_ req: Request) async throws -> Response {
