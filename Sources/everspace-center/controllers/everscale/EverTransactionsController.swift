@@ -111,7 +111,7 @@ extension EverTransactionsController {
                           route: "/everscale/getTransaction",
                           summary: "",
                           description: "Get Account Transaction",
-                          parametersObject: GetTransactionsRequest(),
+                          parametersObject: GetTransactionRequest(),
                           responses: [
                             .init(code: "200",
                                   description: "Specific user",

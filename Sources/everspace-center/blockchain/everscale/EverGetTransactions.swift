@@ -298,7 +298,7 @@ query {
                               hashId: String? = nil
     ) async throws -> ExtendedTransactionHistoryModel {
         let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "transactions",
-                                                                         filter: ["id": ["ed": hashId]].toAnyValue(),
+                                                                         filter: ["id": ["eq": hashId]].toAnyValue(),
                                                                          result: [
                                                                             "id",
                                                                             "account_addr",
