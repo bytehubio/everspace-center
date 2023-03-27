@@ -77,7 +77,7 @@ extension EverAccountsController {
     }
     
     func getBalance(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> Response {
-        try await EverClient.getBalance(client: client, accountAddress: content.address)
+        try await EverClient.getBalance(client: client, accountAddress: content.address).toJson()
     }
     
     @discardableResult
@@ -121,7 +121,8 @@ extension EverAccountsController {
         ).add([
             APIObject(object: JsonRPCResponse<EverClient.Account>(result: EverClient.Account())),
             APIObject(object: JsonRPCResponse<[EverClient.Account]>(result: [EverClient.Account()])),
-            APIObject(object: EverClient.Account())
+            APIObject(object: EverClient.Account()),
+            APIObject(object: EverClient.AccountBalance())
         ])
     }
 }

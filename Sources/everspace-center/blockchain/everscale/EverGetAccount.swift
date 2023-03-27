@@ -75,7 +75,7 @@ extension EverClient {
     
     class func getBalance(client: TSDKClientModule = EverClient.shared.client,
                           accountAddress: String
-    ) async throws -> String {
+    ) async throws -> AccountBalance {
         let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress)
         let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
                                                                          filter: [
@@ -91,7 +91,7 @@ extension EverClient {
         
         
         
-        if let first = try response.result.toJson().toModel([AccountBalance].self).first?.balance {
+        if let first = try response.result.toJson().toModel([AccountBalance].self).first {
             return first
         } else {
             throw makeError(TSDKClientError.mess("Account not found"))
