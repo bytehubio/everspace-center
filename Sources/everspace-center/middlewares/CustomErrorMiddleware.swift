@@ -58,6 +58,9 @@ public final class CustomErrorMiddleware: Middleware {
             // attempt to serialize the error to json
             do {
                 let resultError: String = "Status: \(status). Reason: \(reason)"
+                if !req.url.string.contains("jsonRpc") {
+                    return Response(body: Response.Body(string: resultError))
+                }
                 var errorResponse: JsonRPCResponse<JsonRPCVoid>!
                 if let id = req.parameters.get("id") {
                     errorResponse = JsonRPCResponse<JsonRPCVoid>(id: id, jsonrpc: .v2_0, error: resultError)
@@ -89,12 +92,6 @@ public final class CustomErrorMiddleware: Middleware {
     }
     
     public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
-        if !request.url.string.contains("everscale") || !request.url.string.contains("toncoin") {
-            return next.respond(to: request).flatMapErrorThrowing { error in
-                let response = Response(body: Response.Body(string: error.localizedDescription))
-                return response
-            }
-        }
         return next.respond(to: request).flatMapErrorThrowing { error in
             return self.closure(request, error)
         }

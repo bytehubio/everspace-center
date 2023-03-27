@@ -53,7 +53,6 @@ func systemCommand(_ command: String, _ user: String? = nil, timeOutNanoseconds:
     var result: String = .init()
     let process: Process? = .init()
     let pipe: Pipe = .init()
-    var timeOutThread: Thread?
     process?.executableURL = .init(fileURLWithPath: "/usr/bin/env")
     process?.standardOutput = pipe
     process?.standardError = pipe
@@ -69,7 +68,6 @@ func systemCommand(_ command: String, _ user: String? = nil, timeOutNanoseconds:
         }
     }
     try process?.run()
-    timeOutThread?.start()
     process?.waitUntilExit()
     let data: Data = pipe.fileHandleForReading.readDataToEndOfFile()
     if let output = String(data: data, encoding: .utf8) {
@@ -102,11 +100,6 @@ func forceKillProcess(_ process: Process?) async throws {
     }
 }
 
-
-
-
-
-
 @discardableResult
 func systemCommand(_ command: String) async throws -> String {
     try await systemCommand(command, nil, timeOutNanoseconds: 0)
@@ -117,58 +110,3 @@ func systemCommand(_ command: String) async throws -> String {
 func systemCommand(_ command: String, _ user: String? = nil, timeOutSec: UInt32 = 0) async throws -> String {
     try await systemCommand(command, user, timeOutNanoseconds: timeOutSec * 1000000)
 }
-
-
-//@discardableResult
-//func systemCommand(_ command: String, _ user: String? = nil, timeOutNanoseconds: UInt32 = 0) async throws -> String {
-//    var result: String = .init()
-//    let process: Process? = .init()
-//    let pipe: Pipe = .init()
-//    process?.executableURL = .init(fileURLWithPath: "/usr/bin/env")
-//    process?.standardOutput = pipe
-//    process?.standardError = pipe
-//    if user != nil {
-//        process.arguments = ["sudo", "-H", "-u", user!, "bash", "-lc", "\(command)"]
-//    } else {
-//        process.arguments = ["bash", "-lc", "\(command)"]
-//    }
-//    if timeOutNanoseconds > 0 {
-//        Thread {
-//            Task {
-//                pe("KILL")
-//                usleep(timeOutNanoseconds)
-//                pe("KILL33 \(timeOutNanoseconds)")
-////                try? await forceKillProcess(process)
-//            }
-//        }.start()
-//    }
-//    try process.run()
-//    pe(11)
-//    process.waitUntilExit()
-//    pe(12)
-//    let data: Data = pipe.fileHandleForReading.readDataToEndOfFile()
-//    pe(13)
-//    if let output = String(data: data, encoding: .utf8) {
-//        pe(14)
-//        result = output.trimmingCharacters(in: .whitespacesAndNewlines)
-//        pe("result", result)
-//    }
-//    pe(15)
-//    if process.isRunning { try await forceKillProcess(process) }
-//    pe(16)
-//    return result
-//}
-//
-//
-//func forceKillProcess(_ process: Process) async throws {
-//    pe("KILL 2")
-//    process.terminate()
-//    usleep(1000)
-//    if process.isRunning { process.interrupt() }
-//    usleep(1000)
-//    if process.isRunning { try await systemCommand("kill -9 \(process.processIdentifier)") }
-////    while process.isRunning {
-////        try systemCommand("kill -9 \(process.processIdentifier)")
-////        usleep(1000)
-////    }
-//}

@@ -29,7 +29,7 @@ final class EverBlocksController: RouteCollection {
     func getConfigParamsRpc(_ req: Request) async throws -> Response {
         let content: EverJsonRPCRequest<BlockConfigRequest> = try req.content.decode(EverJsonRPCRequest<BlockConfigRequest>.self)
         return try JsonRPCResponse<BlockConfigResponse>(id: content.id,
-                                                       result: try await getConfigParams(EverClient.shared.client, content.params, req)).toJson()
+                                                        result: try await getConfigParams(EverClient.shared.client, content.params, req)).toJson()
     }
 }
 
@@ -49,8 +49,12 @@ extension EverBlocksController {
         if content.number > 34 || content.number < 0 {
             throw makeError(AppError.mess("Number out of range"))
         }
-        let client = EverClient.shared.client
-        let account = try await EverClient.getAccount(accountAddress: "-1:5555555555555555555555555555555555555555555555555555555555555555")
+        let queryResult = try await client.net.query(TSDKParamsOfQuery(query: "query{ blocks(filter: {workchain_id: {eq: -1}, key_block: {eq: true}}, limit: 1) {master{config_addr}}}"))
+        guard let address = ((((queryResult.result.toDictionary()?["data"] as? [String: Any])?["blocks"] as? [Any])?.first as? [String: Any])?["master"] as? [String: Any])?["config_addr"] as? String
+        else {
+            throw makeError(AppError.mess("Config Address not found"))
+        }
+        let account = try await EverClient.getAccount(accountAddress: "-1:\(address)")
         let fileManager: FileManager = FileManager.default
         let uniqName: String = "\(UUID())-\(req.id).boc"
         let filePath: String = "\(pathToRootDirectory)/get_congig_params/\(uniqName)"
