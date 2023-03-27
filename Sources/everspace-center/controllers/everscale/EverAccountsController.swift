@@ -47,13 +47,13 @@ final class EverAccountsController: RouteCollection {
     
     func getBalance(_ req: Request) async throws -> Response {
         let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
-        return try await getBalance(EverClient.shared.client, content)
+        return try await getBalance(EverClient.shared.client, content).toJson()
     }
     
     func getBalanceRpc(_ req: Request) async throws -> Response {
         let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
-        return try JsonRPCResponse<String>(id: content.id,
-                                           result: try await getBalance(EverClient.shared.client, content.params)).toJson()
+        return try JsonRPCResponse<EverClient.AccountBalance>(id: content.id,
+                                                              result: try await getBalance(EverClient.shared.client, content.params)).toJson()
     }
 }
 
@@ -76,8 +76,8 @@ extension EverAccountsController {
         try await EverClient.getAccounts(client: client, accountAddresses: content.addresses)
     }
     
-    func getBalance(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> Response {
-        try await EverClient.getBalance(client: client, accountAddress: content.address).toJson()
+    func getBalance(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> EverClient.AccountBalance {
+        try await EverClient.getBalance(client: client, accountAddress: content.address)
     }
     
     @discardableResult
