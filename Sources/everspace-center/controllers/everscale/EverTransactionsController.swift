@@ -95,7 +95,7 @@ extension EverTransactionsController {
     func prepareSwagger(_ openAPIBuilder: OpenAPIBuilder) -> OpenAPIBuilder {
         return openAPIBuilder.add(
             APIController(name: "transactions",
-                          description: "Controller where we can manage users",
+                          description: "Transactions Controller",
                           actions: [
                 APIAction(method: .get,
                           route: "/everscale/getTransactions",
@@ -104,17 +104,17 @@ extension EverTransactionsController {
                           parametersObject: GetTransactionsRequest(),
                           responses: [
                             .init(code: "200",
-                                  description: "Specific user",
+                                  description: "Description",
                                   type: .object(JsonRPCResponse<[EverClient.TransactionHistoryModel]>.self, asCollection: false))
                           ]),
                 APIAction(method: .get,
                           route: "/everscale/getTransaction",
                           summary: "",
-                          description: "Get Account Transaction",
+                          description: "Get Extend Account Transaction",
                           parametersObject: GetTransactionRequest(),
                           responses: [
                             .init(code: "200",
-                                  description: "Specific user",
+                                  description: "Description",
                                   type: .object(JsonRPCResponse<EverClient.ExtendedTransactionHistoryModel>.self, asCollection: false))
                           ]),
             ])

@@ -85,7 +85,7 @@ extension EverAccountsController {
         
         return openAPIBuilder.add(
             APIController(name: "accounts",
-                          description: "Controller where we can manage users",
+                          description: "Accounts Controller",
                           actions: [
                 APIAction(method: .get,
                           route: "/everscale/getAccount",
@@ -94,7 +94,7 @@ extension EverAccountsController {
                           parametersObject: GetAccountRequest(),
                           responses: [
                             .init(code: "200",
-                                  description: "",
+                                  description: "Description",
                                   type: .object(JsonRPCResponse<EverClient.Account>.self, asCollection: false))
                           ]),
                 APIAction(method: .get,
@@ -104,7 +104,7 @@ extension EverAccountsController {
                           parametersObject: GetAccountsRequest(),
                           responses: [
                             .init(code: "200",
-                                  description: "",
+                                  description: "Description",
                                   type: .object(JsonRPCResponse<[EverClient.Account]>.self, asCollection: false))
                           ]),
                 APIAction(method: .get,
@@ -114,7 +114,7 @@ extension EverAccountsController {
                           parametersObject: GetAccountRequest(),
                           responses: [
                             .init(code: "200",
-                                  description: "",
+                                  description: "Description",
                                   type: .object(JsonRPCResponse<String>.self, asCollection: false))
                           ]),
             ])

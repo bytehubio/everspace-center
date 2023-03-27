@@ -19,19 +19,12 @@ public enum EverRPCMethods: String, Content {
     case sendExternalMessage
     case runGetMethodFift
     case runGetMethodAbi
+    case waitForTransaction
 }
 
 class EverJsonRpcController {
     
     static let shared: EverJsonRpcController = .init()
-//    static let transactionsController: EverTransactionsController = .init()
-//    static let accountsController: EverAccountsController = .init()
-    
-    init() {
-//        let openAPIBuilder: OpenAPIBuilder = EverSwaggerController.openAPIBuilder
-//        Self.transactionsController.prepareSwagger(openAPIBuilder)
-//        Self.accountsController.prepareSwagger(openAPIBuilder)
-    }
     
     func jsonRpc(_ req: Request) async throws -> Response {
         let method: EverRPCMethods = try req.content.decode(EverJsonRPCRequestMethod.self).method
@@ -51,6 +44,8 @@ class EverJsonRpcController {
             return try await encodeResponse(for: req, json: try await EverRunGetMethodsController.shared.runGetMethodAbi(req))
         case .runGetMethodFift:
             return try await encodeResponse(for: req, json: try await EverRunGetMethodsController.shared.runGetMethodFift(req))
+        case .waitForTransaction:
+            return try await encodeResponse(for: req, json: try await EverSendController.shared.waitForTransaction(req))
         }
     }
 }

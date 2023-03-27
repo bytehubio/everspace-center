@@ -80,26 +80,26 @@ extension EverRunGetMethodsController {
     func prepareSwagger(_ openAPIBuilder: OpenAPIBuilder) -> OpenAPIBuilder {
         return openAPIBuilder.add(
             APIController(name: "run get methods",
-                          description: "Controller where we can manage users",
+                          description: "RunGetMethod Controller",
                           actions: [
                             APIAction(method: .get,
                                       route: "/everscale/runGetMethodFift",
                                       summary: "",
-                                      description: "Get Account Transactions",
+                                      description: "Run Get Fift method",
                                       parametersObject: EverClient.RunGetMethodFift(),
                                       responses: [
                                         .init(code: "200",
-                                              description: "Specific user",
+                                              description: "Description",
                                               type: .object(JsonRPCResponse<EverClient.RunGetMethodFiftResponse>.self, asCollection: false))
                                       ]),
                             APIAction(method: .get,
                                       route: "/everscale/runGetMethodAbi",
                                       summary: "",
-                                      description: "Get Account Transactions",
+                                      description: "Run Get method by Abi",
                                       parametersObject: EverClient.RunGetMethodAbi(),
                                       responses: [
                                         .init(code: "200",
-                                              description: "Specific user",
+                                              description: "Description",
                                               type: .object(JsonRPCResponse<EverClient.RunGetMethodFiftResponse>.self, asCollection: false))
                                       ]),
                           ])
