@@ -12,13 +12,10 @@ import IkigaJSON
 /// Captures all errors and transforms them into an internal server error HTTP response.
 public final class CustomErrorMiddleware: Middleware {
     /// Structure of `ErrorMiddleware` default response.
-//    internal struct ErrorResponse: Codable {
-//        /// Always `true` to indicate this is a non-typical JSON response.
-//        var error: Bool
-//
-//        /// The reason for the error.
-//        var reason: String
-//    }
+    internal struct ErrorResponse: Codable {
+        /// The reason for the error.
+        var error: String
+    }
 
     /// Create a default `ErrorMiddleware`. Logs errors to a `Logger` based on `Environment`
     /// and converts `Error` to `Response` based on conformance to `AbortError` and `Debuggable`.
@@ -58,19 +55,21 @@ public final class CustomErrorMiddleware: Middleware {
             // attempt to serialize the error to json
             do {
                 let resultError: String = "Status: \(status). Reason: \(reason)"
-                if !req.url.string.contains("jsonRpc") {
-                    return Response(body: Response.Body(string: resultError))
-                }
-                var errorResponse: JsonRPCResponse<JsonRPCVoid>!
-                if let id = req.parameters.get("id") {
-                    errorResponse = JsonRPCResponse<JsonRPCVoid>(id: id, jsonrpc: .v2_0, error: resultError)
-                } else if let content: JsonRPCRequestDefault = try? req.content.decode(JsonRPCRequestDefault.self) {
-                    errorResponse = JsonRPCResponse<JsonRPCVoid>(id: content.id, jsonrpc: content.jsonrpc, error: resultError)
+                if req.url.string.contains("jsonRpc") {
+                    var errorResponse: JsonRPCResponse<JsonRPCVoid>!
+                    if let id = req.parameters.get("id") {
+                        errorResponse = JsonRPCResponse<JsonRPCVoid>(id: id, jsonrpc: .v2_0, error: resultError)
+                    } else if let content: JsonRPCRequestDefault = try? req.content.decode(JsonRPCRequestDefault.self) {
+                        errorResponse = JsonRPCResponse<JsonRPCVoid>(id: content.id, jsonrpc: content.jsonrpc, error: resultError)
+                    } else {
+                        errorResponse = JsonRPCResponse<JsonRPCVoid>(error: resultError)
+                    }
+                    response.body = try .init(data: IkigaJSONEncoder().encode(errorResponse), byteBufferAllocator: req.byteBufferAllocator)
                 } else {
-                    errorResponse = JsonRPCResponse<JsonRPCVoid>(error: resultError)
+                    let errorResponse = ErrorResponse(error: reason)
+                    response.body = try .init(data: IkigaJSONEncoder().encode(errorResponse), byteBufferAllocator: req.byteBufferAllocator)
                 }
                 
-                response.body = try .init(data: IkigaJSONEncoder().encode(errorResponse), byteBufferAllocator: req.byteBufferAllocator)
                 response.headers.replaceOrAdd(name: .contentType, value: "application/json; charset=utf-8")
             } catch {
                 response.body = .init(string: "Oops: \(error)", byteBufferAllocator: req.byteBufferAllocator)

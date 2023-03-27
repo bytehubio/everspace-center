@@ -57,7 +57,9 @@ extension EverBlocksController {
         let account = try await EverClient.getAccount(accountAddress: "-1:\(address)")
         let fileManager: FileManager = FileManager.default
         let uniqName: String = "\(UUID())-\(req.id).boc"
+        pe(uniqName)
         let filePath: String = "\(pathToRootDirectory)/get_congig_params/\(uniqName)"
+        pe(filePath)
         let tempFileURL: URL = URL(fileURLWithPath: filePath)
         if !fileManager.fileExists(atPath: filePath) {
             fileManager.createFile(atPath: filePath, contents: nil, attributes: nil)
