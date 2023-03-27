@@ -79,11 +79,12 @@ extension EverBlocksController {
         app.logger.warning("readed \(1)")
         let command: String = "node \(pathToRootDirectory)/get_congig_params/cfgparam.js \(filePath) \(content.number)"
 //        app.logger.report(error: AppError.mess("\(command)"))
-        app.logger.warning("\(command)")
+        app.logger.warning("command \(command)")
         let out: String = try await systemCommand(command, timeOutSec: 7)
 //        app.logger.report(error: AppError.mess("\(out)"))
-        app.logger.warning("\(out)")
+        app.logger.warning("out \(out)")
         try fileManager.removeItem(at: tempFileURL)
+        app.logger.warning("after delete")
         let model: BlockConfigResponse = try out.toModel(BlockConfigResponse.self)
         app.logger.warning("return \(try? model.toJson() ?? "-")")
         return model
