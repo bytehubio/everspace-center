@@ -57,9 +57,9 @@ extension EverBlocksController {
         let account = try await EverClient.getAccount(accountAddress: "-1:\(address)")
         let fileManager: FileManager = FileManager.default
         let uniqName: String = "\(UUID())-\(req.id).boc"
-        pe(uniqName)
+        app.logger.report(error: AppError.mess("\(uniqName)"))
         let filePath: String = "\(pathToRootDirectory)/get_congig_params/\(uniqName)"
-        pe(filePath)
+        app.logger.report(error: AppError.mess("\(filePath)"))
         let tempFileURL: URL = URL(fileURLWithPath: filePath)
         if !fileManager.fileExists(atPath: filePath) {
             fileManager.createFile(atPath: filePath, contents: nil, attributes: nil)
@@ -67,9 +67,13 @@ extension EverBlocksController {
         guard let contentData = account.data.data(using: .utf8) else {
             throw makeError(AppError.mess("Can not convert string to Data"))
         }
+        app.logger.report(error: AppError.mess("\(contentData.count)"))
         try await req.fileio.writeFile(ByteBuffer(data: contentData), at: filePath)
+        app.logger.report(error: AppError.mess("readed \(1)"))
         let command: String = "node \(pathToRootDirectory)/get_congig_params/cfgparam.js \(filePath) \(content.number)"
+        app.logger.report(error: AppError.mess("\(command)"))
         let out: String = try await systemCommand(command, timeOutSec: 7)
+        app.logger.report(error: AppError.mess("\(out)"))
         try fileManager.removeItem(at: tempFileURL)
         let model: BlockConfigResponse = try out.toModel(BlockConfigResponse.self)
         
