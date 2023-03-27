@@ -18,12 +18,14 @@ extension EverClient {
         var balance: String = ""
         var acc_type: Int = 1
         var acc_type_name: String = ""
-        var boc: String = ""
         var code: String = ""
         var code_hash: String = ""
-        var prev_code_hash: String = ""
+        var due_payment: String? = ""
         var workchain_id: Int = 1
+        var library_hash: String? = ""
+        var library: String? = ""
         var data: String = ""
+        var data_hash: String = ""
     }
     
     public struct AccountBalance: Codable {
@@ -36,7 +38,6 @@ extension EverClient {
     ) async throws -> Account {
         let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress)
         let response: [Account] = try await getAccounts(accountAddresses: [accountAddress])
-        
         if let first = response.first {
             return first
         } else {
@@ -68,7 +69,7 @@ extension EverClient {
                                                                             "data_hash",
                                                                             "library",
                                                                             "library_hash",
-                                                                            "due_payment",
+                                                                            "due_payment(format: DEC)",
                                                                             "workchain_id",
                                                                          ].joined(separator: " "))
         let response: TSDKResultOfQueryCollection = try await client.net.query_collection(paramsOfQueryCollection)

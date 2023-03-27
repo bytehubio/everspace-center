@@ -30,7 +30,7 @@
       },
       {
         "package": "BigInt",
-        "repositoryURL": "https://github.com/bytehubio/BigInt",
+        "repositoryURL": "https://github.com/bytehubio/BigInt.git",
         "state": {
           "branch": null,
           "revision": "0ed110f7555c34ff468e72e1686e59721f2b0da6",

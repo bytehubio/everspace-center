@@ -274,7 +274,6 @@ query {
         
         var resultArray: [TransactionHistoryModel] = tempArray
         let transactions = try await client.net.query_collection(paramsOfQueryCollection).result
-        
         for transaction in transactions {
             let tx: TransactionHistoryModel = try transaction.toModel(TransactionHistoryModel.self)
             if

@@ -23,6 +23,7 @@ final class EverSwaggerController {
         EverAccountsController.shared.prepareSwagger(Self.openAPIBuilder)
         EverSendController.shared.prepareSwagger(Self.openAPIBuilder)
         EverRunGetMethodsController.shared.prepareSwagger(Self.openAPIBuilder)
+        EverBlocksController.shared.prepareSwagger(Self.openAPIBuilder)
     }
     
     func index(_ req: Request) async throws -> Response {

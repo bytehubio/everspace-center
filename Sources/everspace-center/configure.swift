@@ -22,7 +22,11 @@ public func configure(_ app: Application) throws {
     
     /// START VAPOR CONFIGURING
     app.http.server.configuration.address = BindAddress.hostname(vaporIp, port: vaporPort)
-    app.logger.logLevel = .notice
+    #if os(Linux)
+        app.logger.logLevel = .warning
+    #else
+        app.logger.logLevel = .debug
+    #endif
     
     /// CUSTOM JSON ENCODER
 //    var decoder = IkigaJSONDecoder()

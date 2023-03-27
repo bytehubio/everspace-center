@@ -18,6 +18,8 @@ let packageDependencies: [Package.Dependency] = [
     .package(name: "BigInt", url: "https://github.com/bytehubio/BigInt.git", .exact("5.3.0")),
 //    .package(path: "/Users/nerzh/mydata/swift_projects/Swiftgger"),
     .package(url: "https://github.com/nerzh/Swiftgger", .upToNextMajor(from: "2.0.2")),
+//    .package(url: "https://github.com/tonkeeper/ton-swift", .branch("main")),
+//    .package(path: "/Users/nerzh/mydata/swift_projects/ton-swift")
 ]
 
 let mainTarget: [Target.Dependency] = [
@@ -31,7 +33,8 @@ let mainTarget: [Target.Dependency] = [
     .product(name: "SwiftExtensionsPack", package: "SwiftExtensionsPack"),
     .product(name: "IkigaJSON", package: "IkigaJSON"),
     .product(name: "BigInt", package: "BigInt"),
-    .product(name: "Swiftgger", package: "Swiftgger")
+    .product(name: "Swiftgger", package: "Swiftgger"),
+//    .product(name: "TonSwift", package: "ton-swift"),
 ]
 
 let package = Package(

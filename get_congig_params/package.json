@@ -1,0 +1,14 @@
+{
+  "name": "get_congig_params",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cfgparam.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ton3": "^0.0.16"
+  }
+}

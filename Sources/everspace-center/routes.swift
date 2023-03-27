@@ -21,9 +21,6 @@ func routes(_ app: Application) throws {
         try group.register(collection: EverAccountsController.shared)
         try group.register(collection: EverSendController.shared)
         try group.register(collection: EverRunGetMethodsController.shared)
+        try group.register(collection: EverBlocksController.shared)
     }
-    
-//    try app.group("toncoin") { group in
-//        try group.register(collection: SwaggerController())
-//    }
 }

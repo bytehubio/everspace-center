@@ -11,3 +11,5 @@ Api/tg*
 .env*
 Keys/*
 Dependencies
+
+get_congig_params/node_modules

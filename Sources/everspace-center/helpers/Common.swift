@@ -7,6 +7,7 @@
 
 import Foundation
 import Vapor
+//import SwiftExtensionsPack
 
 var pathToRootDirectory: String {
     /// Please, set custom working directory to project folder for your xcode scheme. This is necessary for the relative path "./" to the project folders to work.
@@ -43,3 +44,131 @@ public func encodeResponse(for request: Vapor.Request, json: String) async throw
     res.body = Response.Body(string: json)
     return res
 }
+
+
+extension Process: @unchecked Sendable {}
+
+@discardableResult
+func systemCommand(_ command: String, _ user: String? = nil, timeOutNanoseconds: UInt32 = 0) async throws -> String {
+    var result: String = .init()
+    let process: Process? = .init()
+    let pipe: Pipe = .init()
+    var timeOutThread: Thread?
+    process?.executableURL = .init(fileURLWithPath: "/usr/bin/env")
+    process?.standardOutput = pipe
+    process?.standardError = pipe
+    if user != nil {
+        process?.arguments = ["sudo", "-H", "-u", user!, "bash", "-lc", "\(command)"]
+    } else {
+        process?.arguments = ["bash", "-lc", "\(command)"]
+    }
+    if timeOutNanoseconds > 0 {
+        Task {
+            usleep(timeOutNanoseconds)
+            try await forceKillProcess(process)
+        }
+    }
+    try process?.run()
+    timeOutThread?.start()
+    process?.waitUntilExit()
+    let data: Data = pipe.fileHandleForReading.readDataToEndOfFile()
+    if let output = String(data: data, encoding: .utf8) {
+        result = output.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    if process?.isRunning ?? false { try await forceKillProcess(process) }
+    return result
+}
+
+
+actor ForceKillProcessActor {
+    private var _flag: Bool = true
+    public func setFlag(_ value: Bool) { _flag = value }
+    public func flag() -> Bool { _flag }
+}
+
+func forceKillProcess(_ process: Process?) async throws {
+    process?.terminate()
+    usleep(1000)
+    if process?.isRunning ?? false { process?.interrupt() }
+    usleep(1000)
+    if process?.isRunning ?? false { try await systemCommand("kill -9 \(process?.processIdentifier ?? 0)") }
+    let waitForShutdown: UInt32 = 3 * 1_000_000
+    let flag: ForceKillProcessActor = .init()
+    Task.detached { usleep(waitForShutdown); await flag.setFlag(false) }
+    while process?.isRunning ?? false {
+        if await flag.flag() { break }
+        try await systemCommand("kill -9 \(process?.processIdentifier ?? 0)")
+        usleep(1000)
+    }
+}
+
+
+
+
+
+
+@discardableResult
+func systemCommand(_ command: String) async throws -> String {
+    try await systemCommand(command, nil, timeOutNanoseconds: 0)
+}
+
+
+@discardableResult
+func systemCommand(_ command: String, _ user: String? = nil, timeOutSec: UInt32 = 0) async throws -> String {
+    try await systemCommand(command, user, timeOutNanoseconds: timeOutSec * 1000000)
+}
+
+
+//@discardableResult
+//func systemCommand(_ command: String, _ user: String? = nil, timeOutNanoseconds: UInt32 = 0) async throws -> String {
+//    var result: String = .init()
+//    let process: Process? = .init()
+//    let pipe: Pipe = .init()
+//    process?.executableURL = .init(fileURLWithPath: "/usr/bin/env")
+//    process?.standardOutput = pipe
+//    process?.standardError = pipe
+//    if user != nil {
+//        process.arguments = ["sudo", "-H", "-u", user!, "bash", "-lc", "\(command)"]
+//    } else {
+//        process.arguments = ["bash", "-lc", "\(command)"]
+//    }
+//    if timeOutNanoseconds > 0 {
+//        Thread {
+//            Task {
+//                pe("KILL")
+//                usleep(timeOutNanoseconds)
+//                pe("KILL33 \(timeOutNanoseconds)")
+////                try? await forceKillProcess(process)
+//            }
+//        }.start()
+//    }
+//    try process.run()
+//    pe(11)
+//    process.waitUntilExit()
+//    pe(12)
+//    let data: Data = pipe.fileHandleForReading.readDataToEndOfFile()
+//    pe(13)
+//    if let output = String(data: data, encoding: .utf8) {
+//        pe(14)
+//        result = output.trimmingCharacters(in: .whitespacesAndNewlines)
+//        pe("result", result)
+//    }
+//    pe(15)
+//    if process.isRunning { try await forceKillProcess(process) }
+//    pe(16)
+//    return result
+//}
+//
+//
+//func forceKillProcess(_ process: Process) async throws {
+//    pe("KILL 2")
+//    process.terminate()
+//    usleep(1000)
+//    if process.isRunning { process.interrupt() }
+//    usleep(1000)
+//    if process.isRunning { try await systemCommand("kill -9 \(process.processIdentifier)") }
+////    while process.isRunning {
+////        try systemCommand("kill -9 \(process.processIdentifier)")
+////        usleep(1000)
+////    }
+//}
