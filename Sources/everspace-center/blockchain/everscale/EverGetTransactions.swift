@@ -44,6 +44,53 @@ extension EverClient {
         }
     }
     
+    struct ExtendedTransactionHistoryModel: Codable, Content {
+        var id: String = "..."
+        var account_addr: String = "..."
+        var now: Double = 1
+        var total_fees: String = "..."
+        var balance_delta: String = "..."
+        var out_msgs: [String] = ["..."]
+        var in_message: InMessage? = .init()
+        var out_messages: [OutMessage] = [.init()]
+        var lt: String = "..."
+        var compute: TransactionCompute = .init()
+        var destroyed: Bool = false
+        var end_status_name: String = "..."
+        var ext_in_msg_fee: String = "..."
+        var cursor: String? = "..."
+        
+        var isIncomingTransaction: Bool {
+            out_messages.isEmpty
+        }
+        
+        struct InMessage: Codable {
+            var id: String = "..."
+            var src: String = "..."
+            var value: String? = "..."
+            var dst: String = "..."
+            var body: String? = "..."
+        }
+        
+        struct OutMessage: Codable {
+            var id: String = "..."
+            var dst: String = "..."
+            var value: String? = "..."
+            var body: String? = "..."
+        }
+        
+        struct TransactionCompute: Codable {
+            var account_activated: Bool = false
+            var compute_type: Int = 1
+            var exit_code: Int = 1
+            var gas_credit: Int = 1
+            var gas_fees: String = "..."
+            var gas_limit: String = "..."
+            var gas_used: String = "..."
+            var vm_steps: Double = 1
+        }
+    }
+    
     
     struct TransactionIds: Codable {
         var blockchain: BlockCain
@@ -247,4 +294,33 @@ query {
         
     }
     
+    class func getTransaction(client: TSDKClientModule = EverClient.shared.client,
+                              hashId: String? = nil
+    ) async throws -> ExtendedTransactionHistoryModel {
+        let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "transactions",
+                                                                         filter: ["id": ["ed": hashId]].toAnyValue(),
+                                                                         result: [
+                                                                            "id",
+                                                                            "account_addr",
+                                                                            "balance_delta(format: DEC)",
+                                                                            "in_message{id dst value(format: DEC) src body}",
+                                                                            "out_messages{id dst value(format: DEC) body}",
+                                                                            "out_msgs",
+                                                                            "total_fees(format: DEC)",
+                                                                            "now",
+                                                                            "lt",
+                                                                            "compute{ account_activated compute_type exit_code gas_credit gas_fees(format: DEC) gas_limit(format: DEC) gas_used(format: DEC) vm_steps }",
+                                                                            "destroyed",
+                                                                            "end_status_name",
+                                                                            "ext_in_msg_fee(format: DEC)"
+                                                                         ].joined(separator: " ")
+        )
+        
+        let transactions = try await client.net.query_collection(paramsOfQueryCollection).result
+        if let transaction = try transactions.first?.toModel(ExtendedTransactionHistoryModel.self) {
+            return transaction
+        } else {
+            throw makeError(AppError(reason: "Convert to ExtendedTransactionHistoryModel failed"))
+        }
+    }
 }

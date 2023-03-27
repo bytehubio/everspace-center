@@ -53,7 +53,7 @@ extension EverSendController {
                           description: "Controller where we can manage users",
                           actions: [
                 APIAction(method: .post,
-                          route: "/everscale/sendExternalMessageRequest",
+                          route: "/everscale/sendExternalMessage",
                           summary: "",
                           description: "Get Account Transactions",
                           parametersObject: SendExternalMessageRequest(),

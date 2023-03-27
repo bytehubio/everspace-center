@@ -14,13 +14,13 @@ import Swiftgger
 
 final class EverTransactionsController: RouteCollection {
     
-    typealias ResponseValue = [EverClient.TransactionHistoryModel]
     typealias Response = String
     
     static let shared: EverTransactionsController = .init()
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("getTransactions", use: getTransactions)
+        routes.get("getTransaction", use: getTransaction)
     }
 
     func getTransactions(_ req: Request) async throws -> Response {
@@ -30,8 +30,19 @@ final class EverTransactionsController: RouteCollection {
     
     func getTransactionsRpc(_ req: Request) async throws -> Response {
         let content: EverJsonRPCRequest<GetTransactionsRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionsRequest>.self)
-        return try JsonRPCResponse<ResponseValue>(id: content.id,
-                                                  result: try await getTransactions(EverClient.shared.client, content.params)).toJson()
+        return try JsonRPCResponse<[EverClient.TransactionHistoryModel]>(id: content.id,
+                                                                         result: try await getTransactions(EverClient.shared.client, content.params)).toJson()
+    }
+    
+    func getTransaction(_ req: Request) async throws -> Response {
+        let content: GetTransactionRequest = try req.query.decode(GetTransactionRequest.self)
+        return try await getTransaction(EverClient.shared.client, content).toJson()
+    }
+    
+    func getTransactionRpc(_ req: Request) async throws -> Response {
+        let content: EverJsonRPCRequest<GetTransactionRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionRequest>.self)
+        return try JsonRPCResponse<EverClient.ExtendedTransactionHistoryModel>(id: content.id,
+                                                                               result: try await getTransaction(EverClient.shared.client, content.params)).toJson()
     }
 }
 
@@ -45,9 +56,13 @@ extension EverTransactionsController {
         var hash: String? = nil
     }
     
+    struct GetTransactionRequest: Content {
+        var hash: String = "..."
+    }
+    
     func getTransactions(_ client: TSDKClientModule,
                          _ content: GetTransactionsRequest
-    ) async throws -> ResponseValue {
+    ) async throws -> [EverClient.TransactionHistoryModel] {
         let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, content.address)
         if content.hash != nil || content.lt != nil || content.to_lt != nil {
             let transactions = try await EverClient.getTransactions(address: accountAddress,
@@ -69,6 +84,12 @@ extension EverTransactionsController {
             }
         }
     }
+    
+    func getTransaction(_ client: TSDKClientModule,
+                        _ content: GetTransactionRequest
+    ) async throws -> EverClient.ExtendedTransactionHistoryModel {
+        try await EverClient.getTransaction(client: client, hashId: content.hash)
+    }
 
     @discardableResult
     func prepareSwagger(_ openAPIBuilder: OpenAPIBuilder) -> OpenAPIBuilder {
@@ -84,14 +105,27 @@ extension EverTransactionsController {
                           responses: [
                             .init(code: "200",
                                   description: "Specific user",
-                                  type: .object(JsonRPCResponse<ResponseValue>.self, asCollection: false))
-                          ])
+                                  type: .object(JsonRPCResponse<[EverClient.TransactionHistoryModel]>.self, asCollection: false))
+                          ]),
+                APIAction(method: .get,
+                          route: "/everscale/getTransaction",
+                          summary: "",
+                          description: "Get Account Transaction",
+                          parametersObject: GetTransactionsRequest(),
+                          responses: [
+                            .init(code: "200",
+                                  description: "Specific user",
+                                  type: .object(JsonRPCResponse<EverClient.ExtendedTransactionHistoryModel>.self, asCollection: false))
+                          ]),
             ])
         ).add([
-            APIObject(object: JsonRPCResponse<ResponseValue>(result: [.init()])),
+            APIObject(object: JsonRPCResponse<[EverClient.TransactionHistoryModel]>(result: [.init()])),
+            APIObject(object: JsonRPCResponse<EverClient.ExtendedTransactionHistoryModel>(result: .init())),
             APIObject(object: EverClient.TransactionHistoryModel()),
             APIObject(object: EverClient.TransactionHistoryModel.InMessage()),
             APIObject(object: EverClient.TransactionHistoryModel.OutMessage()),
+            APIObject(object: EverClient.ExtendedTransactionHistoryModel()),
+            APIObject(object: EverClient.ExtendedTransactionHistoryModel.TransactionCompute()),
         ])
     }
 }

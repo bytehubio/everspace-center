@@ -13,9 +13,10 @@ import Swiftgger
 
 public enum EverRPCMethods: String, Content {
     case getTransactions
+    case getTransaction
     case getAccount
     case getBalance
-    case sendExternalMessageRequest
+    case sendExternalMessage
 }
 
 class EverJsonRpcController {
@@ -36,11 +37,13 @@ class EverJsonRpcController {
         switch method {
         case .getTransactions:
             return try await encodeResponse(for: req, json: try await EverTransactionsController.shared.getTransactionsRpc(req))
+        case .getTransaction:
+            return try await encodeResponse(for: req, json: try await EverTransactionsController.shared.getTransactionRpc(req))
         case .getAccount:
             return try await encodeResponse(for: req, json: try await EverAccountsController.shared.getAccountRpc(req))
         case .getBalance:
             return try await encodeResponse(for: req, json: try await EverAccountsController.shared.getBalanceRpc(req))
-        case .sendExternalMessageRequest:
+        case .sendExternalMessage:
             return try await encodeResponse(for: req, json: try await EverSendController.shared.sendExternalMessage(req))
         }
     }
