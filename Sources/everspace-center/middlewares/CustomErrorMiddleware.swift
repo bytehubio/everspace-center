@@ -54,7 +54,7 @@ public final class CustomErrorMiddleware: Middleware {
             
             // attempt to serialize the error to json
             do {
-                let resultError: String = "Status: \(status). Reason: \(reason)"
+                let resultError: String = "[\(Date())] Status: \(status). Reason: \(reason). Error: \(error.localizedDescription)"
                 if req.url.string.contains("jsonRpc") {
                     var errorResponse: JsonRPCResponse<JsonRPCVoid>!
                     if let id = req.parameters.get("id") {
@@ -66,7 +66,7 @@ public final class CustomErrorMiddleware: Middleware {
                     }
                     response.body = try .init(data: IkigaJSONEncoder().encode(errorResponse), byteBufferAllocator: req.byteBufferAllocator)
                 } else {
-                    let errorResponse = ErrorResponse(error: reason)
+                    let errorResponse = ErrorResponse(error: "[\(Date())] Reason: \(reason). Error: \(error.localizedDescription)")
                     response.body = try .init(data: IkigaJSONEncoder().encode(errorResponse), byteBufferAllocator: req.byteBufferAllocator)
                 }
                 
