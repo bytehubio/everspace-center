@@ -85,7 +85,7 @@ extension EverBlocksController {
         app.logger.warning("\(out)")
         try fileManager.removeItem(at: tempFileURL)
         let model: BlockConfigResponse = try out.toModel(BlockConfigResponse.self)
-        
+        app.logger.warning("return \(try? model.toJson() ?? "-")")
         return model
     }
 
