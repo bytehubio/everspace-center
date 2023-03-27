@@ -14,7 +14,6 @@ import Swiftgger
 
 final class EverSendController: RouteCollection {
     
-    typealias ResponseValue = [EverClient.TransactionHistoryModel]
     typealias Response = String
     
     static let shared: EverSendController = .init()
@@ -24,72 +23,49 @@ final class EverSendController: RouteCollection {
     }
 
     func sendExternalMessage(_ req: Request) async throws -> Response {
-//        let content: GetTransactionsRequest = try req.query.decode(GetTransactionsRequest.self)
-//        return try await getTransactions(EverClient.shared.client, content).toJson()
-        return ""
+        let content: SendExternalMessageRequest = try req.query.decode(SendExternalMessageRequest.self)
+        return try await sendExternalMessage(EverClient.shared.client, content).toJson()
     }
     
     func sendExternalMessageRpc(_ req: Request) async throws -> Response {
-        ""
-//        let content: EverJsonRPCRequest<GetTransactionsRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionsRequest>.self)
-//        return try JsonRPCResponse<ResponseValue>(id: content.id,
-//                                                  result: try await getTransactions(EverClient.shared.client, content.params)).toJson()
+        let content: EverJsonRPCRequest<SendExternalMessageRequest> = try req.content.decode(EverJsonRPCRequest<SendExternalMessageRequest>.self)
+        return try JsonRPCResponse<EverClient.SendExternalMessage>(id: content.id,
+                                                                   result: try await sendExternalMessage(EverClient.shared.client, content.params)).toJson()
     }
 }
 
-//extension EverSendController {
-//    
-//    struct SendExternalMessageRequest: Content {
-//        var boc: String = ""
-//    }
-//    
-//    func sendExternalMessage(_ client: TSDKClientModule,
-//                             _ content: SendExternalMessageRequest
-//    ) async throws -> ResponseValue {
-//        let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, content.address)
-//        if content.hash != nil || content.lt != nil || content.to_lt != nil {
-//            let transactions = try await EverClient.getTransactions(address: accountAddress,
-//                                                                    limit: content.limit,
-//                                                                    lt: content.lt,
-//                                                                    to_lt: content.to_lt,
-//                                                                    hashId: content.hash)
-//            return transactions
-//        } else {
-//            return try await withCheckedThrowingContinuation { continuation in
-//                EverClient.getTransactions(address: accountAddress, limit: content.limit) { result in
-//                    switch result {
-//                    case let .success(transactions):
-//                        continuation.resume(returning: transactions)
-//                    case let .failure(error):
-//                        continuation.resume(throwing: makeError(error))
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    @discardableResult
-//    func prepareSwagger(_ openAPIBuilder: OpenAPIBuilder) -> OpenAPIBuilder {
-//        return openAPIBuilder.add(
-//            APIController(name: "transactions",
-//                          description: "Controller where we can manage users",
-//                          actions: [
-//                APIAction(method: .get,
-//                          route: "/everscale/getTransactions",
-//                          summary: "",
-//                          description: "Get Account Transactions",
-//                          parametersObject: GetTransactionsRequest(),
-//                          responses: [
-//                            .init(code: "200",
-//                                  description: "Specific user",
-//                                  type: .object(JsonRPCResponse<ResponseValue>.self, asCollection: false))
-//                          ])
-//            ])
-//        ).add([
-//            APIObject(object: JsonRPCResponse<ResponseValue>(result: [.init()])),
-//            APIObject(object: EverClient.TransactionHistoryModel()),
-//            APIObject(object: EverClient.TransactionHistoryModel.InMessage()),
-//            APIObject(object: EverClient.TransactionHistoryModel.OutMessage()),
-//        ])
-//    }
-//}
+extension EverSendController {
+    
+    struct SendExternalMessageRequest: Content {
+        var boc: String = ""
+    }
+    
+    func sendExternalMessage(_ client: TSDKClientModule,
+                             _ content: SendExternalMessageRequest
+    ) async throws -> EverClient.SendExternalMessage {
+        try await EverClient.sendExternalMessage(client: client, boc: content.boc)
+    }
+
+    @discardableResult
+    func prepareSwagger(_ openAPIBuilder: OpenAPIBuilder) -> OpenAPIBuilder {
+        return openAPIBuilder.add(
+            APIController(name: "send",
+                          description: "Controller where we can manage users",
+                          actions: [
+                APIAction(method: .get,
+                          route: "/everscale/sendExternalMessageRequest",
+                          summary: "",
+                          description: "Get Account Transactions",
+                          parametersObject: SendExternalMessageRequest(),
+                          responses: [
+                            .init(code: "200",
+                                  description: "Specific user",
+                                  type: .object(JsonRPCResponse<EverClient.SendExternalMessage>.self, asCollection: false))
+                          ])
+            ])
+        ).add([
+            APIObject(object: JsonRPCResponse<EverClient.SendExternalMessage>(result: .init())),
+            APIObject(object: EverClient.SendExternalMessage()),
+        ])
+    }
+}

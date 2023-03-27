@@ -121,6 +121,7 @@ extension EverAccountsController {
         ).add([
             APIObject(object: JsonRPCResponse<EverClient.Account>(result: EverClient.Account())),
             APIObject(object: JsonRPCResponse<[EverClient.Account]>(result: [EverClient.Account()])),
+            APIObject(object: JsonRPCResponse<EverClient.AccountBalance>(result: EverClient.AccountBalance())),
             APIObject(object: EverClient.Account()),
             APIObject(object: EverClient.AccountBalance())
         ])
