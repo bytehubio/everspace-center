@@ -57,7 +57,7 @@ extension EverClient {
         var compute: TransactionCompute = .init()
         var destroyed: Bool = false
         var end_status_name: String = "..."
-        var ext_in_msg_fee: String = "..."
+        var ext_in_msg_fee: String? = "..."
         var cursor: String? = "..."
         
         var isIncomingTransaction: Bool {
@@ -76,14 +76,20 @@ extension EverClient {
             var id: String = "..."
             var dst: String = "..."
             var value: String? = "..."
-            var body: String? = "..."
+            var body: String = "..."
+            var boc: String = "..."
+            var bounce: Bool? = false
+            var bounced: Bool? = false
+            var created_lt: String = "..."
+            var fwd_fee: String? = "..."
+            var msg_type_name: String = "..."
         }
         
         struct TransactionCompute: Codable {
             var account_activated: Bool = false
             var compute_type: Int = 1
             var exit_code: Int = 1
-            var gas_credit: Int = 1
+            var gas_credit: Int? = 1
             var gas_fees: String = "..."
             var gas_limit: String = "..."
             var gas_used: String = "..."
@@ -304,7 +310,7 @@ query {
                                                                             "account_addr",
                                                                             "balance_delta(format: DEC)",
                                                                             "in_message{id dst value(format: DEC) src body}",
-                                                                            "out_messages{id dst value(format: DEC) body}",
+                                                                            "out_messages{id dst value(format: DEC) body boc bounce bounced created_lt(format: DEC) fwd_fee(format: DEC) msg_type_name}",
                                                                             "out_msgs",
                                                                             "total_fees(format: DEC)",
                                                                             "now",
@@ -317,6 +323,7 @@ query {
         )
         
         let transactions = try await client.net.query_collection(paramsOfQueryCollection).result
+        pe(transactions.first!.toJSON())
         if let transaction = try transactions.first?.toModel(ExtendedTransactionHistoryModel.self) {
             return transaction
         } else {
