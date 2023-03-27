@@ -59,15 +59,17 @@ extension EverClient {
                                                                          ].toAnyValue(),
                                                                          result: [
                                                                             "id",
+                                                                            "balance(format: DEC)",
                                                                             "acc_type",
                                                                             "acc_type_name",
-                                                                            "boc",
                                                                             "code",
                                                                             "code_hash",
-                                                                            "prev_code_hash",
-                                                                            "workchain_id",
                                                                             "data",
-                                                                            "balance(format: DEC)",
+                                                                            "data_hash",
+                                                                            "library",
+                                                                            "library_hash",
+                                                                            "due_payment",
+                                                                            "workchain_id",
                                                                          ].joined(separator: " "))
         let response: TSDKResultOfQueryCollection = try await client.net.query_collection(paramsOfQueryCollection)
         return try response.result.toJson().toModel([Account].self)

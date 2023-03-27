@@ -19,7 +19,7 @@ final class EverSendController: RouteCollection {
     static let shared: EverSendController = .init()
     
     func boot(routes: Vapor.RoutesBuilder) throws {
-        routes.get("sendExternalMessage", use: sendExternalMessage)
+        routes.post("sendExternalMessage", use: sendExternalMessage)
     }
 
     func sendExternalMessage(_ req: Request) async throws -> Response {
@@ -52,7 +52,7 @@ extension EverSendController {
             APIController(name: "send",
                           description: "Controller where we can manage users",
                           actions: [
-                APIAction(method: .get,
+                APIAction(method: .post,
                           route: "/everscale/sendExternalMessageRequest",
                           summary: "",
                           description: "Get Account Transactions",

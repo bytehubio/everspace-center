@@ -19,6 +19,7 @@ func routes(_ app: Application) throws {
         try group.register(collection: EverJsonRpcController.shared)
         try group.register(collection: EverTransactionsController.shared)
         try group.register(collection: EverAccountsController.shared)
+        try group.register(collection: EverSendController.shared)
     }
     
 //    try app.group("toncoin") { group in
