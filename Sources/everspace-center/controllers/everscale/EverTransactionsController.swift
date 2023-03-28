@@ -15,8 +15,13 @@ import Swiftgger
 final class EverTransactionsController: RouteCollection {
     
     typealias Response = String
+    static var shared: EverTransactionsController = .init(EverClient.shared.client)
+    var client: TSDKClientModule
+    var emptyClient: TSDKClientModule = EverClient.shared.emptyClient
     
-    static let shared: EverTransactionsController = .init()
+    init(_ client: TSDKClientModule) {
+        self.client = client
+    }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("getTransactions", use: getTransactions)

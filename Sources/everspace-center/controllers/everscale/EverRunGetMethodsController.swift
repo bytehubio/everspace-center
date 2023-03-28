@@ -15,8 +15,13 @@ import Swiftgger
 final class EverRunGetMethodsController: RouteCollection {
     
     typealias Response = String
+    static let shared: EverRunGetMethodsController = .init(EverClient.shared.client)
+    var client: TSDKClientModule
+    var emptyClient: TSDKClientModule = EverClient.shared.emptyClient
     
-    static let shared: EverRunGetMethodsController = .init()
+    init(_ client: TSDKClientModule) {
+        self.client = client
+    }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("runGetMethodFift", use: runGetMethodFift)

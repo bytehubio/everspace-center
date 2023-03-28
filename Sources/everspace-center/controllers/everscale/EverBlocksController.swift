@@ -15,7 +15,14 @@ import Swiftgger
 final class EverBlocksController: RouteCollection {
     
     typealias Response = String
-    static let shared: EverBlocksController = .init()
+    static let shared: EverBlocksController = .init(EverClient.shared.client)
+    var client: TSDKClientModule
+    var emptyClient: TSDKClientModule = EverClient.shared.emptyClient
+    
+    init(_ client: TSDKClientModule) {
+        pe(1)
+        self.client = client
+    }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("getConfigParams", use: getConfigParams)
@@ -68,6 +75,7 @@ extension EverBlocksController {
         try await req.fileio.writeFile(ByteBuffer(data: contentData), at: filePath)
         let command: String = "node \(pathToRootDirectory)/get_congig_params/cfgparam.js \(filePath) \(content.number)"
         let out: String = try await systemCommand(command, timeOutSec: 7)
+//        pe(out)
         try fileManager.removeItem(at: tempFileURL)
         let model: BlockConfigResponse = try out.toModel(BlockConfigResponse.self)
         

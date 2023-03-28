@@ -59,7 +59,7 @@ func systemCommand(_ command: String, _ user: String? = nil, timeOutNanoseconds:
     if user != nil {
         process.arguments = ["sudo", "-H", "-u", user!, "bash", "-lc", "\(command)"]
     } else {
-        process.arguments = ["bash", "-c", "\(command)"]
+        process.arguments = ["bash", "-lc", "\(command)"]
     }
     if timeOutNanoseconds > 0 {
         Task {
