@@ -10,7 +10,7 @@ import SwiftExtensionsPack
 import EverscaleClientSwift
 import Vapor
 
-public enum EverDevRPCMethods: String, Content {
+public enum EverDevnetRPCMethods: String, Content {
     case getTransactions
     case getTransaction
     case getAccount
@@ -21,6 +21,9 @@ public enum EverDevRPCMethods: String, Content {
     case waitForTransaction
     case getConfigParams
     case sendAndWaitTransaction
+    case getLastMasterBlock
+    case getBlock
+    case getRawBlock
 }
 
 class EverDevnetJsonRpcController: RouteCollection {
@@ -30,7 +33,7 @@ class EverDevnetJsonRpcController: RouteCollection {
     }
     
     func jsonRpc(_ req: Request) async throws -> Response {
-        let method: EverRPCMethods = try req.content.decode(EverJsonRPCRequestMethod.self).method
+        let method: EverDevnetRPCMethods = try req.content.decode(EverDevnetJsonRPCRequestMethod.self).method
         
         switch method {
         case .getTransactions:
@@ -53,6 +56,12 @@ class EverDevnetJsonRpcController: RouteCollection {
             return try await encodeResponse(for: req, json: try await everDevnetBlocksController.getConfigParams(req))
         case .sendAndWaitTransaction:
             return try await encodeResponse(for: req, json: try await everDevnetSendController.sendAndWaitTransaction(req))
+        case .getLastMasterBlock:
+            return try await encodeResponse(for: req, json: try await everDevnetBlocksController.getLastMasterBlock(req))
+        case .getBlock:
+            return try await encodeResponse(for: req, json: try await everDevnetBlocksController.getBlock(req))
+        case .getRawBlock:
+            return try await encodeResponse(for: req, json: try await everDevnetBlocksController.getRawBlock(req))
         }
     }
 }

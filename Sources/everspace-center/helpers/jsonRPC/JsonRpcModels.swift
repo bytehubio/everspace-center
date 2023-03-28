@@ -21,9 +21,14 @@ public struct EverJsonRPCRequestMethod: Content {
     var method: EverRPCMethods
 }
 
+public struct EverDevnetJsonRPCRequestMethod: Content {
+    var method: EverDevnetRPCMethods
+}
+
 public struct TonJsonRPCRequestMethod: Content {
     var method: TonRPCMethods
 }
+
 
 public struct JsonRPCRequestDefault: Content {
     var id: String

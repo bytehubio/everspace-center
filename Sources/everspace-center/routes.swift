@@ -28,11 +28,11 @@ let everDevnetBlocksController: EverBlocksController = .init(EverDevClient.clien
 
 let tonSwaggerController: TonSwaggerController = .init("toncoin")
 let tonJsonRpcController: TonJsonRpcController = .init()
-let tonTransactionsController: TonTransactionsController = .init(TonClient.client, tonSwaggerController)
-let tonAccountsController: TonAccountsController = .init(TonClient.client, tonSwaggerController)
-let tonSendController: TonSendController = .init(TonClient.client, tonSwaggerController)
-let tonRunGetMethodsController: TonRunGetMethodsController = .init(TonClient.client, tonSwaggerController)
-let tonBlocksController: TonBlocksController = .init(TonClient.client, tonSwaggerController)
+let tonTransactionsController: EverTransactionsController = .init(TonClient.client, tonSwaggerController)
+let tonAccountsController: EverAccountsController = .init(TonClient.client, tonSwaggerController)
+let tonSendController: EverSendController = .init(TonClient.client, tonSwaggerController)
+let tonRunGetMethodsController: EverRunGetMethodsController = .init(TonClient.client, tonSwaggerController)
+let tonBlocksController: EverBlocksController = .init(TonClient.client, tonSwaggerController)
 
 func routes(_ app: Application) throws {
 

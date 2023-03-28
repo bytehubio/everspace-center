@@ -21,6 +21,9 @@ public enum TonRPCMethods: String, Content {
     case waitForTransaction
     case getConfigParams
     case sendAndWaitTransaction
+    case getLastMasterBlock
+    case getBlock
+    case getRawBlock
 }
 
 class TonJsonRpcController: RouteCollection {
@@ -30,7 +33,7 @@ class TonJsonRpcController: RouteCollection {
     }
     
     func jsonRpc(_ req: Request) async throws -> Response {
-        let method: EverRPCMethods = try req.content.decode(EverJsonRPCRequestMethod.self).method
+        let method: TonRPCMethods = try req.content.decode(TonJsonRPCRequestMethod.self).method
         
         switch method {
         case .getTransactions:
@@ -53,6 +56,12 @@ class TonJsonRpcController: RouteCollection {
             return try await encodeResponse(for: req, json: try await tonBlocksController.getConfigParams(req))
         case .sendAndWaitTransaction:
             return try await encodeResponse(for: req, json: try await tonSendController.sendAndWaitTransaction(req))
+        case .getLastMasterBlock:
+            return try await encodeResponse(for: req, json: try await tonBlocksController.getLastMasterBlock(req))
+        case .getBlock:
+            return try await encodeResponse(for: req, json: try await tonBlocksController.getBlock(req))
+        case .getRawBlock:
+            return try await encodeResponse(for: req, json: try await tonBlocksController.getRawBlock(req))
         }
     }
 }
