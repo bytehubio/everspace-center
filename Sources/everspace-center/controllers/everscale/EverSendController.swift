@@ -69,7 +69,7 @@ extension EverSendController {
     func sendExternalMessage(_ client: TSDKClientModule,
                              _ content: SendExternalMessageRequest
     ) async throws -> Everscale.SendExternalMessage {
-        try await Everscale.sendExternalMessage(client: client, boc: content.boc)
+        try await Everscale.sendExternalMessageGQL(client: client, boc: content.boc)
     }
     
     func waitForTransaction(_ client: TSDKClientModule,
