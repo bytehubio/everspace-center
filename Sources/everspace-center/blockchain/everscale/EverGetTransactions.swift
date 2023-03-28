@@ -11,7 +11,7 @@ import BigInt
 import SwiftExtensionsPack
 import Vapor
 
-extension EverClient {
+extension Everscale {
     struct TransactionHistoryModel: Codable, Content {
         var id: String = "..."
         var account_addr: String = "..."
@@ -130,7 +130,7 @@ extension EverClient {
     }
     
     
-    class func getTransactions(client: TSDKClientModule = EverClient.shared.client,
+    class func getTransactions(client: TSDKClientModule,
                                address: String,
                                limit: UInt32? = nil,
                                cursor: String? = nil,
@@ -246,7 +246,7 @@ query {
     
     
     
-    class func getTransactions(client: TSDKClientModule = EverClient.shared.client,
+    class func getTransactions(client: TSDKClientModule,
                                address: String,
                                limit: UInt32?,
                                lt: String? = nil,
@@ -290,7 +290,8 @@ query {
         if transactions.isEmpty { return resultArray }
         let lastTransaction: TransactionHistoryModel = try transactions.last!.toModel(TransactionHistoryModel.self)
         if resultArray.last?.lt == lastTransaction.lt { return resultArray }
-        return try await getTransactions(address: address,
+        return try await getTransactions(client: client,
+                                         address: address,
                                          limit: limit ?? defaultLimit,
                                          lt: lt,
                                          to_lt: to_lt,
@@ -299,7 +300,7 @@ query {
         
     }
     
-    class func getTransaction(client: TSDKClientModule = EverClient.shared.client,
+    class func getTransaction(client: TSDKClientModule,
                               hashId: String? = nil
     ) async throws -> ExtendedTransactionHistoryModel {
         let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "transactions",

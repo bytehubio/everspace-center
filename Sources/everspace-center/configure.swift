@@ -20,11 +20,6 @@ public func configure(_ app: Application) throws {
     }
     guard let vaporIp = Environment.get("vapor_ip") else { fatalError("Set vapor_ip to .env.your_evironment") }
     
-    /// CLIENTS
-    EverClient.shared = try .init(clientConfig: EverClient.makeClientConfig(name: "everscale_mainnet"))
-    EverDevClient.shared = try .init(clientConfig: EverDevClient.makeClientConfig(name: "everscale_devnet"))
-    TonClient.shared = try .init(clientConfig: TonClient.makeClientConfig(name: "toncoin_mainnet"))
-    
     /// START VAPOR CONFIGURING
     app.http.server.configuration.address = BindAddress.hostname(vaporIp, port: vaporPort)
     #if os(Linux)

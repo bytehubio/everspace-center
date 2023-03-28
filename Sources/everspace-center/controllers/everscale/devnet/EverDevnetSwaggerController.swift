@@ -9,18 +9,18 @@ import Foundation
 import Vapor
 import Swiftgger
 
-final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
+final class EverDevnetSwaggerController: RouteCollection, SwaggerControllerPrtcl {
     
-    static let shared: TonSwaggerController = .init()
+    static let shared: EverDevnetSwaggerController = .init()
     let openAPIBuilder: OpenAPIBuilder = .init(
-        title: "TONCOIN API",
+        title: "EVERSCALE DEVNET API",
         version: "1.0.0",
         description: """
-                This is incredible Toncoin API.\n
+                This is incredible Everscale Devnet API.\n
         **Now temporarily without authorization.**\n
         \n
         You can use JSON RPC requests:\n
-            https://everspace.center/toncoin/jsonRpc\n\n
+            https://everspace.center/everscale-devnet/jsonRpc\n\n
         Example request:\n
             {\n
                 "id": "1",\n
@@ -43,6 +43,8 @@ final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
     //        .jwt(description: "You can get token from *sign-in* action from *Account* controller.")
         ]
     )
+
+    private init() {}
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("", use: index)
@@ -55,7 +57,7 @@ final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
         <html lang="en">
           <head>
             <meta charset="UTF-8">
-            <title>Everspace Center. Everscale API. Toncoin API. Venom API.</title>
+            <title>Swagger UI</title>
             <link rel="stylesheet" type="text/css" href="css/swagger/swagger-ui.css" />
             <link rel="stylesheet" type="text/css" href="css/swagger/index.css" />
             <link rel="icon" type="image/png" href="images/swagger/favicon-32x32.png" sizes="32x32" />
@@ -66,7 +68,7 @@ final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
             <div id="swagger-ui"></div>
             <script src="/js/swagger/swagger-ui-bundle.js" charset="UTF-8"> </script>
             <script src="/js/swagger/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-            <script src="/js/swagger/swagger-initializer-toncoin.js" charset="UTF-8"> </script>
+            <script src="/js/swagger/swagger-initializer-everscale-devnet.js" charset="UTF-8"> </script>
           </body>
         </html>
         """
@@ -78,4 +80,3 @@ final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
         try await encodeResponse(for: req, json: try openAPIBuilder.built().toJson())
     }
 }
-

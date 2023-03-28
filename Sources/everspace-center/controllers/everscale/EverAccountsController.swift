@@ -18,7 +18,7 @@ class EverAccountsController: RouteCollection {
     static var shared: EverAccountsController!
     var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
-    var emptyClient: TSDKClientModule = EverClient.shared.emptyClient
+    var emptyClient: TSDKClientModule = EverClient.emptyClient
     
     init(_ client: TSDKClientModule, _ swagger: SwaggerControllerPrtcl) {
         self.client = client
@@ -36,33 +36,33 @@ class EverAccountsController: RouteCollection {
     func getAccount(_ req: Request) async throws -> Response {
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
-            return try JsonRPCResponse<EverClient.Account>(id: content.id,
+            return try JsonRPCResponse<Everscale.Account>(id: content.id,
                                                            result: try await getAccount(client, content.params)).toJson()
         } else {
             let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
-            return try await getAccount(EverClient.shared.client, content).toJson()
+            return try await getAccount(client, content).toJson()
         }
     }
     
     func getAccounts(_ req: Request) async throws -> Response {
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<GetAccountsRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountsRequest>.self)
-            return try JsonRPCResponse<[EverClient.Account]>(id: content.id,
+            return try JsonRPCResponse<[Everscale.Account]>(id: content.id,
                                                              result: try await getAccounts(client, content.params)).toJson()
         } else {
             let content: GetAccountsRequest = try req.query.decode(GetAccountsRequest.self)
-            return try await getAccounts(EverClient.shared.client, content).toJson()
+            return try await getAccounts(client, content).toJson()
         }
     }
     
     func getBalance(_ req: Request) async throws -> Response {
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
-            return try JsonRPCResponse<EverClient.AccountBalance>(id: content.id,
+            return try JsonRPCResponse<Everscale.AccountBalance>(id: content.id,
                                                                   result: try await getBalance(client, content.params)).toJson()
         } else {
             let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
-            return try await getBalance(EverClient.shared.client, content).toJson()
+            return try await getBalance(client, content).toJson()
         }
     }
 }
@@ -78,16 +78,16 @@ extension EverAccountsController {
         var addresses: [String] = [""]
     }
     
-    func getAccount(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> EverClient.Account {
-        try await EverClient.getAccount(client: client, accountAddress: content.address)
+    func getAccount(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> Everscale.Account {
+        try await Everscale.getAccount(client: client, accountAddress: content.address)
     }
     
-    func getAccounts(_ client: TSDKClientModule, _ content: GetAccountsRequest) async throws -> [EverClient.Account] {
-        try await EverClient.getAccounts(client: client, accountAddresses: content.addresses)
+    func getAccounts(_ client: TSDKClientModule, _ content: GetAccountsRequest) async throws -> [Everscale.Account] {
+        try await Everscale.getAccounts(client: client, accountAddresses: content.addresses)
     }
     
-    func getBalance(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> EverClient.AccountBalance {
-        try await EverClient.getBalance(client: client, accountAddress: content.address)
+    func getBalance(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> Everscale.AccountBalance {
+        try await Everscale.getBalance(client: client, accountAddress: content.address)
     }
     
     @discardableResult
@@ -105,7 +105,7 @@ extension EverAccountsController {
                           responses: [
                             .init(code: "200",
                                   description: "Description",
-                                  type: .object(JsonRPCResponse<EverClient.Account>.self, asCollection: false))
+                                  type: .object(JsonRPCResponse<Everscale.Account>.self, asCollection: false))
                           ]),
                 APIAction(method: .get,
                           route: "/everscale/getAccounts",
@@ -115,7 +115,7 @@ extension EverAccountsController {
                           responses: [
                             .init(code: "200",
                                   description: "Description",
-                                  type: .object(JsonRPCResponse<[EverClient.Account]>.self, asCollection: false))
+                                  type: .object(JsonRPCResponse<[Everscale.Account]>.self, asCollection: false))
                           ]),
                 APIAction(method: .get,
                           route: "/everscale/getBalance",
@@ -129,11 +129,11 @@ extension EverAccountsController {
                           ]),
             ])
         ).add([
-            APIObject(object: JsonRPCResponse<EverClient.Account>(result: EverClient.Account())),
-            APIObject(object: JsonRPCResponse<[EverClient.Account]>(result: [EverClient.Account()])),
-            APIObject(object: JsonRPCResponse<EverClient.AccountBalance>(result: EverClient.AccountBalance())),
-            APIObject(object: EverClient.Account()),
-            APIObject(object: EverClient.AccountBalance())
+            APIObject(object: JsonRPCResponse<Everscale.Account>(result: Everscale.Account())),
+            APIObject(object: JsonRPCResponse<[Everscale.Account]>(result: [Everscale.Account()])),
+            APIObject(object: JsonRPCResponse<Everscale.AccountBalance>(result: Everscale.AccountBalance())),
+            APIObject(object: Everscale.Account()),
+            APIObject(object: Everscale.AccountBalance())
         ])
     }
 }

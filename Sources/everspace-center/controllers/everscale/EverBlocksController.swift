@@ -18,7 +18,7 @@ class EverBlocksController: RouteCollection {
     static var shared: EverBlocksController!
     var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
-    var emptyClient: TSDKClientModule = EverClient.shared.emptyClient
+    var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
     
     init(_ client: TSDKClientModule, _ swagger: SwaggerControllerPrtcl) {
         self.client = client
@@ -35,10 +35,10 @@ class EverBlocksController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<BlockConfigRequest> = try req.content.decode(EverJsonRPCRequest<BlockConfigRequest>.self)
             return try JsonRPCResponse<BlockConfigResponse>(id: content.id,
-                                                            result: try await getConfigParams(EverClient.shared.client, content.params, req)).toJson()
+                                                            result: try await getConfigParams(client, content.params, req)).toJson()
         } else {
             let content: BlockConfigRequest = try req.query.decode(BlockConfigRequest.self)
-            return try await getConfigParams(EverClient.shared.client, content, req).toJson()
+            return try await getConfigParams(client, content, req).toJson()
         }
     }
 }
@@ -64,7 +64,7 @@ extension EverBlocksController {
         else {
             throw makeError(AppError.mess("Config Address not found"))
         }
-        let account = try await EverClient.getAccount(accountAddress: "-1:\(address)")
+        let account = try await Everscale.getAccount(client: client, accountAddress: "-1:\(address)")
         let fileManager: FileManager = FileManager.default
         let uniqName: String = "\(UUID())-\(req.id).boc"
         let filePath: String = "\(pathToRootDirectory)/get_congig_params/\(uniqName)"

@@ -11,13 +11,13 @@ import BigInt
 import SwiftExtensionsPack
 import Vapor
 
-extension EverClient {
+extension Everscale {
     
     public struct SendExternalMessage: Codable {
         var shard_block_id: String = ""
     }
     
-    class func sendExternalMessage(client: TSDKClientModule = EverClient.shared.client,
+    class func sendExternalMessage(client: TSDKClientModule,
                                    boc: String
     ) async throws -> SendExternalMessage {
         let params: TSDKParamsOfSendMessage = .init(message: boc, abi: nil, send_events: false)

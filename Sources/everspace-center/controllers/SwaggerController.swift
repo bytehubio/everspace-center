@@ -26,7 +26,7 @@ final class SwaggerController: RouteCollection {
             <meta charset="UTF-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Everspace Center</title>
+            <title>Everspace Center. Everscale API. Toncoin API. Venom API.</title>
 
             <link href='https://fonts.googleapis.com/css?family=JetBrains Mono' rel='stylesheet'>
 
@@ -64,7 +64,7 @@ final class SwaggerController: RouteCollection {
             <h2 id="available-networks">Available networks</h2>
             <ul>
                 <li><a href="https://everspace.center/everscale"><code>Everscale Mainnet</code></a></li>
-                <!-- <li><a href="https://everspace.center/everscale-devnet"><code>Everscale Devnet</code></a></li> -->
+                <li><a href="https://everspace.center/everscale-devnet"><code>Everscale Devnet</code></a></li>
 
                 <div class="sep-top"></div>
                 <li><a href="https://everspace.center/toncoin"><code>TON Mainnet</code></a></li>
@@ -82,7 +82,7 @@ final class SwaggerController: RouteCollection {
             <footer>
                 <br>
                 <div class="footer">
-                    Made with ❤️ by <a href="https://everspace.app/" target="_blank">Everspace Team</a>
+                    Made with ❤️ by <a href="https://everspace.app/" target="_blank">Everspace Wallet Team</a>
                     | <a href="https://t.me/nerzh">Telegram</a>
                     | <a href="mailto:admin@bytehub.io">E-mail</a>
                 </div>

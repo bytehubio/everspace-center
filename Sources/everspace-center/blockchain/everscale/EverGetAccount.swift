@@ -11,7 +11,7 @@ import BigInt
 import SwiftExtensionsPack
 import Vapor
 
-extension EverClient {
+extension Everscale {
     
     public struct Account: Codable {
         var id: String = ""
@@ -33,11 +33,11 @@ extension EverClient {
         var balance: String = ""
     }
     
-    class func getAccount(client: TSDKClientModule = EverClient.shared.client,
+    class func getAccount(client: TSDKClientModule,
                           accountAddress: String
     ) async throws -> Account {
         let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress)
-        let response: [Account] = try await getAccounts(accountAddresses: [accountAddress])
+        let response: [Account] = try await getAccounts(client: client, accountAddresses: [accountAddress])
         if let first = response.first {
             return first
         } else {
@@ -45,7 +45,7 @@ extension EverClient {
         }
     }
     
-    class func getAccounts(client: TSDKClientModule = EverClient.shared.client,
+    class func getAccounts(client: TSDKClientModule,
                            accountAddresses: [String]
     ) async throws -> [Account] {
         var addresses: [String] = []
@@ -76,7 +76,7 @@ extension EverClient {
         return try response.result.toJson().toModel([Account].self)
     }
     
-    class func getBalance(client: TSDKClientModule = EverClient.shared.client,
+    class func getBalance(client: TSDKClientModule,
                           accountAddress: String
     ) async throws -> AccountBalance {
         let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress)

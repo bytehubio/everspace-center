@@ -11,7 +11,7 @@ import BigInt
 import SwiftExtensionsPack
 import Vapor
 
-extension EverClient {
+extension Everscale {
     
     public struct RunGetMethodFift: Codable, Content {
         var address: String = "..."
@@ -30,8 +30,8 @@ extension EverClient {
         var result: String = ""
     }
     
-    class func runGetMethodFift(client: TSDKClientModule = EverClient.shared.client,
-                                emptyClient: TSDKClientModule = EverClient.shared.emptyClient,
+    class func runGetMethodFift(client: TSDKClientModule,
+                                emptyClient: TSDKClientModule,
                                 address: String,
                                 method: String,
                                 params: [String]? = nil
@@ -44,8 +44,8 @@ extension EverClient {
         return .init(result: response.output.toJSON())
     }
     
-    class func runGetMethodAbi(client: TSDKClientModule = EverClient.shared.client,
-                               emptyClient: TSDKClientModule = EverClient.shared.emptyClient,
+    class func runGetMethodAbi(client: TSDKClientModule,
+                               emptyClient: TSDKClientModule,
                                address: String,
                                method: String,
                                jsonParams: String? = nil,
