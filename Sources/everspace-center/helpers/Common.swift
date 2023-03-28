@@ -51,15 +51,15 @@ extension Process: @unchecked Sendable {}
 @discardableResult
 func systemCommand(_ command: String, _ user: String? = nil, timeOutNanoseconds: UInt32 = 0) async throws -> String {
     var result: String = .init()
-    let process: Process? = .init()
+    let process: Process = .init()
     let pipe: Pipe = .init()
-    process?.executableURL = .init(fileURLWithPath: "/usr/bin/env")
-    process?.standardOutput = pipe
-    process?.standardError = pipe
+    process.executableURL = .init(fileURLWithPath: "/usr/bin/env")
+    process.standardOutput = pipe
+    process.standardError = pipe
     if user != nil {
-        process?.arguments = ["sudo", "-H", "-u", user!, "bash", "-lc", "\(command)"]
+        process.arguments = ["sudo", "-H", "-u", user!, "bash", "-lc", "cd $HOME || true && \(command)"]
     } else {
-        process?.arguments = ["bash", "-lc", "\(command)"]
+        process.arguments = ["bash", "-c", "\(command)"]
     }
     if timeOutNanoseconds > 0 {
         Task {
@@ -67,13 +67,13 @@ func systemCommand(_ command: String, _ user: String? = nil, timeOutNanoseconds:
             try await forceKillProcess(process)
         }
     }
-    try process?.run()
-    process?.waitUntilExit()
+    try process.run()
+    process.waitUntilExit()
     let data: Data = pipe.fileHandleForReading.readDataToEndOfFile()
     if let output = String(data: data, encoding: .utf8) {
         result = output.trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    if process?.isRunning ?? false { try await forceKillProcess(process) }
+    if process.isRunning { try await forceKillProcess(process) }
     return result
 }
 
@@ -84,18 +84,18 @@ actor ForceKillProcessActor {
     public func flag() -> Bool { _flag }
 }
 
-func forceKillProcess(_ process: Process?) async throws {
-    process?.terminate()
+func forceKillProcess(_ process: Process) async throws {
+    process.terminate()
     usleep(1000)
-    if process?.isRunning ?? false { process?.interrupt() }
+    if process.isRunning { process.interrupt() }
     usleep(1000)
-    if process?.isRunning ?? false { try await systemCommand("kill -9 \(process?.processIdentifier ?? 0)") }
+    if process.isRunning { try await systemCommand("kill -9 \(process.processIdentifier)") }
     let waitForShutdown: UInt32 = 3 * 1_000_000
     let flag: ForceKillProcessActor = .init()
     Task.detached { usleep(waitForShutdown); await flag.setFlag(false) }
-    while process?.isRunning ?? false {
+    while process.isRunning {
         if await flag.flag() { break }
-        try await systemCommand("kill -9 \(process?.processIdentifier ?? 0)")
+        try await systemCommand("kill -9 \(process.processIdentifier)")
         usleep(1000)
     }
 }
