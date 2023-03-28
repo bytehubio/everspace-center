@@ -66,7 +66,7 @@ final class MainController: RouteCollection {
 
                 <div class="sep-top"></div>
                 <li><a href="https://everspace.center/toncoin"><code>TON Mainnet</code></a></li>
-                <li><code>TON Testnet (soon)</code></li>
+                <!-- <li><code>TON Testnet (soon)</code></li> -->
                 <!-- <div class="sep-top"></div>
                 <li><a href="https://everspace.center/venom-testnet"><code>Venom Testnet</code></a></li>
                 <div class="sep-top"></div>
