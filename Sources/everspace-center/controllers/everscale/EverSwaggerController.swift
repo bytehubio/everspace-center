@@ -16,6 +16,7 @@ final class EverSwaggerController: RouteCollection, SwaggerControllerPrtcl {
         title: "EVERSCALE API",
         version: "1.0.0",
         description: """
+        [EVERSPACE API CENTER -> MAIN PAGE](https://everspace.center)\n\n
                 This is incredible Everscale API.\n
         **Now temporarily without authorization.**\n
         \n

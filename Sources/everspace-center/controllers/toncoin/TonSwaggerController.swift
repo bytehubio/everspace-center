@@ -16,6 +16,7 @@ final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
         title: "TONCOIN API",
         version: "1.0.0",
         description: """
+        [EVERSPACE API CENTER -> MAIN PAGE](https://everspace.center)\n\n
                 This is incredible Toncoin API.\n
         **Now temporarily without authorization.**\n
         \n
