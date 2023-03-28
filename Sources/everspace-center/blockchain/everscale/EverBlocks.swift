@@ -72,6 +72,24 @@ extension Everscale {
         var boc: String = "..."
     }
     
+    struct LookupBlockRequest: Content {
+        var workchain_id: Int = 1
+        var shard: String = "..."
+        var seq_no: Int? = 1
+        var start_lt: String? = "..."
+        var gen_utime: Double? = 1
+    }
+    
+    struct LookupBlockResponse: Content {
+        var id: String = "..."
+        var workchain_id: Int = 1
+        var shard: String = "..."
+        var seq_no: Int = 1
+        var start_lt: String = "..."
+        var gen_utime: Double = 1
+        var file_hash: String = "..."
+    }
+    
     class func getLastMasterBlock(client: TSDKClientModule) async throws -> LastMasterBlockResponse {
         let out = try await client.net.query(TSDKParamsOfQuery(query: """
         query {
@@ -179,5 +197,39 @@ extension Everscale {
         }
         
         return try result.toModel(RawBlockResponse.self)
+    }
+    
+    class func lookupBlock(client: TSDKClientModule, content: LookupBlockRequest) async throws -> LookupBlockResponse {
+        if content.seq_no == nil && content.start_lt == nil && content.gen_utime == nil {
+            throw makeError(AppError.mess("seq_no, start_lt or gen_utime should be defined"))
+        }
+        let out = try await client.net.query(TSDKParamsOfQuery(query: """
+        query {
+          blocks(
+            filter: {
+              workchain_id: {eq: \(content.workchain_id)},
+              \(content.seq_no != nil ? "seq_no: {eq: \(content.seq_no!)}," : "")
+              \(content.start_lt != nil ? "start_lt: {eq: \"\(content.start_lt!)\"}," : "")
+              \(content.gen_utime != nil ? "gen_utime: {eq: \(content.gen_utime!)}," : "")
+              shard: {eq: \"\(content.shard)\"}
+            }
+          ) {
+            id
+            workchain_id
+            seq_no
+            file_hash
+            shard
+            gen_utime
+            start_lt
+          }
+        }
+        """))
+        
+        guard let result = try ((out.result.toDictionary()?["data"] as? [String: Any])?["blocks"] as? [[String: Any]])?.first?.toJSON()
+        else {
+            throw makeError(AppError.mess("Block not found"))
+        }
+        
+        return try result.toModel(LookupBlockResponse.self)
     }
 }

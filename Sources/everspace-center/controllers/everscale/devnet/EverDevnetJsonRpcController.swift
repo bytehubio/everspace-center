@@ -24,6 +24,7 @@ public enum EverDevnetRPCMethods: String, Content {
     case getLastMasterBlock
     case getBlock
     case getRawBlock
+    case lookupBlock
 }
 
 class EverDevnetJsonRpcController: RouteCollection {
@@ -62,6 +63,8 @@ class EverDevnetJsonRpcController: RouteCollection {
             return try await encodeResponse(for: req, json: try await everDevnetBlocksController.getBlock(req))
         case .getRawBlock:
             return try await encodeResponse(for: req, json: try await everDevnetBlocksController.getRawBlock(req))
+        case .lookupBlock:
+            return try await encodeResponse(for: req, json: try await everDevnetBlocksController.lookupBlock(req))
         }
     }
 }

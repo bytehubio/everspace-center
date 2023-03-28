@@ -30,6 +30,7 @@ class EverBlocksController: RouteCollection {
         routes.get("getLastMasterBlock", use: getLastMasterBlock)
         routes.get("getBlock", use: getBlock)
         routes.get("getRawBlock", use: getRawBlock)
+        routes.get("lookupBlock", use: lookupBlock)
     }
     
     func getConfigParams(_ req: Request) async throws -> Response {
@@ -72,6 +73,17 @@ class EverBlocksController: RouteCollection {
         } else {
             let content: Everscale.GetBlockRequest = try req.query.decode(Everscale.GetBlockRequest.self)
             return try await getRawBlock(client, content: content).toJson()
+        }
+    }
+    
+    func lookupBlock(_ req: Request) async throws -> Response {
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<Everscale.LookupBlockRequest> = try req.content.decode(EverJsonRPCRequest<Everscale.LookupBlockRequest>.self)
+            return try JsonRPCResponse<Everscale.LookupBlockResponse>(id: content.id,
+                                                                   result: try await lookupBlock(client, content: content.params)).toJson()
+        } else {
+            let content: Everscale.LookupBlockRequest = try req.query.decode(Everscale.LookupBlockRequest.self)
+            return try await lookupBlock(client, content: content).toJson()
         }
     }
 }
@@ -129,6 +141,10 @@ extension EverBlocksController {
     func getRawBlock(_ client: TSDKClientModule, content: Everscale.GetBlockRequest) async throws -> Everscale.RawBlockResponse {
         try await Everscale.getRawBlock(client: client, content: content)
     }
+    
+    func lookupBlock(_ client: TSDKClientModule, content: Everscale.LookupBlockRequest) async throws -> Everscale.LookupBlockResponse {
+        try await Everscale.lookupBlock(client: client, content: content)
+    }
 
 
     @discardableResult
@@ -176,6 +192,16 @@ extension EverBlocksController {
                                   description: "Description",
                                   type: .object(JsonRPCResponse<Everscale.RawBlockResponse>.self, asCollection: false))
                           ]),
+                APIAction(method: .get,
+                          route: "/\(swagger.route)/lookupBlock",
+                          summary: "",
+                          description: "Lookup Block",
+                          parametersObject: Everscale.LookupBlockRequest(),
+                          responses: [
+                            .init(code: "200",
+                                  description: "Description",
+                                  type: .object(JsonRPCResponse<Everscale.LookupBlockResponse>.self, asCollection: false))
+                          ]),
             ])
         ).add([
             APIObject(object: JsonRPCResponse<BlockConfigResponse>(result: BlockConfigResponse())),
@@ -186,6 +212,8 @@ extension EverBlocksController {
             APIObject(object: Everscale.BlockResponse()),
             APIObject(object: JsonRPCResponse<Everscale.RawBlockResponse>(result: Everscale.RawBlockResponse())),
             APIObject(object: Everscale.RawBlockResponse()),
+            APIObject(object: JsonRPCResponse<Everscale.LookupBlockResponse>(result: Everscale.LookupBlockResponse())),
+            APIObject(object: Everscale.LookupBlockResponse()),
         ])
     }
 }
