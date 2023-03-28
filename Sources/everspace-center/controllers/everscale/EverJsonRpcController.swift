@@ -21,6 +21,7 @@ public enum EverRPCMethods: String, Content {
     case runGetMethodAbi
     case waitForTransaction
     case getConfigParams
+    case sendAndWaitTransaction
 }
 
 class EverJsonRpcController: RouteCollection {
@@ -51,6 +52,8 @@ class EverJsonRpcController: RouteCollection {
             return try await encodeResponse(for: req, json: try await everSendController.waitForTransaction(req))
         case .getConfigParams:
             return try await encodeResponse(for: req, json: try await everBlocksController.getConfigParams(req))
+        case .sendAndWaitTransaction:
+            return try await encodeResponse(for: req, json: try await everSendController.sendAndWaitTransaction(req))
         }
     }
 }

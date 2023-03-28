@@ -35,14 +35,13 @@ public class SDKClient: SDKClientPrtcl {
     }
     
     public static func makeClientConfig(name: String) -> TSDKClientConfig {
-        let networkConfig: TSDKNetworkConfig = .init(server_address: nil,
-                                                     endpoints: try! SDKClient.getNetwork(networkName: name)
-        )
-        return .init(network: networkConfig, crypto: nil, abi: nil, boc: nil)
+        let networkConfig: TSDKNetworkConfig = .init(endpoints: try! SDKClient.getNetwork(networkName: name),
+                                                     out_of_sync_threshold: 90000)
+        return .init(network: networkConfig, crypto: nil, abi: .init(message_expiration_timeout: 180000), boc: nil)
     }
     
     private static func makeEmptyClientConfig() -> TSDKClientConfig {
-        .init(network: .init())
+        .init(network: .init(out_of_sync_threshold: 90000), abi: .init(message_expiration_timeout: 180000))
     }
     
     public static func makeEmptyClient() -> TSDKClientModule {

@@ -20,6 +20,7 @@ public enum TonRPCMethods: String, Content {
     case runGetMethodAbi
     case waitForTransaction
     case getConfigParams
+    case sendAndWaitTransaction
 }
 
 class TonJsonRpcController: RouteCollection {
@@ -50,6 +51,8 @@ class TonJsonRpcController: RouteCollection {
             return try await encodeResponse(for: req, json: try await tonSendController.waitForTransaction(req))
         case .getConfigParams:
             return try await encodeResponse(for: req, json: try await tonBlocksController.getConfigParams(req))
+        case .sendAndWaitTransaction:
+            return try await encodeResponse(for: req, json: try await tonSendController.sendAndWaitTransaction(req))
         }
     }
 }

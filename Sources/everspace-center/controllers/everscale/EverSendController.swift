@@ -27,7 +27,8 @@ class EverSendController: RouteCollection {
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.post("sendExternalMessage", use: sendExternalMessage)
-        routes.post("waitForTransaction", use: sendExternalMessage)
+        routes.post("waitForTransaction", use: waitForTransaction)
+        routes.post("sendAndWaitTransaction", use: sendAndWaitTransaction)
     }
     
     func sendExternalMessage(_ req: Request) async throws -> Response {
@@ -39,7 +40,6 @@ class EverSendController: RouteCollection {
             let content: SendExternalMessageRequest = try req.query.decode(SendExternalMessageRequest.self)
             return try await sendExternalMessage(client, content).toJson()
         }
-        
     }
     
     func waitForTransaction(_ req: Request) async throws -> Response {
@@ -52,6 +52,17 @@ class EverSendController: RouteCollection {
             return try await waitForTransaction(client, content).toJson()
         }
         
+    }
+    
+    func sendAndWaitTransaction(_ req: Request) async throws -> Response {
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<SendExternalMessageRequest> = try req.content.decode(EverJsonRPCRequest<SendExternalMessageRequest>.self)
+            return try JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
+                                                                   result: try await sendAndWaitTransaction(client, content.params)).toJson()
+        } else {
+            let content: SendExternalMessageRequest = try req.query.decode(SendExternalMessageRequest.self)
+            return try await sendAndWaitTransaction(client, content).toJson()
+        }
     }
 }
 
@@ -69,7 +80,8 @@ extension EverSendController {
     func sendExternalMessage(_ client: TSDKClientModule,
                              _ content: SendExternalMessageRequest
     ) async throws -> Everscale.SendExternalMessage {
-        try await Everscale.sendExternalMessageGQL(client: client, boc: content.boc)
+        try await Everscale.sendExternalMessage(client: client, boc: content.boc)
+        //        try await Everscale.sendExternalMessageGQL(client: client, boc: content.boc)
     }
     
     func waitForTransaction(_ client: TSDKClientModule,
@@ -77,6 +89,16 @@ extension EverSendController {
     ) async throws -> TSDKResultOfProcessMessage {
         let result = try await client.processing.wait_for_transaction(TSDKParamsOfWaitForTransaction(message: content.boc,
                                                                                                      shard_block_id: content.shard_block_id,
+                                                                                                     send_events: false))
+        return result
+    }
+    
+    func sendAndWaitTransaction(_ client: TSDKClientModule,
+                                _ content: SendExternalMessageRequest
+    ) async throws -> TSDKResultOfProcessMessage {
+        let out = try await sendExternalMessage(client, content)
+        let result = try await client.processing.wait_for_transaction(TSDKParamsOfWaitForTransaction(message: content.boc,
+                                                                                                     shard_block_id: out.shard_block_id,
                                                                                                      send_events: false))
         return result
     }
@@ -102,6 +124,16 @@ extension EverSendController {
                                       summary: "",
                                       description: "Wait For Transactions",
                                       parametersObject: WaitForTransactionRequest(),
+                                      responses: [
+                                        .init(code: "200",
+                                              description: "Description",
+                                              type: .object(JsonRPCResponse<TSDKResultOfProcessMessage>.self, asCollection: false))
+                                      ]),
+                            APIAction(method: .post,
+                                      route: "/\(swagger.route)/sendAndWaitTransaction",
+                                      summary: "",
+                                      description: "Send Boc And Wait For Transaction",
+                                      parametersObject: SendExternalMessageRequest(),
                                       responses: [
                                         .init(code: "200",
                                               description: "Description",
