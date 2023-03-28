@@ -75,8 +75,6 @@ extension EverBlocksController {
         try await req.fileio.writeFile(ByteBuffer(data: contentData), at: filePath)
         let command: String = "node \(pathToRootDirectory)/get_congig_params/cfgparam.js \(filePath) \(content.number)"
         let out: String = try await systemCommand(command, timeOutSec: 7)
-        let a = try await systemCommand("whoami", timeOutSec: 7)
-        app.logger.warning("\(a)")
         try fileManager.removeItem(at: tempFileURL)
         let model: BlockConfigResponse = try out.toModel(BlockConfigResponse.self)
         
