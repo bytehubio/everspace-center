@@ -12,15 +12,19 @@ import EverscaleClientSwift
 import Swiftgger
 
 
-final class EverRunGetMethodsController: RouteCollection {
+class EverRunGetMethodsController: RouteCollection {
     
     typealias Response = String
-    static let shared: EverRunGetMethodsController = .init(EverClient.shared.client)
+    static var shared: EverRunGetMethodsController!
+    var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = EverClient.shared.emptyClient
     
-    init(_ client: TSDKClientModule) {
+    init(_ client: TSDKClientModule, _ swagger: SwaggerControllerPrtcl) {
         self.client = client
+        self.swagger = swagger
+        prepareSwagger(swagger.openAPIBuilder)
+        Self.shared = self
     }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
@@ -29,26 +33,25 @@ final class EverRunGetMethodsController: RouteCollection {
     }
     
     func runGetMethodFift(_ req: Request) async throws -> Response {
-        let content: EverClient.RunGetMethodFift = try req.query.decode(EverClient.RunGetMethodFift.self)
-        let result: EverClient.RunGetMethodFiftResponse = try await runGetMethodFift(content: content)
-        return try result.toJson()
-    }
-    
-    func runGetMethodFiftRpc(_ req: Request) async throws -> Response {
-        let content: EverJsonRPCRequest<EverClient.RunGetMethodFift> = try req.content.decode(EverJsonRPCRequest<EverClient.RunGetMethodFift>.self)
-        return try JsonRPCResponse<EverClient.RunGetMethodFiftResponse>(id: content.id,
-                                                                        result: try await runGetMethodFift(content: content.params)).toJson()
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<EverClient.RunGetMethodFift> = try req.content.decode(EverJsonRPCRequest<EverClient.RunGetMethodFift>.self)
+            return try JsonRPCResponse<EverClient.RunGetMethodFiftResponse>(id: content.id,
+                                                                            result: try await runGetMethodFift(content: content.params)).toJson()
+        } else {
+            let content: EverClient.RunGetMethodFift = try req.query.decode(EverClient.RunGetMethodFift.self)
+            return try await runGetMethodFift(content: content).toJson()
+        }
     }
     
     func runGetMethodAbi(_ req: Request) async throws -> Response {
-        let content: EverClient.RunGetMethodAbi = try req.query.decode(EverClient.RunGetMethodAbi.self)
-        return try await runGetMethodAbi(content: content).toJson()
-    }
-    
-    func runGetMethodAbiRpc(_ req: Request) async throws -> Response {
-        let content: EverJsonRPCRequest<EverClient.RunGetMethodAbi> = try req.content.decode(EverJsonRPCRequest<EverClient.RunGetMethodAbi>.self)
-        return try JsonRPCResponse<EverClient.RunGetMethodFiftResponse>(id: content.id,
-                                                                        result: try await runGetMethodAbi(content: content.params)).toJson()
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<EverClient.RunGetMethodAbi> = try req.content.decode(EverJsonRPCRequest<EverClient.RunGetMethodAbi>.self)
+            return try JsonRPCResponse<EverClient.RunGetMethodFiftResponse>(id: content.id,
+                                                                            result: try await runGetMethodAbi(content: content.params)).toJson()
+        } else {
+            let content: EverClient.RunGetMethodAbi = try req.query.decode(EverClient.RunGetMethodAbi.self)
+            return try await runGetMethodAbi(content: content).toJson()
+        }
     }
 }
 

@@ -9,11 +9,9 @@ import Foundation
 import EverscaleClientSwift
 import Vapor
 
-public final class EverClient {
+public class EverClient {
     
-    public static var shared: EverClient = {
-        try! .init(clientConfig: EverClient.makeClientConfig(), emptyClient: EverClient.makeEmptyClientConfig())
-    }()
+    public static var shared: EverClient!
     
     private class func getNetwork(networkName: String) throws -> [String] {
         guard let json = Environment.get(networkName) else { throw AppError(reason: "\(networkName) is not defined for env \(try Environment.detect().name)")  }
@@ -28,14 +26,14 @@ public final class EverClient {
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule
     
-    public init(clientConfig: TSDKClientConfig, emptyClient: TSDKClientConfig) throws {
+    public init(clientConfig: TSDKClientConfig, emptyClient: TSDKClientConfig = EverClient.makeEmptyClientConfig()) throws {
         self.client = try TSDKClientModule(config: clientConfig)
         self.emptyClient = try TSDKClientModule(config: clientConfig)
     }
     
-    public static func makeClientConfig() -> TSDKClientConfig {
+    public static func makeClientConfig(name: String) -> TSDKClientConfig {
         let networkConfig: TSDKNetworkConfig = .init(server_address: nil,
-                                                     endpoints: try! EverClient.getNetwork(networkName: "mainnet")
+                                                     endpoints: try! EverClient.getNetwork(networkName: name)
         )
         return .init(network: networkConfig, crypto: nil, abi: nil, boc: nil)
     }
@@ -43,8 +41,6 @@ public final class EverClient {
     public static func makeEmptyClientConfig() -> TSDKClientConfig {
         .init(network: .init())
     }
-    
-    public func refreshClient() {
-        client = try! TSDKClientModule(config: Self.makeClientConfig())
-    }
 }
+
+public class EverDevClient: EverClient {}

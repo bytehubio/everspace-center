@@ -9,57 +9,11 @@ import Foundation
 import Vapor
 import Swiftgger
 
-final class TonSwaggerController {
+final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
     
     static let shared: TonSwaggerController = .init()
-    
-    func boot(routes: Vapor.RoutesBuilder) throws {
-        routes.get("", use: index)
-        routes.get("swagger", use: show)
-    }
-    
-    init() {
-//        EverTransactionsController.shared.prepareSwagger(Self.openAPIBuilder)
-//        EverAccountsController.shared.prepareSwagger(Self.openAPIBuilder)
-//        EverSendController.shared.prepareSwagger(Self.openAPIBuilder)
-//        EverRunGetMethodsController.shared.prepareSwagger(Self.openAPIBuilder)
-//        EverBlocksController.shared.prepareSwagger(Self.openAPIBuilder)
-    }
-    
-    func index(_ req: Request) async throws -> Response {
-        let html: String = """
-        <!DOCTYPE html>
-        <html lang="en">
-          <head>
-            <meta charset="UTF-8">
-            <title>Swagger UI</title>
-            <link rel="stylesheet" type="text/css" href="css/swagger/swagger-ui.css" />
-            <link rel="stylesheet" type="text/css" href="css/swagger/index.css" />
-            <link rel="icon" type="image/png" href="images/swagger/favicon-32x32.png" sizes="32x32" />
-            <link rel="icon" type="image/png" href="images/swagger/favicon-16x16.png" sizes="16x16" />
-          </head>
-        
-          <body>
-            <div id="swagger-ui"></div>
-            <script src="/js/swagger/swagger-ui-bundle.js" charset="UTF-8"> </script>
-            <script src="/js/swagger/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-            <script src="/js/swagger/swagger-initializer-toncoin.js" charset="UTF-8"> </script>
-          </body>
-        </html>
-        """
-        
-        return try await encodeResponse(for: req, html: html)
-    }
-    
-    func show(_ req: Request) async throws -> Response {
-        try await encodeResponse(for: req, json: try Self.openAPIBuilder.built().toJson())
-    }
-}
-
-extension TonSwaggerController: RouteCollection {
-    
-    static let openAPIBuilder: OpenAPIBuilder = .init(
-        title: "EVERSCALE API",
+    let openAPIBuilder: OpenAPIBuilder = .init(
+        title: "TONCOIN API",
         version: "1.0.0",
         description: """
                 This is incredible Toncoin API.\n
@@ -89,4 +43,39 @@ extension TonSwaggerController: RouteCollection {
     //        .jwt(description: "You can get token from *sign-in* action from *Account* controller.")
         ]
     )
+    
+    func boot(routes: Vapor.RoutesBuilder) throws {
+        routes.get("", use: index)
+        routes.get("swagger", use: show)
+    }
+    
+    func index(_ req: Request) async throws -> Response {
+        let html: String = """
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <title>Swagger UI</title>
+            <link rel="stylesheet" type="text/css" href="css/swagger/swagger-ui.css" />
+            <link rel="stylesheet" type="text/css" href="css/swagger/index.css" />
+            <link rel="icon" type="image/png" href="images/swagger/favicon-32x32.png" sizes="32x32" />
+            <link rel="icon" type="image/png" href="images/swagger/favicon-16x16.png" sizes="16x16" />
+          </head>
+        
+          <body>
+            <div id="swagger-ui"></div>
+            <script src="/js/swagger/swagger-ui-bundle.js" charset="UTF-8"> </script>
+            <script src="/js/swagger/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
+            <script src="/js/swagger/swagger-initializer-toncoin.js" charset="UTF-8"> </script>
+          </body>
+        </html>
+        """
+        
+        return try await encodeResponse(for: req, html: html)
+    }
+    
+    func show(_ req: Request) async throws -> Response {
+        try await encodeResponse(for: req, json: try openAPIBuilder.built().toJson())
+    }
 }
+

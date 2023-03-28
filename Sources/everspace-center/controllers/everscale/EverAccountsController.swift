@@ -12,15 +12,19 @@ import EverscaleClientSwift
 import Swiftgger
 
 
-final class EverAccountsController: RouteCollection {
+class EverAccountsController: RouteCollection {
     
     typealias Response = String
-    static let shared: EverAccountsController = .init(EverClient.shared.client)
+    static var shared: EverAccountsController!
+    var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = EverClient.shared.emptyClient
     
-    init(_ client: TSDKClientModule) {
+    init(_ client: TSDKClientModule, _ swagger: SwaggerControllerPrtcl) {
         self.client = client
+        self.swagger = swagger
+        prepareSwagger(swagger.openAPIBuilder)
+        Self.shared = self
     }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
@@ -30,36 +34,36 @@ final class EverAccountsController: RouteCollection {
     }
     
     func getAccount(_ req: Request) async throws -> Response {
-        let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
-        return try await getAccount(EverClient.shared.client, content).toJson()
-    }
-    
-    func getAccountRpc(_ req: Request) async throws -> Response {
-        let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
-        return try JsonRPCResponse<EverClient.Account>(id: content.id,
-                                                       result: try await getAccount(client, content.params)).toJson()
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
+            return try JsonRPCResponse<EverClient.Account>(id: content.id,
+                                                           result: try await getAccount(client, content.params)).toJson()
+        } else {
+            let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
+            return try await getAccount(EverClient.shared.client, content).toJson()
+        }
     }
     
     func getAccounts(_ req: Request) async throws -> Response {
-        let content: GetAccountsRequest = try req.query.decode(GetAccountsRequest.self)
-        return try await getAccounts(EverClient.shared.client, content).toJson()
-    }
-    
-    func getAccountsRpc(_ req: Request) async throws -> Response {
-        let content: EverJsonRPCRequest<GetAccountsRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountsRequest>.self)
-        return try JsonRPCResponse<[EverClient.Account]>(id: content.id,
-                                                         result: try await getAccounts(client, content.params)).toJson()
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<GetAccountsRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountsRequest>.self)
+            return try JsonRPCResponse<[EverClient.Account]>(id: content.id,
+                                                             result: try await getAccounts(client, content.params)).toJson()
+        } else {
+            let content: GetAccountsRequest = try req.query.decode(GetAccountsRequest.self)
+            return try await getAccounts(EverClient.shared.client, content).toJson()
+        }
     }
     
     func getBalance(_ req: Request) async throws -> Response {
-        let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
-        return try await getBalance(EverClient.shared.client, content).toJson()
-    }
-    
-    func getBalanceRpc(_ req: Request) async throws -> Response {
-        let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
-        return try JsonRPCResponse<EverClient.AccountBalance>(id: content.id,
-                                                              result: try await getBalance(client, content.params)).toJson()
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
+            return try JsonRPCResponse<EverClient.AccountBalance>(id: content.id,
+                                                                  result: try await getBalance(client, content.params)).toJson()
+        } else {
+            let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
+            return try await getBalance(EverClient.shared.client, content).toJson()
+        }
     }
 }
 

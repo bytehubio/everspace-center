@@ -12,15 +12,19 @@ import EverscaleClientSwift
 import Swiftgger
 
 
-final class EverSendController: RouteCollection {
+class EverSendController: RouteCollection {
     
     typealias Response = String
-    static let shared: EverSendController = .init(EverClient.shared.client)
+    static var shared: EverSendController!
+    var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = EverClient.shared.emptyClient
     
-    init(_ client: TSDKClientModule) {
+    init(_ client: TSDKClientModule, _ swagger: SwaggerControllerPrtcl) {
         self.client = client
+        self.swagger = swagger
+        prepareSwagger(swagger.openAPIBuilder)
+        Self.shared = self
     }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
@@ -29,25 +33,27 @@ final class EverSendController: RouteCollection {
     }
 
     func sendExternalMessage(_ req: Request) async throws -> Response {
-        let content: SendExternalMessageRequest = try req.query.decode(SendExternalMessageRequest.self)
-        return try await sendExternalMessage(EverClient.shared.client, content).toJson()
-    }
-    
-    func sendExternalMessageRpc(_ req: Request) async throws -> Response {
-        let content: EverJsonRPCRequest<SendExternalMessageRequest> = try req.content.decode(EverJsonRPCRequest<SendExternalMessageRequest>.self)
-        return try JsonRPCResponse<EverClient.SendExternalMessage>(id: content.id,
-                                                                   result: try await sendExternalMessage(EverClient.shared.client, content.params)).toJson()
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<SendExternalMessageRequest> = try req.content.decode(EverJsonRPCRequest<SendExternalMessageRequest>.self)
+            return try JsonRPCResponse<EverClient.SendExternalMessage>(id: content.id,
+                                                                       result: try await sendExternalMessage(EverClient.shared.client, content.params)).toJson()
+        } else {
+            let content: SendExternalMessageRequest = try req.query.decode(SendExternalMessageRequest.self)
+            return try await sendExternalMessage(EverClient.shared.client, content).toJson()
+        }
+        
     }
     
     func waitForTransaction(_ req: Request) async throws -> Response {
-        let content: WaitForTransactionRequest = try req.query.decode(WaitForTransactionRequest.self)
-        return try await waitForTransaction(EverClient.shared.client, content).toJson()
-    }
-    
-    func waitForTransactionRpc(_ req: Request) async throws -> Response {
-        let content: EverJsonRPCRequest<WaitForTransactionRequest> = try req.content.decode(EverJsonRPCRequest<WaitForTransactionRequest>.self)
-        return try JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
-                                                               result: try await waitForTransaction(EverClient.shared.client, content.params)).toJson()
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<WaitForTransactionRequest> = try req.content.decode(EverJsonRPCRequest<WaitForTransactionRequest>.self)
+            return try JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
+                                                                   result: try await waitForTransaction(EverClient.shared.client, content.params)).toJson()
+        } else {
+            let content: WaitForTransactionRequest = try req.query.decode(WaitForTransactionRequest.self)
+            return try await waitForTransaction(EverClient.shared.client, content).toJson()
+        }
+        
     }
 }
 

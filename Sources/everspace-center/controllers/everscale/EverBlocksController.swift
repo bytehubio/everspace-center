@@ -12,16 +12,19 @@ import EverscaleClientSwift
 import Swiftgger
 
 
-final class EverBlocksController: RouteCollection {
+class EverBlocksController: RouteCollection {
     
     typealias Response = String
-    static let shared: EverBlocksController = .init(EverClient.shared.client)
+    static var shared: EverBlocksController!
+    var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = EverClient.shared.emptyClient
     
-    init(_ client: TSDKClientModule) {
-        pe(1)
+    init(_ client: TSDKClientModule, _ swagger: SwaggerControllerPrtcl) {
         self.client = client
+        self.swagger = swagger
+        prepareSwagger(swagger.openAPIBuilder)
+        Self.shared = self
     }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
@@ -29,14 +32,14 @@ final class EverBlocksController: RouteCollection {
     }
     
     func getConfigParams(_ req: Request) async throws -> Response {
-        let content: BlockConfigRequest = try req.query.decode(BlockConfigRequest.self)
-        return try await getConfigParams(EverClient.shared.client, content, req).toJson()
-    }
-
-    func getConfigParamsRpc(_ req: Request) async throws -> Response {
-        let content: EverJsonRPCRequest<BlockConfigRequest> = try req.content.decode(EverJsonRPCRequest<BlockConfigRequest>.self)
-        return try JsonRPCResponse<BlockConfigResponse>(id: content.id,
-                                                        result: try await getConfigParams(EverClient.shared.client, content.params, req)).toJson()
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<BlockConfigRequest> = try req.content.decode(EverJsonRPCRequest<BlockConfigRequest>.self)
+            return try JsonRPCResponse<BlockConfigResponse>(id: content.id,
+                                                            result: try await getConfigParams(EverClient.shared.client, content.params, req)).toJson()
+        } else {
+            let content: BlockConfigRequest = try req.query.decode(BlockConfigRequest.self)
+            return try await getConfigParams(EverClient.shared.client, content, req).toJson()
+        }
     }
 }
 

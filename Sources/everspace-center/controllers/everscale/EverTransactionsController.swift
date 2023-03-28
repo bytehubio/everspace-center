@@ -12,15 +12,19 @@ import EverscaleClientSwift
 import Swiftgger
 
 
-final class EverTransactionsController: RouteCollection {
+class EverTransactionsController: RouteCollection {
     
     typealias Response = String
-    static var shared: EverTransactionsController = .init(EverClient.shared.client)
+    static var shared: EverTransactionsController!
+    var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = EverClient.shared.emptyClient
     
-    init(_ client: TSDKClientModule) {
+    init(_ client: TSDKClientModule, _ swagger: SwaggerControllerPrtcl) {
         self.client = client
+        self.swagger = swagger
+        prepareSwagger(swagger.openAPIBuilder)
+        Self.shared = self
     }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
@@ -29,25 +33,26 @@ final class EverTransactionsController: RouteCollection {
     }
 
     func getTransactions(_ req: Request) async throws -> Response {
-        let content: GetTransactionsRequest = try req.query.decode(GetTransactionsRequest.self)
-        return try await getTransactions(EverClient.shared.client, content).toJson()
-    }
-    
-    func getTransactionsRpc(_ req: Request) async throws -> Response {
-        let content: EverJsonRPCRequest<GetTransactionsRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionsRequest>.self)
-        return try JsonRPCResponse<[EverClient.TransactionHistoryModel]>(id: content.id,
-                                                                         result: try await getTransactions(EverClient.shared.client, content.params)).toJson()
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<GetTransactionsRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionsRequest>.self)
+            return try JsonRPCResponse<[EverClient.TransactionHistoryModel]>(id: content.id,
+                                                                             result: try await getTransactions(EverClient.shared.client, content.params)).toJson()
+        } else {
+            let content: GetTransactionsRequest = try req.query.decode(GetTransactionsRequest.self)
+            return try await getTransactions(EverClient.shared.client, content).toJson()
+        }
+        
     }
     
     func getTransaction(_ req: Request) async throws -> Response {
-        let content: GetTransactionRequest = try req.query.decode(GetTransactionRequest.self)
-        return try await getTransaction(EverClient.shared.client, content).toJson()
-    }
-    
-    func getTransactionRpc(_ req: Request) async throws -> Response {
-        let content: EverJsonRPCRequest<GetTransactionRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionRequest>.self)
-        return try JsonRPCResponse<EverClient.ExtendedTransactionHistoryModel>(id: content.id,
-                                                                               result: try await getTransaction(EverClient.shared.client, content.params)).toJson()
+        if req.url.string.contains("jsonRpc") {
+            let content: EverJsonRPCRequest<GetTransactionRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionRequest>.self)
+            return try JsonRPCResponse<EverClient.ExtendedTransactionHistoryModel>(id: content.id,
+                                                                                   result: try await getTransaction(EverClient.shared.client, content.params)).toJson()
+        } else {
+            let content: GetTransactionRequest = try req.query.decode(GetTransactionRequest.self)
+            return try await getTransaction(EverClient.shared.client, content).toJson()
+        }
     }
 }
 

@@ -20,6 +20,11 @@ public func configure(_ app: Application) throws {
     }
     guard let vaporIp = Environment.get("vapor_ip") else { fatalError("Set vapor_ip to .env.your_evironment") }
     
+    /// CLIENTS
+    EverClient.shared = try .init(clientConfig: EverClient.makeClientConfig(name: "everscale_mainnet"))
+    EverDevClient.shared = try .init(clientConfig: EverDevClient.makeClientConfig(name: "everscale_devnet"))
+    TonClient.shared = try .init(clientConfig: TonClient.makeClientConfig(name: "toncoin_mainnet"))
+    
     /// START VAPOR CONFIGURING
     app.http.server.configuration.address = BindAddress.hostname(vaporIp, port: vaporPort)
     #if os(Linux)
@@ -32,9 +37,9 @@ public func configure(_ app: Application) throws {
 //    var decoder = IkigaJSONDecoder()
 //    decoder.settings.dateDecodingStrategy = .iso8601
 //    ContentConfiguration.global.use(decoder: decoder, for: .json)
-//    var encoder = IkigaJSONEncoder()
-//    encoder.settings.dateDecodingStrategy = .iso8601
-//    ContentConfiguration.global.use(encoder: encoder, for: .json)
+    var encoder = IkigaJSONEncoder()
+    encoder.settings.dateDecodingStrategy = .iso8601
+    ContentConfiguration.global.use(encoder: encoder, for: .json)
     
     /// CUSTOM ERROR
     app.middleware = .init()

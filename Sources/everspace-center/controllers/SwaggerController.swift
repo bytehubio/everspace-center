@@ -66,11 +66,10 @@ final class SwaggerController: RouteCollection {
                 <li><a href="https://everspace.center/everscale"><code>Everscale Mainnet</code></a></li>
                 <!-- <li><a href="https://everspace.center/everscale-devnet"><code>Everscale Devnet</code></a></li> -->
 
-                <!-- <div class="sep-top"></div>
-                <li><a href="https://everspace.center/toncoin-devnet"><code>TON Mainnet</code></a></li>
-                <li><code>TON Testnet (soon)</code></li> -->
-        <!--
                 <div class="sep-top"></div>
+                <li><a href="https://everspace.center/toncoin"><code>TON Mainnet</code></a></li>
+                <li><code>TON Testnet (soon)</code></li>
+                <!-- <div class="sep-top"></div>
                 <li><a href="https://everspace.center/venom-testnet"><code>Venom Testnet</code></a></li>
                 <div class="sep-top"></div>
 
