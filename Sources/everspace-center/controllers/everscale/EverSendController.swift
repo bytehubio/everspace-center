@@ -15,7 +15,6 @@ import Swiftgger
 class EverSendController: RouteCollection {
     
     typealias Response = String
-    static var shared: EverSendController!
     var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
@@ -24,7 +23,6 @@ class EverSendController: RouteCollection {
         self.client = client
         self.swagger = swagger
         prepareSwagger(swagger.openAPIBuilder)
-        Self.shared = self
     }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
@@ -90,7 +88,7 @@ extension EverSendController {
                           description: "Send Controller",
                           actions: [
                             APIAction(method: .post,
-                                      route: "/everscale/sendExternalMessage",
+                                      route: "/\(swagger.route)/sendExternalMessage",
                                       summary: "",
                                       description: "Send External Message",
                                       parametersObject: SendExternalMessageRequest(),
@@ -100,7 +98,7 @@ extension EverSendController {
                                               type: .object(JsonRPCResponse<Everscale.SendExternalMessage>.self, asCollection: false))
                                       ]),
                             APIAction(method: .post,
-                                      route: "/everscale/waitForTransaction",
+                                      route: "/\(swagger.route)/waitForTransaction",
                                       summary: "",
                                       description: "Wait For Transactions",
                                       parametersObject: WaitForTransactionRequest(),

@@ -15,7 +15,6 @@ import Swiftgger
 class EverRunGetMethodsController: RouteCollection {
     
     typealias Response = String
-    static var shared: EverRunGetMethodsController!
     var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
@@ -24,7 +23,6 @@ class EverRunGetMethodsController: RouteCollection {
         self.client = client
         self.swagger = swagger
         prepareSwagger(swagger.openAPIBuilder)
-        Self.shared = self
     }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
@@ -95,7 +93,7 @@ extension EverRunGetMethodsController {
                           description: "RunGetMethod Controller",
                           actions: [
                             APIAction(method: .get,
-                                      route: "/everscale/runGetMethodFift",
+                                      route: "/\(swagger.route)/runGetMethodFift",
                                       summary: "",
                                       description: "Run Get Fift method",
                                       parametersObject: Everscale.RunGetMethodFift(),
@@ -105,7 +103,7 @@ extension EverRunGetMethodsController {
                                               type: .object(JsonRPCResponse<Everscale.RunGetMethodFiftResponse>.self, asCollection: false))
                                       ]),
                             APIAction(method: .get,
-                                      route: "/everscale/runGetMethodAbi",
+                                      route: "/\(swagger.route)/runGetMethodAbi",
                                       summary: "",
                                       description: "Run Get method by Abi",
                                       parametersObject: Everscale.RunGetMethodAbi(),

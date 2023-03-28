@@ -15,7 +15,6 @@ import Swiftgger
 class EverBlocksController: RouteCollection {
     
     typealias Response = String
-    static var shared: EverBlocksController!
     var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
@@ -24,7 +23,6 @@ class EverBlocksController: RouteCollection {
         self.client = client
         self.swagger = swagger
         prepareSwagger(swagger.openAPIBuilder)
-        Self.shared = self
     }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
@@ -92,7 +90,7 @@ extension EverBlocksController {
                           description: "Blocks Controller",
                           actions: [
                 APIAction(method: .get,
-                          route: "/everscale/getConfigParams",
+                          route: "/\(swagger.route)/getConfigParams",
                           summary: "",
                           description: "Description",
                           parametersObject: BlockConfigRequest(),

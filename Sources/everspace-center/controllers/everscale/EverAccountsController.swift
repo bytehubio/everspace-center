@@ -15,16 +15,14 @@ import Swiftgger
 class EverAccountsController: RouteCollection {
     
     typealias Response = String
-    static var shared: EverAccountsController!
     var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
-    var emptyClient: TSDKClientModule = EverClient.emptyClient
+    var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
     
     init(_ client: TSDKClientModule, _ swagger: SwaggerControllerPrtcl) {
         self.client = client
         self.swagger = swagger
         prepareSwagger(swagger.openAPIBuilder)
-        Self.shared = self
     }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
@@ -98,7 +96,7 @@ extension EverAccountsController {
                           description: "Accounts Controller",
                           actions: [
                 APIAction(method: .get,
-                          route: "/everscale/getAccount",
+                          route: "/\(swagger.route)/getAccount",
                           summary: "",
                           description: "Get Account Info",
                           parametersObject: GetAccountRequest(),
@@ -108,7 +106,7 @@ extension EverAccountsController {
                                   type: .object(JsonRPCResponse<Everscale.Account>.self, asCollection: false))
                           ]),
                 APIAction(method: .get,
-                          route: "/everscale/getAccounts",
+                          route: "/\(swagger.route)/getAccounts",
                           summary: "",
                           description: "Get Accounts",
                           parametersObject: GetAccountsRequest(),
@@ -118,7 +116,7 @@ extension EverAccountsController {
                                   type: .object(JsonRPCResponse<[Everscale.Account]>.self, asCollection: false))
                           ]),
                 APIAction(method: .get,
-                          route: "/everscale/getBalance",
+                          route: "/\(swagger.route)/getBalance",
                           summary: "",
                           description: "Get Balance",
                           parametersObject: GetAccountRequest(),

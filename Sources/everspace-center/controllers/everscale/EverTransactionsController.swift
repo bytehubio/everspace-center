@@ -15,7 +15,6 @@ import Swiftgger
 class EverTransactionsController: RouteCollection {
     
     typealias Response = String
-    static var shared: EverTransactionsController!
     var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
@@ -24,7 +23,6 @@ class EverTransactionsController: RouteCollection {
         self.client = client
         self.swagger = swagger
         prepareSwagger(swagger.openAPIBuilder)
-        Self.shared = self
     }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
@@ -109,7 +107,7 @@ extension EverTransactionsController {
                           description: "Transactions Controller",
                           actions: [
                             APIAction(method: .get,
-                                      route: "/everscale/getTransactions",
+                                      route: "/\(swagger.route)/getTransactions",
                                       summary: "",
                                       description: "Get Account Transactions",
                                       parametersObject: GetTransactionsRequest(),
@@ -119,7 +117,7 @@ extension EverTransactionsController {
                                               type: .object(JsonRPCResponse<[Everscale.TransactionHistoryModel]>.self, asCollection: false))
                                       ]),
                             APIAction(method: .get,
-                                      route: "/everscale/getTransaction",
+                                      route: "/\(swagger.route)/getTransaction",
                                       summary: "",
                                       description: "Get Extend Account Transaction",
                                       parametersObject: GetTransactionRequest(),

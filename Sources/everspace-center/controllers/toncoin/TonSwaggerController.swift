@@ -11,7 +11,7 @@ import Swiftgger
 
 final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
     
-    static let shared: TonSwaggerController = .init()
+    var route: String
     let openAPIBuilder: OpenAPIBuilder = .init(
         title: "TONCOIN API",
         version: "1.0.0",
@@ -44,6 +44,10 @@ final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
     //        .jwt(description: "You can get token from *sign-in* action from *Account* controller.")
         ]
     )
+    
+    init(_ route: String) {
+        self.route = route
+    }
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("", use: index)

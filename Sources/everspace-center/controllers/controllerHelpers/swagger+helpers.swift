@@ -10,4 +10,5 @@ import Swiftgger
 
 protocol SwaggerControllerPrtcl {
     var openAPIBuilder: OpenAPIBuilder { get }
+    var route: String { get }
 }

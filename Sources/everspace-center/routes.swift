@@ -10,7 +10,7 @@ import Swiftgger
 
 let mainController: MainController = .init()
 
-let everSwaggerController: EverSwaggerController = .init()
+let everSwaggerController: EverSwaggerController = .init("everscale")
 let everJsonRpcController: EverJsonRpcController = .init()
 let everTransactionsController: EverTransactionsController = .init(EverClient.client, everSwaggerController)
 let everAccountsController: EverAccountsController = .init(EverClient.client, everSwaggerController)
@@ -18,7 +18,7 @@ let everSendController: EverSendController = .init(EverClient.client, everSwagge
 let everRunGetMethodsController: EverRunGetMethodsController = .init(EverClient.client, everSwaggerController)
 let everBlocksController: EverBlocksController = .init(EverClient.client, everSwaggerController)
 
-let everDevnetSwaggerController: EverDevnetSwaggerController = .init()
+let everDevnetSwaggerController: EverDevnetSwaggerController = .init("everscale-devnet")
 let everDevnetJsonRpcController: EverDevnetJsonRpcController = .init()
 let everDevnetTransactionsController: EverTransactionsController = .init(EverDevClient.client, everDevnetSwaggerController)
 let everDevnetAccountsController: EverAccountsController = .init(EverDevClient.client, everDevnetSwaggerController)
@@ -26,7 +26,7 @@ let everDevnetSendController: EverSendController = .init(EverDevClient.client, e
 let everDevnetRunGetMethodsController: EverRunGetMethodsController = .init(EverDevClient.client, everDevnetSwaggerController)
 let everDevnetBlocksController: EverBlocksController = .init(EverDevClient.client, everDevnetSwaggerController)
 
-let tonSwaggerController: TonSwaggerController = .init()
+let tonSwaggerController: TonSwaggerController = .init("toncoin")
 let tonJsonRpcController: TonJsonRpcController = .init()
 let tonTransactionsController: TonTransactionsController = .init(TonClient.client, tonSwaggerController)
 let tonAccountsController: TonAccountsController = .init(TonClient.client, tonSwaggerController)
