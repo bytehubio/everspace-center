@@ -57,7 +57,7 @@ func systemCommand(_ command: String, _ user: String? = nil, timeOutNanoseconds:
     process.standardOutput = pipe
     process.standardError = pipe
     if user != nil {
-        process.arguments = ["sudo", "-H", "-u", user!, "bash", "-lc", "cd $HOME || true && \(command)"]
+        process.arguments = ["sudo", "-H", "-u", user!, "bash", "-lc", "\(command)"]
     } else {
         process.arguments = ["bash", "-c", "\(command)"]
     }
