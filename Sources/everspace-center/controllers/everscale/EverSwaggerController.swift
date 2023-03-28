@@ -11,7 +11,6 @@ import Swiftgger
 
 final class EverSwaggerController: RouteCollection, SwaggerControllerPrtcl {
     
-    static let shared: EverSwaggerController = .init()
     let openAPIBuilder: OpenAPIBuilder = .init(
         title: "EVERSCALE API",
         version: "1.0.0",
@@ -44,8 +43,6 @@ final class EverSwaggerController: RouteCollection, SwaggerControllerPrtcl {
     //        .jwt(description: "You can get token from *sign-in* action from *Account* controller.")
         ]
     )
-
-    private init() {}
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("", use: index)

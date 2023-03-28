@@ -44,8 +44,6 @@ final class EverDevnetSwaggerController: RouteCollection, SwaggerControllerPrtcl
     //        .jwt(description: "You can get token from *sign-in* action from *Account* controller.")
         ]
     )
-
-    private init() {}
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("", use: index)

@@ -8,39 +8,65 @@
 import Vapor
 import Swiftgger
 
+let mainController: MainController = .init()
+
+let everSwaggerController: EverSwaggerController = .init()
+let everJsonRpcController: EverJsonRpcController = .init()
+let everTransactionsController: EverTransactionsController = .init(EverClient.client, everSwaggerController)
+let everAccountsController: EverAccountsController = .init(EverClient.client, everSwaggerController)
+let everSendController: EverSendController = .init(EverClient.client, everSwaggerController)
+let everRunGetMethodsController: EverRunGetMethodsController = .init(EverClient.client, everSwaggerController)
+let everBlocksController: EverBlocksController = .init(EverClient.client, everSwaggerController)
+
+let everDevnetSwaggerController: EverDevnetSwaggerController = .init()
+let everDevnetJsonRpcController: EverDevnetJsonRpcController = .init()
+let everDevnetTransactionsController: EverTransactionsController = .init(EverDevClient.client, everDevnetSwaggerController)
+let everDevnetAccountsController: EverAccountsController = .init(EverDevClient.client, everDevnetSwaggerController)
+let everDevnetSendController: EverSendController = .init(EverDevClient.client, everDevnetSwaggerController)
+let everDevnetRunGetMethodsController: EverRunGetMethodsController = .init(EverDevClient.client, everDevnetSwaggerController)
+let everDevnetBlocksController: EverBlocksController = .init(EverDevClient.client, everDevnetSwaggerController)
+
+let tonSwaggerController: TonSwaggerController = .init()
+let tonJsonRpcController: TonJsonRpcController = .init()
+let tonTransactionsController: TonTransactionsController = .init(TonClient.client, tonSwaggerController)
+let tonAccountsController: TonAccountsController = .init(TonClient.client, tonSwaggerController)
+let tonSendController: TonSendController = .init(TonClient.client, tonSwaggerController)
+let tonRunGetMethodsController: TonRunGetMethodsController = .init(TonClient.client, tonSwaggerController)
+let tonBlocksController: TonBlocksController = .init(TonClient.client, tonSwaggerController)
+
 func routes(_ app: Application) throws {
 
     try app.group("") { group in
-        try group.register(collection: SwaggerController.shared)
+        try group.register(collection: mainController)
     }
     
     try app.group("everscale") { group in
-        try group.register(collection: EverSwaggerController.shared)
-        try group.register(collection: EverJsonRpcController())
-        try group.register(collection: EverTransactionsController(EverClient.client, EverSwaggerController.shared))
-        try group.register(collection: EverAccountsController(EverClient.client, EverSwaggerController.shared))
-        try group.register(collection: EverSendController(EverClient.client, EverSwaggerController.shared))
-        try group.register(collection: EverRunGetMethodsController(EverClient.client, EverSwaggerController.shared))
-        try group.register(collection: EverBlocksController(EverClient.client, EverSwaggerController.shared))
+        try group.register(collection: everSwaggerController)
+        try group.register(collection: everJsonRpcController)
+        try group.register(collection: everTransactionsController)
+        try group.register(collection: everAccountsController)
+        try group.register(collection: everSendController)
+        try group.register(collection: everRunGetMethodsController)
+        try group.register(collection: everBlocksController)
     }
     
     try app.group("everscale-devnet") { group in
-        try group.register(collection: EverDevnetSwaggerController.shared)
-        try group.register(collection: EverJsonRpcController())
-        try group.register(collection: EverTransactionsController(EverDevClient.client, EverDevnetSwaggerController.shared))
-        try group.register(collection: EverAccountsController(EverDevClient.client, EverDevnetSwaggerController.shared))
-        try group.register(collection: EverSendController(EverDevClient.client, EverDevnetSwaggerController.shared))
-        try group.register(collection: EverRunGetMethodsController(EverDevClient.client, EverDevnetSwaggerController.shared))
-        try group.register(collection: EverBlocksController(EverDevClient.client, EverDevnetSwaggerController.shared))
+        try group.register(collection: everDevnetSwaggerController)
+        try group.register(collection: everDevnetJsonRpcController)
+        try group.register(collection: everDevnetTransactionsController)
+        try group.register(collection: everDevnetAccountsController)
+        try group.register(collection: everDevnetSendController)
+        try group.register(collection: everDevnetRunGetMethodsController)
+        try group.register(collection: everDevnetBlocksController)
     }
     
     try app.group("toncoin") { group in
-        try group.register(collection: TonSwaggerController.shared)
-        try group.register(collection: TonJsonRpcController())
-        try group.register(collection: TonTransactionsController(TonClient.client, TonSwaggerController.shared))
-        try group.register(collection: TonAccountsController(TonClient.client, TonSwaggerController.shared))
-        try group.register(collection: TonSendController(TonClient.client, TonSwaggerController.shared))
-        try group.register(collection: TonRunGetMethodsController(TonClient.client, TonSwaggerController.shared))
-        try group.register(collection: TonBlocksController(TonClient.client, TonSwaggerController.shared))
+        try group.register(collection: tonSwaggerController)
+        try group.register(collection: tonJsonRpcController)
+        try group.register(collection: tonTransactionsController)
+        try group.register(collection: tonAccountsController)
+        try group.register(collection: tonSendController)
+        try group.register(collection: tonRunGetMethodsController)
+        try group.register(collection: tonBlocksController)
     }
 }

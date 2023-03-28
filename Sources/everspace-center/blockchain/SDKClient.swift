@@ -31,7 +31,7 @@ public class SDKClient: SDKClientPrtcl {
     
     public init(clientConfig: TSDKClientConfig) throws {
         self.client = try TSDKClientModule(config: clientConfig)
-        self.emptyClient = try TSDKClientModule(config: clientConfig)
+        self.emptyClient = Self.makeEmptyClient()
     }
     
     public static func makeClientConfig(name: String) -> TSDKClientConfig {

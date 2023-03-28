@@ -9,9 +9,7 @@ import Foundation
 import Vapor
 import Swiftgger
 
-final class SwaggerController: RouteCollection {
-    
-    static let shared: SwaggerController = .init()
+final class MainController: RouteCollection {
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("", use: index)

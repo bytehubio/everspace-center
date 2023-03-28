@@ -33,23 +33,23 @@ class TonJsonRpcController: RouteCollection {
         
         switch method {
         case .getTransactions:
-            return try await encodeResponse(for: req, json: try await EverTransactionsController.shared.getTransactions(req))
+            return try await encodeResponse(for: req, json: try await tonTransactionsController.getTransactions(req))
         case .getTransaction:
-            return try await encodeResponse(for: req, json: try await EverTransactionsController.shared.getTransaction(req))
+            return try await encodeResponse(for: req, json: try await tonTransactionsController.getTransaction(req))
         case .getAccount:
-            return try await encodeResponse(for: req, json: try await EverAccountsController.shared.getAccount(req))
+            return try await encodeResponse(for: req, json: try await tonAccountsController.getAccount(req))
         case .getBalance:
-            return try await encodeResponse(for: req, json: try await EverAccountsController.shared.getBalance(req))
+            return try await encodeResponse(for: req, json: try await tonAccountsController.getBalance(req))
         case .sendExternalMessage:
-            return try await encodeResponse(for: req, json: try await EverSendController.shared.sendExternalMessage(req))
+            return try await encodeResponse(for: req, json: try await tonSendController.sendExternalMessage(req))
         case .runGetMethodAbi:
-            return try await encodeResponse(for: req, json: try await EverRunGetMethodsController.shared.runGetMethodAbi(req))
+            return try await encodeResponse(for: req, json: try await tonRunGetMethodsController.runGetMethodAbi(req))
         case .runGetMethodFift:
-            return try await encodeResponse(for: req, json: try await EverRunGetMethodsController.shared.runGetMethodFift(req))
+            return try await encodeResponse(for: req, json: try await tonRunGetMethodsController.runGetMethodFift(req))
         case .waitForTransaction:
-            return try await encodeResponse(for: req, json: try await EverSendController.shared.waitForTransaction(req))
+            return try await encodeResponse(for: req, json: try await tonSendController.waitForTransaction(req))
         case .getConfigParams:
-            return try await encodeResponse(for: req, json: try await EverBlocksController.shared.getConfigParams(req))
+            return try await encodeResponse(for: req, json: try await tonBlocksController.getConfigParams(req))
         }
     }
 }
