@@ -26,6 +26,7 @@ public enum EverRPCMethods: String, Content {
     case getBlock
     case getRawBlock
     case lookupBlock
+    case getBlockByTime
 }
 
 class EverJsonRpcController: RouteCollection {
@@ -66,6 +67,8 @@ class EverJsonRpcController: RouteCollection {
             return try await everBlocksController.getRawBlock(req)
         case .lookupBlock:
             return try await everBlocksController.lookupBlock(req)
+        case .getBlockByTime:
+            return try await everBlocksController.getBlockByTime(req)
         }
     }
 }

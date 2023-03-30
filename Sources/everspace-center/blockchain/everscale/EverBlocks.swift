@@ -90,6 +90,14 @@ extension Everscale {
         var file_hash: String = "..."
     }
     
+    struct BlockByTimeRequest: Content {
+        var time: String = "..."
+    }
+    
+    struct BlockByTimeResponse: Content {
+        var start: Int = 1
+    }
+    
     class func getLastMasterBlock(client: TSDKClientModule) async throws -> LastMasterBlockResponse {
         let out = try await client.net.query(TSDKParamsOfQuery(query: """
         query {
@@ -231,5 +239,24 @@ extension Everscale {
         }
         
         return try result.toModel(LookupBlockResponse.self)
+    }
+    
+    class func getBlockByTime(client: TSDKClientModule, content: BlockByTimeRequest) async throws -> BlockByTimeResponse {
+        let out = try await client.net.query(TSDKParamsOfQuery(query: """
+        query {
+          blockchain {
+            master_seq_no_range(time_start: 1680165000) {
+              start
+            }
+          }
+        }
+        """))
+        
+        guard let result = try ((((out.result.toDictionary()?["data"] as? [String: Any])?["blockchain"] as? [String: Any])?["master_seq_no_range"] as? [String: Any]))?.toJSON()
+        else {
+            throw makeError(AppError.mess("Block not found"))
+        }
+        
+        return try result.toModel(BlockByTimeResponse.self)
     }
 }

@@ -25,6 +25,7 @@ public enum TonRPCMethods: String, Content {
     case getBlock
     case getRawBlock
     case lookupBlock
+    case getBlockByTime
 }
 
 class TonJsonRpcController: RouteCollection {
@@ -65,6 +66,8 @@ class TonJsonRpcController: RouteCollection {
             return try await tonBlocksController.getRawBlock(req)
         case .lookupBlock:
             return try await tonBlocksController.lookupBlock(req)
+        case .getBlockByTime:
+            return try await tonBlocksController.getBlockByTime(req)
         }
     }
 }
