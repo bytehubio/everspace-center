@@ -80,6 +80,7 @@ func runGetMethodAbi(client: TSDKClientModule,
                      params: [String: Any] = [:],
                      abi: String
 ) async throws -> String {
+    let addr: String = try await tonConvertAddrToEverFormat(client: emptyClient, addr)
     let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
                                                                      filter: [
                                                                         "id": [

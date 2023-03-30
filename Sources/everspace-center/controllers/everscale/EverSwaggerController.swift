@@ -41,6 +41,9 @@ final class EverSwaggerController: RouteCollection, SwaggerControllerPrtcl {
         contact: APIContact(name: "Mail", email: "admin@bytehub.io", url: URL(string: "https://github.com/nerzh")),
     //            license: APILicense(name: "MIT", url: URL(string: "http://mit.license")),
         authorizations: [
+            .apiKey(description: "INSERT API KEY"),
+            .basic(description: "BASIC"),
+            .jwt(description: "JWT")
     //        .jwt(description: "You can get token from *sign-in* action from *Account* controller.")
         ]
     )
