@@ -34,6 +34,15 @@ let rfldSendController: EverSendController = .init(RfldClient.client, rfldSwagge
 let rfldRunGetMethodsController: EverRunGetMethodsController = .init(RfldClient.client, rfldSwaggerController)
 let rfldBlocksController: EverBlocksController = .init(RfldClient.client, rfldSwaggerController)
 
+let venomDevnetSwaggerController: VenomDevnetSwaggerController = .init("venom-devnet")
+let venomDevnetJsonRpcController: VenomDevnetJsonRpcController = .init()
+let venomDevnetTransactionsController: EverTransactionsController = .init(VenomDevnetClient.client, venomDevnetSwaggerController)
+let venomDevnetAccountsController: EverAccountsController = .init(VenomDevnetClient.client, venomDevnetSwaggerController)
+let venomDevnetSendController: EverSendController = .init(VenomDevnetClient.client, venomDevnetSwaggerController)
+let venomDevnetRunGetMethodsController: EverRunGetMethodsController = .init(VenomDevnetClient.client, venomDevnetSwaggerController)
+let venomDevnetBlocksController: EverBlocksController = .init(VenomDevnetClient.client, venomDevnetSwaggerController)
+
+
 let tonSwaggerController: TonSwaggerController = .init("toncoin")
 let tonJsonRpcController: TonJsonRpcController = .init()
 let tonTransactionsController: EverTransactionsController = .init(TonClient.client, tonSwaggerController)
@@ -76,6 +85,16 @@ func routes(_ app: Application) throws {
         try group.register(collection: rfldSendController)
         try group.register(collection: rfldRunGetMethodsController)
         try group.register(collection: rfldBlocksController)
+    }
+    
+    try app.group("venom-devnet") { group in
+        try group.register(collection: venomDevnetSwaggerController)
+        try group.register(collection: venomDevnetJsonRpcController)
+        try group.register(collection: venomDevnetTransactionsController)
+        try group.register(collection: venomDevnetAccountsController)
+        try group.register(collection: venomDevnetSendController)
+        try group.register(collection: venomDevnetRunGetMethodsController)
+        try group.register(collection: venomDevnetBlocksController)
     }
     
     try app.group("toncoin") { group in

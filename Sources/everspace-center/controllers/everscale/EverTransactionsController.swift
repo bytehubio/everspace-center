@@ -160,13 +160,11 @@ extension EverTransactionsController {
                                _ content: Everscale.BlocksTransactionsRequest
     ) async throws -> [BlocksTransactionsResponse] {
         let out = try await Everscale.getBlocksTransactions(client: client, content: content)
-        //        pe(out)
-        var transactions: [BlocksTransactionsResponse] = []
         var cache_responses: [String: BlocksTransactionsResponse] = .init()
         var cache_transactions: [String: String] = .init()
         var ids: [String] = .init()
         
-        for (num, edge) in out.blockchain.blocks.edges.enumerated() {
+        for edge in out.blockchain.blocks.edges {
             var blocksTransactionsResponse: BlocksTransactionsResponse = .init()
             blocksTransactionsResponse.id = edge.node.id.replace(#"^block\/"#, "")
             blocksTransactionsResponse.seq_no = edge.node.seq_no
