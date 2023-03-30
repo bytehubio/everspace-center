@@ -27,6 +27,7 @@ public enum EverDevnetRPCMethods: String, Content {
     case lookupBlock
     case getBlockByTime
     case estimateFee
+    case getBlocksTransactions
 }
 
 class EverDevnetJsonRpcController: RouteCollection {
@@ -71,6 +72,8 @@ class EverDevnetJsonRpcController: RouteCollection {
             return try await everDevnetBlocksController.getBlockByTime(req)
         case .estimateFee:
             return try await everDevnetSendController.estimateFee(req)
+        case .getBlocksTransactions:
+            return try await everDevnetTransactionsController.getBlocksTransactions(req)
         }
     }
 }

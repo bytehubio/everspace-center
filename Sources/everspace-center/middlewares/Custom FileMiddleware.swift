@@ -43,7 +43,6 @@ public final class CustomFileMiddleware: Middleware {
     }
     
     public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
-        print("FILE", request.headers)
         // make a copy of the percent-decoded path
         guard var path = request.url.path.removingPercentEncoding else {
             return request.eventLoop.makeFailedFuture(Abort(.badRequest))

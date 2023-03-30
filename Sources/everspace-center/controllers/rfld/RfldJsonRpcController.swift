@@ -27,6 +27,7 @@ public enum RfldRPCMethods: String, Content {
     case lookupBlock
     case getBlockByTime
     case estimateFee
+    case getBlocksTransactions
 }
 
 class RfldJsonRpcController: RouteCollection {
@@ -40,37 +41,39 @@ class RfldJsonRpcController: RouteCollection {
         
         switch method {
         case .getTransactions:
-            return try await everDevnetTransactionsController.getTransactions(req)
+            return try await rfldTransactionsController.getTransactions(req)
         case .getTransaction:
-            return try await everDevnetTransactionsController.getTransaction(req)
+            return try await rfldTransactionsController.getTransaction(req)
         case .getAccount:
-            return try await everDevnetAccountsController.getAccount(req)
+            return try await rfldAccountsController.getAccount(req)
         case .getBalance:
-            return try await everDevnetAccountsController.getBalance(req)
+            return try await rfldAccountsController.getBalance(req)
         case .sendExternalMessage:
-            return try await everDevnetSendController.sendExternalMessage(req)
+            return try await rfldSendController.sendExternalMessage(req)
         case .runGetMethodAbi:
-            return try await everDevnetRunGetMethodsController.runGetMethodAbi(req)
+            return try await rfldRunGetMethodsController.runGetMethodAbi(req)
         case .runGetMethodFift:
-            return try await everDevnetRunGetMethodsController.runGetMethodFift(req)
+            return try await rfldRunGetMethodsController.runGetMethodFift(req)
         case .waitForTransaction:
-            return try await everDevnetSendController.waitForTransaction(req)
+            return try await rfldSendController.waitForTransaction(req)
         case .getConfigParams:
-            return try await everDevnetBlocksController.getConfigParams(req)
+            return try await rfldBlocksController.getConfigParams(req)
         case .sendAndWaitTransaction:
-            return try await everDevnetSendController.sendAndWaitTransaction(req)
+            return try await rfldSendController.sendAndWaitTransaction(req)
         case .getLastMasterBlock:
-            return try await everDevnetBlocksController.getLastMasterBlock(req)
+            return try await rfldBlocksController.getLastMasterBlock(req)
         case .getBlock:
-            return try await everDevnetBlocksController.getBlock(req)
+            return try await rfldBlocksController.getBlock(req)
         case .getRawBlock:
-            return try await everDevnetBlocksController.getRawBlock(req)
+            return try await rfldBlocksController.getRawBlock(req)
         case .lookupBlock:
-            return try await everDevnetBlocksController.lookupBlock(req)
+            return try await rfldBlocksController.lookupBlock(req)
         case .getBlockByTime:
-            return try await everDevnetBlocksController.getBlockByTime(req)
+            return try await rfldBlocksController.getBlockByTime(req)
         case .estimateFee:
-            return try await everDevnetSendController.estimateFee(req)
+            return try await rfldSendController.estimateFee(req)
+        case .getBlocksTransactions:
+            return try await rfldTransactionsController.getBlocksTransactions(req)
         }
     }
 }

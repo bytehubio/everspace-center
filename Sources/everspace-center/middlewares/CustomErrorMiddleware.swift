@@ -91,7 +91,6 @@ public final class CustomErrorMiddleware: Middleware {
     }
     
     public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
-        print("ERROR", request.headers)
         return next.respond(to: request).flatMapErrorThrowing { error in
             return self.closure(request, error)
         }

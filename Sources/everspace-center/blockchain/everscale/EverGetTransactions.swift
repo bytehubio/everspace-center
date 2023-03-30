@@ -129,6 +129,59 @@ extension Everscale {
         }
     }
     
+    struct BlocksTransactionsRequest: Content {
+        var seq_no: Int = 1
+    }
+    
+//    blockchain {
+//      blocks(master_seq_no_range: {start: \(content.seq_no), end: \(content.seq_no + 1)}) {
+//        edges {
+//          node {
+//            id
+//            workchain_id
+//            shard
+//            account_blocks {
+//              transactions {
+//                transaction_id
+//              }
+//            }
+//          }
+//        }
+//      }
+//    }
+    
+    struct BlocksTransactionsGQLResponse: Content {
+        var blockchain: Blockchain = .init()
+        
+        struct Blockchain: Content {
+            var blocks: Block = .init()
+            
+            struct Block: Content {
+                var edges: [Edge] = []
+                
+                struct Edge: Content {
+                    var node: Node = .init()
+                    
+                    struct Node: Content {
+                        var id: String = ""
+                        var seq_no: Double = 0
+                        var workchain_id: Int = 0
+                        var shard: String = ""
+                        var account_blocks: [AccountBlock] = []
+                        
+                        struct AccountBlock: Content {
+                            var transactions: [Transaction] = []
+                            
+                            struct Transaction: Content {
+                                var transaction_id: String = ""
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     
     class func getTransactions(client: TSDKClientModule,
                                address: String,
@@ -324,7 +377,7 @@ query {
         )
         
         let transactions = try await client.net.query_collection(paramsOfQueryCollection).result
-        pe(transactions.first!.toJSON())
+        
         if let transaction = try transactions.first?.toModel(ExtendedTransactionHistoryModel.self) {
             return transaction
         } else {
@@ -332,18 +385,18 @@ query {
         }
     }
     
-    class func getBlocksTransactions(client: TSDKClientModule, content: GetBlockRequest) async throws -> RawBlockResponse {
+    class func getBlocksTransactions(client: TSDKClientModule, content: BlocksTransactionsRequest) async throws -> BlocksTransactionsGQLResponse {
         let out = try await client.net.query(TSDKParamsOfQuery(query: """
         query {
           blockchain {
-            blocks(master_seq_no_range: {start: 28434269, end: 28434270}) {
+            blocks(master_seq_no_range: {start: \(content.seq_no), end: \(content.seq_no + 1)}) {
               edges {
                 node {
                   id
                   workchain_id
                   shard
+                  seq_no
                   account_blocks {
-                    account_addr
                     transactions {
                       transaction_id
                     }
@@ -355,11 +408,11 @@ query {
         }
         """))
         
-        guard let result = try ((out.result.toDictionary()?["data"] as? [String: Any])?["blocks"] as? [[String: Any]])?.first?.toJSON()
+        guard let result = try (out.result.toDictionary()?["data"] as? [String: Any])?.toJSON().toModel(BlocksTransactionsGQLResponse.self)
         else {
-            throw makeError(AppError.mess("Block not found"))
+            throw makeError(AppError.mess("Transactions not found"))
         }
         
-        return try result.toModel(RawBlockResponse.self)
+        return result
     }
 }
