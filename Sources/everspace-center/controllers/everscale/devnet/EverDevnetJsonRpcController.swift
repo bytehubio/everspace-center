@@ -42,9 +42,9 @@ class EverDevnetJsonRpcController: RouteCollection {
         case .getTransaction:
             return try await encodeResponse(for: req, json: try await everDevnetTransactionsController.getTransaction(req))
         case .getAccount:
-            return try await encodeResponse(for: req, json: try await everDevnetAccountsController.getAccount(req))
+            return try await everDevnetAccountsController.getAccount(req)
         case .getBalance:
-            return try await encodeResponse(for: req, json: try await everDevnetAccountsController.getBalance(req))
+            return try await everDevnetAccountsController.getBalance(req)
         case .sendExternalMessage:
             return try await encodeResponse(for: req, json: try await everDevnetSendController.sendExternalMessage(req))
         case .runGetMethodAbi:

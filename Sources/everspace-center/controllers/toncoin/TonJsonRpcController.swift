@@ -42,9 +42,9 @@ class TonJsonRpcController: RouteCollection {
         case .getTransaction:
             return try await encodeResponse(for: req, json: try await tonTransactionsController.getTransaction(req))
         case .getAccount:
-            return try await encodeResponse(for: req, json: try await tonAccountsController.getAccount(req))
+            return try await tonAccountsController.getAccount(req)
         case .getBalance:
-            return try await encodeResponse(for: req, json: try await tonAccountsController.getBalance(req))
+            return try await tonAccountsController.getBalance(req)
         case .sendExternalMessage:
             return try await encodeResponse(for: req, json: try await tonSendController.sendExternalMessage(req))
         case .runGetMethodAbi:

@@ -95,7 +95,7 @@ extension EverRunGetMethodsController {
                             APIAction(method: .get,
                                       route: "/\(swagger.route)/runGetMethodFift",
                                       summary: "",
-                                      description: "Run Get Fift method",
+                                      description: "Run Get Fift method.\nParams field is a array. Example of variants: [12345] or [12345, {\"type\": \"Slice\", \"value\": \"base64Boc\"}] etc",
                                       parametersObject: Everscale.RunGetMethodFift(),
                                       responses: [
                                         .init(code: "200",

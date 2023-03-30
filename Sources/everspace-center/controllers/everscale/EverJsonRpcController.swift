@@ -43,9 +43,9 @@ class EverJsonRpcController: RouteCollection {
         case .getTransaction:
             return try await encodeResponse(for: req, json: try await everTransactionsController.getTransaction(req))
         case .getAccount:
-            return try await encodeResponse(for: req, json: try await everAccountsController.getAccount(req))
+            return try await everAccountsController.getAccount(req)
         case .getBalance:
-            return try await encodeResponse(for: req, json: try await everAccountsController.getBalance(req))
+            return try await everAccountsController.getBalance(req)
         case .sendExternalMessage:
             return try await encodeResponse(for: req, json: try await everSendController.sendExternalMessage(req))
         case .runGetMethodAbi:

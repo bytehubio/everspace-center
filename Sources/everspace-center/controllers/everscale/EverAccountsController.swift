@@ -14,7 +14,7 @@ import Swiftgger
 
 class EverAccountsController: RouteCollection {
     
-    typealias Response = String
+    
     var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
@@ -32,36 +32,42 @@ class EverAccountsController: RouteCollection {
     }
     
     func getAccount(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
-            return try JsonRPCResponse<Everscale.Account>(id: content.id,
-                                                           result: try await getAccount(client, content.params)).toJson()
+            result = JsonRPCResponse<Everscale.Account>(id: content.id,
+                                                        result: try await getAccount(client, content.params)).toJson()
         } else {
             let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
-            return try await getAccount(client, content).toJson()
+            result = try await getAccount(client, content).toJson()
         }
+        return try await encodeResponse(for: req, json: result)
     }
     
     func getAccounts(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<GetAccountsRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountsRequest>.self)
-            return try JsonRPCResponse<[Everscale.Account]>(id: content.id,
+            result = JsonRPCResponse<[Everscale.Account]>(id: content.id,
                                                              result: try await getAccounts(client, content.params)).toJson()
         } else {
             let content: GetAccountsRequest = try req.query.decode(GetAccountsRequest.self)
-            return try await getAccounts(client, content).toJson()
+            result =  try await getAccounts(client, content).toJson()
         }
+        return try await encodeResponse(for: req, json: result)
     }
     
     func getBalance(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
-            return try JsonRPCResponse<Everscale.AccountBalance>(id: content.id,
+            result = JsonRPCResponse<Everscale.AccountBalance>(id: content.id,
                                                                   result: try await getBalance(client, content.params)).toJson()
         } else {
             let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
-            return try await getBalance(client, content).toJson()
+            result = try await getBalance(client, content).toJson()
         }
+        return try await encodeResponse(for: req, json: result)
     }
 }
 
