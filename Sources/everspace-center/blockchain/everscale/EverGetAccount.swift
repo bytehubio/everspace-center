@@ -17,15 +17,15 @@ extension Everscale {
         var id: String = ""
         var balance: String = ""
         var acc_type: Int = 1
-        var acc_type_name: String = ""
-        var code: String = ""
-        var code_hash: String = ""
+        var acc_type_name: String? = ""
+        var code: String? = ""
+        var code_hash: String? = ""
         var due_payment: String? = ""
         var workchain_id: Int = 1
         var library_hash: String? = ""
         var library: String? = ""
-        var data: String = ""
-        var data_hash: String = ""
+        var data: String? = ""
+        var data_hash: String? = ""
     }
     
     public struct AccountBalance: Codable {

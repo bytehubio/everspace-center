@@ -34,7 +34,7 @@ let rfldSendController: EverSendController = .init(RfldClient.client, rfldSwagge
 let rfldRunGetMethodsController: EverRunGetMethodsController = .init(RfldClient.client, rfldSwaggerController)
 let rfldBlocksController: EverBlocksController = .init(RfldClient.client, rfldSwaggerController)
 
-let venomDevnetSwaggerController: VenomDevnetSwaggerController = .init("venom-devnet")
+let venomDevnetSwaggerController: VenomDevnetSwaggerController = .init("venom-testnet")
 let venomDevnetJsonRpcController: VenomDevnetJsonRpcController = .init()
 let venomDevnetTransactionsController: EverTransactionsController = .init(VenomDevnetClient.client, venomDevnetSwaggerController)
 let venomDevnetAccountsController: EverAccountsController = .init(VenomDevnetClient.client, venomDevnetSwaggerController)
@@ -87,7 +87,7 @@ func routes(_ app: Application) throws {
         try group.register(collection: rfldBlocksController)
     }
     
-    try app.group("venom-devnet") { group in
+    try app.group("venom-testnet") { group in
         try group.register(collection: venomDevnetSwaggerController)
         try group.register(collection: venomDevnetJsonRpcController)
         try group.register(collection: venomDevnetTransactionsController)

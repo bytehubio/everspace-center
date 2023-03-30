@@ -13,15 +13,15 @@ final class VenomDevnetSwaggerController: RouteCollection, SwaggerControllerPrtc
     
     var route: String
     let openAPIBuilder: OpenAPIBuilder = .init(
-        title: "VENOM DEVNET API",
+        title: "VENOM TESTNET API",
         version: "1.0.0",
         description: """
         [EVERSPACE API CENTER -> MAIN PAGE](https://everspace.center)\n\n
-                This is incredible Venom Devnet API.\n
+                This is incredible Venom Testnet API.\n
         **Now temporarily without authorization.**\n
         \n
         You can use JSON RPC requests:\n
-            https://everspace.center/venom-devnet/jsonRpc\n\n
+            https://everspace.center/venom-testnet/jsonRpc\n\n
         Example request:\n
             {\n
                 "id": "1",\n
@@ -71,7 +71,7 @@ final class VenomDevnetSwaggerController: RouteCollection, SwaggerControllerPrtc
             <div id="swagger-ui"></div>
             <script src="/js/swagger/swagger-ui-bundle.js" charset="UTF-8"> </script>
             <script src="/js/swagger/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-            <script src="/js/swagger/swagger-initializer-venom-devnet.js" charset="UTF-8"> </script>
+            <script src="/js/swagger/swagger-initializer-venom-testnet.js" charset="UTF-8"> </script>
           </body>
         </html>
         """

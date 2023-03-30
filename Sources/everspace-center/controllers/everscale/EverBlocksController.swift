@@ -140,7 +140,7 @@ extension EverBlocksController {
         if !fileManager.fileExists(atPath: filePath) {
             fileManager.createFile(atPath: filePath, contents: nil, attributes: nil)
         }
-        guard let contentData = account.data.data(using: .utf8) else {
+        guard let contentData = account.data?.data(using: .utf8) else {
             throw makeError(AppError.mess("Can not convert string to Data"))
         }
         try await req.fileio.writeFile(ByteBuffer(data: contentData), at: filePath)
