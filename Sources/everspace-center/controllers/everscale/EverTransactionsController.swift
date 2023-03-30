@@ -73,26 +73,33 @@ extension EverTransactionsController {
                          _ content: GetTransactionsRequest
     ) async throws -> [Everscale.TransactionHistoryModel] {
         let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, content.address)
-        if content.hash != nil || content.lt != nil || content.to_lt != nil {
-            let transactions = try await Everscale.getTransactions(client: client,
-                                                                   address: accountAddress,
-                                                                   limit: content.limit,
-                                                                   lt: content.lt,
-                                                                   to_lt: content.to_lt,
-                                                                   hashId: content.hash)
-            return transactions
-        } else {
-            return try await withCheckedThrowingContinuation { continuation in
-                Everscale.getTransactions(client: client, address: accountAddress, limit: content.limit) { result in
-                    switch result {
-                    case let .success(transactions):
-                        continuation.resume(returning: transactions)
-                    case let .failure(error):
-                        continuation.resume(throwing: makeError(error))
-                    }
-                }
-            }
-        }
+        let transactions = try await Everscale.getTransactions(client: client,
+                                                               address: accountAddress,
+                                                               limit: content.limit,
+                                                               lt: content.lt,
+                                                               to_lt: content.to_lt,
+                                                               hashId: content.hash)
+        return transactions
+//        if content.hash != nil || content.lt != nil || content.to_lt != nil {
+//            let transactions = try await Everscale.getTransactions(client: client,
+//                                                                   address: accountAddress,
+//                                                                   limit: content.limit,
+//                                                                   lt: content.lt,
+//                                                                   to_lt: content.to_lt,
+//                                                                   hashId: content.hash)
+//            return transactions
+//        } else {
+//            return try await withCheckedThrowingContinuation { continuation in
+//                Everscale.getTransactions(client: client, address: accountAddress, limit: content.limit) { result in
+//                    switch result {
+//                    case let .success(transactions):
+//                        continuation.resume(returning: transactions)
+//                    case let .failure(error):
+//                        continuation.resume(throwing: makeError(error))
+//                    }
+//                }
+//            }
+//        }
     }
     
     func getTransaction(_ client: TSDKClientModule,
