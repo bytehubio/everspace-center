@@ -13,8 +13,6 @@ import Swiftgger
 
 
 class EverSendController: RouteCollection {
-    
-    typealias Response = String
     var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
@@ -32,37 +30,42 @@ class EverSendController: RouteCollection {
     }
     
     func sendExternalMessage(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<SendExternalMessageRequest> = try req.content.decode(EverJsonRPCRequest<SendExternalMessageRequest>.self)
-            return try JsonRPCResponse<Everscale.SendExternalMessage>(id: content.id,
+            result = JsonRPCResponse<Everscale.SendExternalMessage>(id: content.id,
                                                                       result: try await sendExternalMessage(client, content.params)).toJson()
         } else {
             let content: SendExternalMessageRequest = try req.query.decode(SendExternalMessageRequest.self)
-            return try await sendExternalMessage(client, content).toJson()
+            result = try await sendExternalMessage(client, content).toJson()
         }
+        return try await encodeResponse(for: req, json: result)
     }
     
     func waitForTransaction(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<WaitForTransactionRequest> = try req.content.decode(EverJsonRPCRequest<WaitForTransactionRequest>.self)
-            return try JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
+            result = JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
                                                                    result: try await waitForTransaction(client, content.params)).toJson()
         } else {
             let content: WaitForTransactionRequest = try req.query.decode(WaitForTransactionRequest.self)
-            return try await waitForTransaction(client, content).toJson()
+            result = try await waitForTransaction(client, content).toJson()
         }
-        
+        return try await encodeResponse(for: req, json: result)
     }
     
     func sendAndWaitTransaction(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<SendExternalMessageRequest> = try req.content.decode(EverJsonRPCRequest<SendExternalMessageRequest>.self)
-            return try JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
+            result = JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
                                                                    result: try await sendAndWaitTransaction(client, content.params)).toJson()
         } else {
             let content: SendExternalMessageRequest = try req.query.decode(SendExternalMessageRequest.self)
-            return try await sendAndWaitTransaction(client, content).toJson()
+            result = try await sendAndWaitTransaction(client, content).toJson()
         }
+        return try await encodeResponse(for: req, json: result)
     }
 }
 

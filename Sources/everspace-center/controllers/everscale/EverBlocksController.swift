@@ -14,7 +14,6 @@ import Swiftgger
 
 class EverBlocksController: RouteCollection {
     
-    typealias Response = String
     var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
@@ -34,63 +33,73 @@ class EverBlocksController: RouteCollection {
     }
     
     func getConfigParams(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<BlockConfigRequest> = try req.content.decode(EverJsonRPCRequest<BlockConfigRequest>.self)
-            return try JsonRPCResponse<BlockConfigResponse>(id: content.id,
-                                                            result: try await getConfigParams(client, content.params, req)).toJson()
+            result = JsonRPCResponse<BlockConfigResponse>(id: content.id,
+                                                          result: try await getConfigParams(client, content.params, req)).toJson()
         } else {
             let content: BlockConfigRequest = try req.query.decode(BlockConfigRequest.self)
-            return try await getConfigParams(client, content, req).toJson()
+            result = try await getConfigParams(client, content, req).toJson()
         }
+        return try await encodeResponse(for: req, json: result)
     }
     
     func getLastMasterBlock(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<[String: String]> = try req.content.decode(EverJsonRPCRequest<[String: String]>.self)
-            return try JsonRPCResponse<Everscale.LastMasterBlockResponse>(id: content.id,
-                                                                          result: try await getLastMasterBlock(client)).toJson()
+            result = JsonRPCResponse<Everscale.LastMasterBlockResponse>(id: content.id,
+                                                                        result: try await getLastMasterBlock(client)).toJson()
         } else {
-            return try await getLastMasterBlock(client).toJson()
+            result = try await getLastMasterBlock(client).toJson()
         }
+        return try await encodeResponse(for: req, json: result)
     }
     
     func getBlock(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<Everscale.GetBlockRequest> = try req.content.decode(EverJsonRPCRequest<Everscale.GetBlockRequest>.self)
-            return try JsonRPCResponse<Everscale.BlockResponse>(id: content.id,
-                                                                   result: try await getBlock(client, content: content.params)).toJson()
+            result = JsonRPCResponse<Everscale.BlockResponse>(id: content.id,
+                                                              result: try await getBlock(client, content: content.params)).toJson()
         } else {
             let content: Everscale.GetBlockRequest = try req.query.decode(Everscale.GetBlockRequest.self)
-            return try await getBlock(client, content: content).toJson()
+            result = try await getBlock(client, content: content).toJson()
         }
+        return try await encodeResponse(for: req, json: result)
     }
     
     func getRawBlock(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<Everscale.GetBlockRequest> = try req.content.decode(EverJsonRPCRequest<Everscale.GetBlockRequest>.self)
-            return try JsonRPCResponse<Everscale.RawBlockResponse>(id: content.id,
-                                                                   result: try await getRawBlock(client, content: content.params)).toJson()
+            result = JsonRPCResponse<Everscale.RawBlockResponse>(id: content.id,
+                                                                 result: try await getRawBlock(client, content: content.params)).toJson()
         } else {
             let content: Everscale.GetBlockRequest = try req.query.decode(Everscale.GetBlockRequest.self)
-            return try await getRawBlock(client, content: content).toJson()
+            result = try await getRawBlock(client, content: content).toJson()
         }
+        return try await encodeResponse(for: req, json: result)
     }
     
     func lookupBlock(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<Everscale.LookupBlockRequest> = try req.content.decode(EverJsonRPCRequest<Everscale.LookupBlockRequest>.self)
-            return try JsonRPCResponse<Everscale.LookupBlockResponse>(id: content.id,
-                                                                   result: try await lookupBlock(client, content: content.params)).toJson()
+            result = JsonRPCResponse<Everscale.LookupBlockResponse>(id: content.id,
+                                                                    result: try await lookupBlock(client, content: content.params)).toJson()
         } else {
             let content: Everscale.LookupBlockRequest = try req.query.decode(Everscale.LookupBlockRequest.self)
-            return try await lookupBlock(client, content: content).toJson()
+            result = try await lookupBlock(client, content: content).toJson()
         }
+        return try await encodeResponse(for: req, json: result)
     }
 }
 
 
 extension EverBlocksController {
-
+    
     struct BlockConfigRequest: Content {
         var number: Int = 1
     }
@@ -99,7 +108,7 @@ extension EverBlocksController {
         var param: Int = 1
         var boc: String = "..."
     }
-
+    
     func getConfigParams(_ client: TSDKClientModule, _ content: BlockConfigRequest, _ req: Request) async throws -> BlockConfigResponse {
         if content.number > 34 || content.number < 0 {
             throw makeError(AppError.mess("Number out of range"))
@@ -145,64 +154,64 @@ extension EverBlocksController {
     func lookupBlock(_ client: TSDKClientModule, content: Everscale.LookupBlockRequest) async throws -> Everscale.LookupBlockResponse {
         try await Everscale.lookupBlock(client: client, content: content)
     }
-
-
+    
+    
     @discardableResult
     func prepareSwagger(_ openAPIBuilder: OpenAPIBuilder) -> OpenAPIBuilder {
         return openAPIBuilder.add(
             APIController(name: "Blocks",
                           description: "Blocks Controller",
                           actions: [
-                APIAction(method: .get,
-                          route: "/\(swagger.route)/getConfigParams",
-                          summary: "",
-                          description: "Description",
-                          parametersObject: BlockConfigRequest(),
-                          responses: [
-                            .init(code: "200",
-                                  description: "Description",
-                                  type: .object(JsonRPCResponse<BlockConfigResponse>.self, asCollection: false))
-                          ]),
-                APIAction(method: .get,
-                          route: "/\(swagger.route)/getLastMasterBlock",
-                          summary: "",
-                          description: "Get Last Master Block",
-                          responses: [
-                            .init(code: "200",
-                                  description: "Description",
-                                  type: .object(JsonRPCResponse<Everscale.LastMasterBlockResponse>.self, asCollection: false))
-                          ]),
-                APIAction(method: .get,
-                          route: "/\(swagger.route)/getBlock",
-                          summary: "",
-                          description: "Get Block",
-                          parametersObject: Everscale.GetBlockRequest(),
-                          responses: [
-                            .init(code: "200",
-                                  description: "Description",
-                                  type: .object(JsonRPCResponse<Everscale.BlockResponse>.self, asCollection: false))
-                          ]),
-                APIAction(method: .get,
-                          route: "/\(swagger.route)/getRawBlock",
-                          summary: "",
-                          description: "Get Raw Block",
-                          parametersObject: Everscale.GetBlockRequest(),
-                          responses: [
-                            .init(code: "200",
-                                  description: "Description",
-                                  type: .object(JsonRPCResponse<Everscale.RawBlockResponse>.self, asCollection: false))
-                          ]),
-                APIAction(method: .get,
-                          route: "/\(swagger.route)/lookupBlock",
-                          summary: "",
-                          description: "Lookup Block",
-                          parametersObject: Everscale.LookupBlockRequest(),
-                          responses: [
-                            .init(code: "200",
-                                  description: "Description",
-                                  type: .object(JsonRPCResponse<Everscale.LookupBlockResponse>.self, asCollection: false))
-                          ]),
-            ])
+                            APIAction(method: .get,
+                                      route: "/\(swagger.route)/getConfigParams",
+                                      summary: "",
+                                      description: "Description",
+                                      parametersObject: BlockConfigRequest(),
+                                      responses: [
+                                        .init(code: "200",
+                                              description: "Description",
+                                              type: .object(JsonRPCResponse<BlockConfigResponse>.self, asCollection: false))
+                                      ]),
+                            APIAction(method: .get,
+                                      route: "/\(swagger.route)/getLastMasterBlock",
+                                      summary: "",
+                                      description: "Get Last Master Block",
+                                      responses: [
+                                        .init(code: "200",
+                                              description: "Description",
+                                              type: .object(JsonRPCResponse<Everscale.LastMasterBlockResponse>.self, asCollection: false))
+                                      ]),
+                            APIAction(method: .get,
+                                      route: "/\(swagger.route)/getBlock",
+                                      summary: "",
+                                      description: "Get Block",
+                                      parametersObject: Everscale.GetBlockRequest(),
+                                      responses: [
+                                        .init(code: "200",
+                                              description: "Description",
+                                              type: .object(JsonRPCResponse<Everscale.BlockResponse>.self, asCollection: false))
+                                      ]),
+                            APIAction(method: .get,
+                                      route: "/\(swagger.route)/getRawBlock",
+                                      summary: "",
+                                      description: "Get Raw Block",
+                                      parametersObject: Everscale.GetBlockRequest(),
+                                      responses: [
+                                        .init(code: "200",
+                                              description: "Description",
+                                              type: .object(JsonRPCResponse<Everscale.RawBlockResponse>.self, asCollection: false))
+                                      ]),
+                            APIAction(method: .get,
+                                      route: "/\(swagger.route)/lookupBlock",
+                                      summary: "",
+                                      description: "Lookup Block",
+                                      parametersObject: Everscale.LookupBlockRequest(),
+                                      responses: [
+                                        .init(code: "200",
+                                              description: "Description",
+                                              type: .object(JsonRPCResponse<Everscale.LookupBlockResponse>.self, asCollection: false))
+                                      ]),
+                          ])
         ).add([
             APIObject(object: JsonRPCResponse<BlockConfigResponse>(result: BlockConfigResponse())),
             APIObject(object: BlockConfigRequest()),

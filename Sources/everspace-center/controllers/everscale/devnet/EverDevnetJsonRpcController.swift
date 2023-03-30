@@ -38,33 +38,33 @@ class EverDevnetJsonRpcController: RouteCollection {
         
         switch method {
         case .getTransactions:
-            return try await encodeResponse(for: req, json: try await everDevnetTransactionsController.getTransactions(req))
+            return try await everDevnetTransactionsController.getTransactions(req)
         case .getTransaction:
-            return try await encodeResponse(for: req, json: try await everDevnetTransactionsController.getTransaction(req))
+            return try await everDevnetTransactionsController.getTransaction(req)
         case .getAccount:
             return try await everDevnetAccountsController.getAccount(req)
         case .getBalance:
             return try await everDevnetAccountsController.getBalance(req)
         case .sendExternalMessage:
-            return try await encodeResponse(for: req, json: try await everDevnetSendController.sendExternalMessage(req))
+            return try await everDevnetSendController.sendExternalMessage(req)
         case .runGetMethodAbi:
-            return try await encodeResponse(for: req, json: try await everDevnetRunGetMethodsController.runGetMethodAbi(req))
+            return try await everDevnetRunGetMethodsController.runGetMethodAbi(req)
         case .runGetMethodFift:
-            return try await encodeResponse(for: req, json: try await everDevnetRunGetMethodsController.runGetMethodFift(req))
+            return try await everDevnetRunGetMethodsController.runGetMethodFift(req)
         case .waitForTransaction:
-            return try await encodeResponse(for: req, json: try await everDevnetSendController.waitForTransaction(req))
+            return try await everDevnetSendController.waitForTransaction(req)
         case .getConfigParams:
-            return try await encodeResponse(for: req, json: try await everDevnetBlocksController.getConfigParams(req))
+            return try await everDevnetBlocksController.getConfigParams(req)
         case .sendAndWaitTransaction:
-            return try await encodeResponse(for: req, json: try await everDevnetSendController.sendAndWaitTransaction(req))
+            return try await everDevnetSendController.sendAndWaitTransaction(req)
         case .getLastMasterBlock:
-            return try await encodeResponse(for: req, json: try await everDevnetBlocksController.getLastMasterBlock(req))
+            return try await everDevnetBlocksController.getLastMasterBlock(req)
         case .getBlock:
-            return try await encodeResponse(for: req, json: try await everDevnetBlocksController.getBlock(req))
+            return try await everDevnetBlocksController.getBlock(req)
         case .getRawBlock:
-            return try await encodeResponse(for: req, json: try await everDevnetBlocksController.getRawBlock(req))
+            return try await everDevnetBlocksController.getRawBlock(req)
         case .lookupBlock:
-            return try await encodeResponse(for: req, json: try await everDevnetBlocksController.lookupBlock(req))
+            return try await everDevnetBlocksController.lookupBlock(req)
         }
     }
 }

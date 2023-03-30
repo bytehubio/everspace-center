@@ -38,33 +38,33 @@ class TonJsonRpcController: RouteCollection {
         
         switch method {
         case .getTransactions:
-            return try await encodeResponse(for: req, json: try await tonTransactionsController.getTransactions(req))
+            return try await tonTransactionsController.getTransactions(req)
         case .getTransaction:
-            return try await encodeResponse(for: req, json: try await tonTransactionsController.getTransaction(req))
+            return try await tonTransactionsController.getTransaction(req)
         case .getAccount:
             return try await tonAccountsController.getAccount(req)
         case .getBalance:
             return try await tonAccountsController.getBalance(req)
         case .sendExternalMessage:
-            return try await encodeResponse(for: req, json: try await tonSendController.sendExternalMessage(req))
+            return try await tonSendController.sendExternalMessage(req)
         case .runGetMethodAbi:
-            return try await encodeResponse(for: req, json: try await tonRunGetMethodsController.runGetMethodAbi(req))
+            return try await tonRunGetMethodsController.runGetMethodAbi(req)
         case .runGetMethodFift:
-            return try await encodeResponse(for: req, json: try await tonRunGetMethodsController.runGetMethodFift(req))
+            return try await tonRunGetMethodsController.runGetMethodFift(req)
         case .waitForTransaction:
-            return try await encodeResponse(for: req, json: try await tonSendController.waitForTransaction(req))
+            return try await tonSendController.waitForTransaction(req)
         case .getConfigParams:
-            return try await encodeResponse(for: req, json: try await tonBlocksController.getConfigParams(req))
+            return try await tonBlocksController.getConfigParams(req)
         case .sendAndWaitTransaction:
-            return try await encodeResponse(for: req, json: try await tonSendController.sendAndWaitTransaction(req))
+            return try await tonSendController.sendAndWaitTransaction(req)
         case .getLastMasterBlock:
-            return try await encodeResponse(for: req, json: try await tonBlocksController.getLastMasterBlock(req))
+            return try await tonBlocksController.getLastMasterBlock(req)
         case .getBlock:
-            return try await encodeResponse(for: req, json: try await tonBlocksController.getBlock(req))
+            return try await tonBlocksController.getBlock(req)
         case .getRawBlock:
-            return try await encodeResponse(for: req, json: try await tonBlocksController.getRawBlock(req))
+            return try await tonBlocksController.getRawBlock(req)
         case .lookupBlock:
-            return try await encodeResponse(for: req, json: try await tonBlocksController.lookupBlock(req))
+            return try await tonBlocksController.lookupBlock(req)
         }
     }
 }

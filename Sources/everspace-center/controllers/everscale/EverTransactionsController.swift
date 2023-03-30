@@ -13,8 +13,6 @@ import Swiftgger
 
 
 class EverTransactionsController: RouteCollection {
-    
-    typealias Response = String
     var swagger: SwaggerControllerPrtcl
     var client: TSDKClientModule
     var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
@@ -31,26 +29,29 @@ class EverTransactionsController: RouteCollection {
     }
     
     func getTransactions(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<GetTransactionsRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionsRequest>.self)
-            return try JsonRPCResponse<[Everscale.TransactionHistoryModel]>(id: content.id,
+            result = JsonRPCResponse<[Everscale.TransactionHistoryModel]>(id: content.id,
                                                                             result: try await getTransactions(client, content.params)).toJson()
         } else {
             let content: GetTransactionsRequest = try req.query.decode(GetTransactionsRequest.self)
-            return try await getTransactions(client, content).toJson()
+            result = try await getTransactions(client, content).toJson()
         }
-        
+        return try await encodeResponse(for: req, json: result)
     }
     
     func getTransaction(_ req: Request) async throws -> Response {
+        let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: EverJsonRPCRequest<GetTransactionRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionRequest>.self)
-            return try JsonRPCResponse<Everscale.ExtendedTransactionHistoryModel>(id: content.id,
+            result = JsonRPCResponse<Everscale.ExtendedTransactionHistoryModel>(id: content.id,
                                                                                   result: try await getTransaction(client, content.params)).toJson()
         } else {
             let content: GetTransactionRequest = try req.query.decode(GetTransactionRequest.self)
-            return try await getTransaction(client, content).toJson()
+            result = try await getTransaction(client, content).toJson()
         }
+        return try await encodeResponse(for: req, json: result)
     }
 }
 
