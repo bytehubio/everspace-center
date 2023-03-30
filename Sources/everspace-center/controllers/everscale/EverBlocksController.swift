@@ -232,7 +232,7 @@ extension EverBlocksController {
                                       route: "/\(swagger.route)/getBlockByTime",
                                       summary: "",
                                       description: "Block By Time",
-                                      parametersObject: Everscale.LookupBlockRequest(),
+                                      parametersObject: Everscale.BlockByTimeRequest(),
                                       responses: [
                                         .init(code: "200",
                                               description: "Description",
