@@ -30,6 +30,7 @@ class EverBlocksController: RouteCollection {
         routes.get("getBlock", use: getBlock)
         routes.get("getRawBlock", use: getRawBlock)
         routes.get("lookupBlock", use: lookupBlock)
+        routes.get("getBlockByTime", use: getBlockByTime)
     }
     
     func getConfigParams(_ req: Request) async throws -> Response {
