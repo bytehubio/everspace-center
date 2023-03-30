@@ -31,7 +31,7 @@ class EverRunGetMethodsController: RouteCollection {
     func runGetMethodFift(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<Everscale.RunGetMethodFift> = try req.content.decode(EverJsonRPCRequest<Everscale.RunGetMethodFift>.self)
+            let content: JsonRPCRequest<EverRPCMethods, Everscale.RunGetMethodFift> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.RunGetMethodFift>.self)
             result = JsonRPCResponse<Everscale.RunGetMethodFiftResponse>(id: content.id,
                                                                             result: try await runGetMethodFift(client,
                                                                                                                emptyClient,
@@ -46,7 +46,7 @@ class EverRunGetMethodsController: RouteCollection {
     func runGetMethodAbi(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<Everscale.RunGetMethodAbi> = try req.content.decode(EverJsonRPCRequest<Everscale.RunGetMethodAbi>.self)
+            let content: JsonRPCRequest<EverRPCMethods, Everscale.RunGetMethodAbi> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.RunGetMethodAbi>.self)
             result = JsonRPCResponse<Everscale.RunGetMethodFiftResponse>(id: content.id,
                                                                             result: try await runGetMethodAbi(client,
                                                                                                               emptyClient,

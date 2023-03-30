@@ -40,6 +40,12 @@ public class SDKClient: SDKClientPrtcl {
         return .init(network: networkConfig, crypto: nil, abi: .init(message_expiration_timeout: 180000), boc: nil)
     }
     
+    public static func makeClientConfig(_ endpoints: [String]) -> TSDKClientConfig {
+        let networkConfig: TSDKNetworkConfig = .init(endpoints: endpoints,
+                                                     out_of_sync_threshold: 90000)
+        return .init(network: networkConfig, crypto: nil, abi: .init(message_expiration_timeout: 180000), boc: nil)
+    }
+    
     private static func makeEmptyClientConfig() -> TSDKClientConfig {
         .init(network: .init(out_of_sync_threshold: 90000), abi: .init(message_expiration_timeout: 180000))
     }

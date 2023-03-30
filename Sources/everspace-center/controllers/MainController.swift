@@ -63,6 +63,7 @@ final class MainController: RouteCollection {
             <ul>
                 <li><a href="https://everspace.center/everscale"><code>Everscale Mainnet</code></a></li>
                 <li><a href="https://everspace.center/everscale-devnet"><code>Everscale Devnet</code></a></li>
+                <li><a href="https://everspace.center/everscale-rfld"><code>Everscale RFLD Devnet</code></a></li>
 
                 <div class="sep-top"></div>
                 <li><a href="https://everspace.center/toncoin"><code>TON Mainnet</code></a></li>

@@ -26,6 +26,7 @@ public enum TonRPCMethods: String, Content {
     case getRawBlock
     case lookupBlock
     case getBlockByTime
+    case estimateFee
 }
 
 class TonJsonRpcController: RouteCollection {
@@ -35,7 +36,7 @@ class TonJsonRpcController: RouteCollection {
     }
     
     func jsonRpc(_ req: Request) async throws -> Response {
-        let method: TonRPCMethods = try req.content.decode(TonJsonRPCRequestMethod.self).method
+        let method: TonRPCMethods = try req.content.decode(JsonRPCRequestMethod<TonRPCMethods>.self).method
         
         switch method {
         case .getTransactions:
@@ -68,6 +69,8 @@ class TonJsonRpcController: RouteCollection {
             return try await tonBlocksController.lookupBlock(req)
         case .getBlockByTime:
             return try await tonBlocksController.getBlockByTime(req)
+        case .estimateFee:
+            return try await tonSendController.estimateFee(req)
         }
     }
 }

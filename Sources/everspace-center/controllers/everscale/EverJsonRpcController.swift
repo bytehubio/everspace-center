@@ -27,6 +27,7 @@ public enum EverRPCMethods: String, Content {
     case getRawBlock
     case lookupBlock
     case getBlockByTime
+    case estimateFee
 }
 
 class EverJsonRpcController: RouteCollection {
@@ -36,7 +37,7 @@ class EverJsonRpcController: RouteCollection {
     }
     
     func jsonRpc(_ req: Request) async throws -> Response {
-        let method: EverRPCMethods = try req.content.decode(EverJsonRPCRequestMethod.self).method
+        let method: EverRPCMethods = try req.content.decode(JsonRPCRequestMethod<EverRPCMethods>.self).method
         
         switch method {
         case .getTransactions:
@@ -69,6 +70,8 @@ class EverJsonRpcController: RouteCollection {
             return try await everBlocksController.lookupBlock(req)
         case .getBlockByTime:
             return try await everBlocksController.getBlockByTime(req)
+        case .estimateFee:
+            return try await everSendController.estimateFee(req)
         }
     }
 }

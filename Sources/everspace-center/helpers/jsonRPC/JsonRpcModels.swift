@@ -17,18 +17,26 @@ public enum RPCVersion: String, Content {
     case v2_0 = "2.0"
 }
 
-public struct EverJsonRPCRequestMethod: Content {
-    var method: EverRPCMethods
+public struct JsonRPCRequestMethod<T: Content>: Content {
+    var method: T
 }
 
-public struct EverDevnetJsonRPCRequestMethod: Content {
-    var method: EverDevnetRPCMethods
-}
 
-public struct TonJsonRPCRequestMethod: Content {
-    var method: TonRPCMethods
-}
+//public struct EverJsonRPCRequestMethod: Content {
+//    var method: EverRPCMethods
+//}
+//
+//public struct EverDevnetJsonRPCRequestMethod: Content {
+//    var method: EverDevnetRPCMethods
+//}
+//
+//public struct TonJsonRPCRequestMethod: Content {
+//    var method: TonRPCMethods
+//}
 
+//public struct RfldJsonRPCRequestMethod: Content {
+//    var method: RfldRPCMethods
+//}
 
 public struct JsonRPCRequestDefault: Content {
     var id: String
@@ -37,20 +45,12 @@ public struct JsonRPCRequestDefault: Content {
 
 public struct JsonRPCVoid: Content {}
 
-public struct EverJsonRPCRequest<T: Content>: Content {
+public struct JsonRPCRequest<M: Content, P: Content>: Content {
     var id: String = "1"
     var jsonrpc: RPCVersion = .v2_0
-    var method: EverRPCMethods
-    var params: T
+    var method: M
+    var params: P
 }
-
-public struct TonJsonRPCRequest<T: Content>: Content {
-    var id: String = "1"
-    var jsonrpc: RPCVersion = .v2_0
-    var method: TonRPCMethods
-    var params: T
-}
-
 
 public struct JsonRPCResponse<T: Codable>: Codable {
     

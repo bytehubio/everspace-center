@@ -36,7 +36,7 @@ class EverBlocksController: RouteCollection {
     func getConfigParams(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<BlockConfigRequest> = try req.content.decode(EverJsonRPCRequest<BlockConfigRequest>.self)
+            let content: JsonRPCRequest<EverRPCMethods, BlockConfigRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, BlockConfigRequest>.self)
             result = JsonRPCResponse<BlockConfigResponse>(id: content.id,
                                                           result: try await getConfigParams(client, content.params, req)).toJson()
         } else {
@@ -49,7 +49,7 @@ class EverBlocksController: RouteCollection {
     func getLastMasterBlock(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<[String: String]> = try req.content.decode(EverJsonRPCRequest<[String: String]>.self)
+            let content: JsonRPCRequest<EverRPCMethods, [String: String]> = try req.content.decode(JsonRPCRequest<EverRPCMethods, [String: String]>.self)
             result = JsonRPCResponse<Everscale.LastMasterBlockResponse>(id: content.id,
                                                                         result: try await getLastMasterBlock(client)).toJson()
         } else {
@@ -61,7 +61,7 @@ class EverBlocksController: RouteCollection {
     func getBlock(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<Everscale.GetBlockRequest> = try req.content.decode(EverJsonRPCRequest<Everscale.GetBlockRequest>.self)
+            let content: JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest>.self)
             result = JsonRPCResponse<Everscale.BlockResponse>(id: content.id,
                                                               result: try await getBlock(client, content: content.params)).toJson()
         } else {
@@ -74,7 +74,7 @@ class EverBlocksController: RouteCollection {
     func getRawBlock(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<Everscale.GetBlockRequest> = try req.content.decode(EverJsonRPCRequest<Everscale.GetBlockRequest>.self)
+            let content: JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest>.self)
             result = JsonRPCResponse<Everscale.RawBlockResponse>(id: content.id,
                                                                  result: try await getRawBlock(client, content: content.params)).toJson()
         } else {
@@ -87,7 +87,7 @@ class EverBlocksController: RouteCollection {
     func lookupBlock(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<Everscale.LookupBlockRequest> = try req.content.decode(EverJsonRPCRequest<Everscale.LookupBlockRequest>.self)
+            let content: JsonRPCRequest<EverRPCMethods, Everscale.LookupBlockRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.LookupBlockRequest>.self)
             result = JsonRPCResponse<Everscale.LookupBlockResponse>(id: content.id,
                                                                     result: try await lookupBlock(client, content: content.params)).toJson()
         } else {
@@ -100,7 +100,7 @@ class EverBlocksController: RouteCollection {
     func getBlockByTime(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<Everscale.BlockByTimeRequest> = try req.content.decode(EverJsonRPCRequest<Everscale.BlockByTimeRequest>.self)
+            let content: JsonRPCRequest<EverRPCMethods, Everscale.BlockByTimeRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.BlockByTimeRequest>.self)
             result = JsonRPCResponse<Everscale.BlockByTimeResponse>(id: content.id,
                                                                     result: try await getBlockByTime(client, content: content.params)).toJson()
         } else {

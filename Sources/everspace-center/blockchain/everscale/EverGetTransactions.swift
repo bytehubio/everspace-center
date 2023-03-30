@@ -331,4 +331,35 @@ query {
             throw makeError(AppError(reason: "Convert to ExtendedTransactionHistoryModel failed"))
         }
     }
+    
+    class func getBlocksTransactions(client: TSDKClientModule, content: GetBlockRequest) async throws -> RawBlockResponse {
+        let out = try await client.net.query(TSDKParamsOfQuery(query: """
+        query {
+          blockchain {
+            blocks(master_seq_no_range: {start: 28434269, end: 28434270}) {
+              edges {
+                node {
+                  id
+                  workchain_id
+                  shard
+                  account_blocks {
+                    account_addr
+                    transactions {
+                      transaction_id
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        """))
+        
+        guard let result = try ((out.result.toDictionary()?["data"] as? [String: Any])?["blocks"] as? [[String: Any]])?.first?.toJSON()
+        else {
+            throw makeError(AppError.mess("Block not found"))
+        }
+        
+        return try result.toModel(RawBlockResponse.self)
+    }
 }

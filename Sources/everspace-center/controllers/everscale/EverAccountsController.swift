@@ -34,7 +34,7 @@ class EverAccountsController: RouteCollection {
     func getAccount(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
+            let content: JsonRPCRequest<EverRPCMethods, GetAccountRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetAccountRequest>.self)
             result = JsonRPCResponse<Everscale.Account>(id: content.id,
                                                         result: try await getAccount(client, content.params)).toJson()
         } else {
@@ -47,7 +47,7 @@ class EverAccountsController: RouteCollection {
     func getAccounts(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<GetAccountsRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountsRequest>.self)
+            let content: JsonRPCRequest<EverRPCMethods, GetAccountsRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetAccountsRequest>.self)
             result = JsonRPCResponse<[Everscale.Account]>(id: content.id,
                                                           result: try await getAccounts(client, content.params)).toJson()
         } else {
@@ -60,7 +60,7 @@ class EverAccountsController: RouteCollection {
     func getBalance(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<GetAccountRequest> = try req.content.decode(EverJsonRPCRequest<GetAccountRequest>.self)
+            let content: JsonRPCRequest<EverRPCMethods, GetAccountRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetAccountRequest>.self)
             result = JsonRPCResponse<Everscale.AccountBalance>(id: content.id,
                                                                result: try await getBalance(client, content.params)).toJson()
         } else {

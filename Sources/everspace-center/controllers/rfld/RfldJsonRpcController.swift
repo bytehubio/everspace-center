@@ -10,7 +10,7 @@ import SwiftExtensionsPack
 import EverscaleClientSwift
 import Vapor
 
-public enum EverDevnetRPCMethods: String, Content {
+public enum RfldRPCMethods: String, Content {
     case getTransactions
     case getTransaction
     case getAccount
@@ -26,16 +26,17 @@ public enum EverDevnetRPCMethods: String, Content {
     case getRawBlock
     case lookupBlock
     case getBlockByTime
+    case estimateFee
 }
 
-class EverDevnetJsonRpcController: RouteCollection {
+class RfldJsonRpcController: RouteCollection {
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.post("jsonRpc", use: jsonRpc)
     }
     
     func jsonRpc(_ req: Request) async throws -> Response {
-        let method: EverDevnetRPCMethods = try req.content.decode(EverDevnetJsonRPCRequestMethod.self).method
+        let method: RfldRPCMethods = try req.content.decode(JsonRPCRequestMethod<RfldRPCMethods>.self).method
         
         switch method {
         case .getTransactions:
@@ -68,6 +69,8 @@ class EverDevnetJsonRpcController: RouteCollection {
             return try await everDevnetBlocksController.lookupBlock(req)
         case .getBlockByTime:
             return try await everDevnetBlocksController.getBlockByTime(req)
+        case .estimateFee:
+            return try await everDevnetSendController.estimateFee(req)
         }
     }
 }

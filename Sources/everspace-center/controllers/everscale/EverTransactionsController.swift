@@ -31,7 +31,7 @@ class EverTransactionsController: RouteCollection {
     func getTransactions(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<GetTransactionsRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionsRequest>.self)
+            let content: JsonRPCRequest<EverRPCMethods, GetTransactionsRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetTransactionsRequest>.self)
             result = JsonRPCResponse<[Everscale.TransactionHistoryModel]>(id: content.id,
                                                                             result: try await getTransactions(client, content.params)).toJson()
         } else {
@@ -44,7 +44,7 @@ class EverTransactionsController: RouteCollection {
     func getTransaction(_ req: Request) async throws -> Response {
         let result: String!
         if req.url.string.contains("jsonRpc") {
-            let content: EverJsonRPCRequest<GetTransactionRequest> = try req.content.decode(EverJsonRPCRequest<GetTransactionRequest>.self)
+            let content: JsonRPCRequest<EverRPCMethods, GetTransactionRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetTransactionRequest>.self)
             result = JsonRPCResponse<Everscale.ExtendedTransactionHistoryModel>(id: content.id,
                                                                                   result: try await getTransaction(client, content.params)).toJson()
         } else {

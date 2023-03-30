@@ -26,6 +26,14 @@ let everDevnetSendController: EverSendController = .init(EverDevClient.client, e
 let everDevnetRunGetMethodsController: EverRunGetMethodsController = .init(EverDevClient.client, everDevnetSwaggerController)
 let everDevnetBlocksController: EverBlocksController = .init(EverDevClient.client, everDevnetSwaggerController)
 
+let rfldSwaggerController: RfldSwaggerController = .init("everscale-rfld")
+let rfldJsonRpcController: RfldJsonRpcController = .init()
+let rfldTransactionsController: EverTransactionsController = .init(RfldClient.client, rfldSwaggerController)
+let rfldAccountsController: EverAccountsController = .init(RfldClient.client, rfldSwaggerController)
+let rfldSendController: EverSendController = .init(RfldClient.client, rfldSwaggerController)
+let rfldRunGetMethodsController: EverRunGetMethodsController = .init(RfldClient.client, rfldSwaggerController)
+let rfldBlocksController: EverBlocksController = .init(RfldClient.client, rfldSwaggerController)
+
 let tonSwaggerController: TonSwaggerController = .init("toncoin")
 let tonJsonRpcController: TonJsonRpcController = .init()
 let tonTransactionsController: EverTransactionsController = .init(TonClient.client, tonSwaggerController)
@@ -58,6 +66,16 @@ func routes(_ app: Application) throws {
         try group.register(collection: everDevnetSendController)
         try group.register(collection: everDevnetRunGetMethodsController)
         try group.register(collection: everDevnetBlocksController)
+    }
+    
+    try app.group("everscale-rfld") { group in
+        try group.register(collection: rfldSwaggerController)
+        try group.register(collection: rfldJsonRpcController)
+        try group.register(collection: rfldTransactionsController)
+        try group.register(collection: rfldAccountsController)
+        try group.register(collection: rfldSendController)
+        try group.register(collection: rfldRunGetMethodsController)
+        try group.register(collection: rfldBlocksController)
     }
     
     try app.group("toncoin") { group in
