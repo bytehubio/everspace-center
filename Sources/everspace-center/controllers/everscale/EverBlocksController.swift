@@ -229,14 +229,14 @@ extension EverBlocksController {
                                               type: .object(JsonRPCResponse<Everscale.LookupBlockResponse>.self, asCollection: false))
                                       ]),
                             APIAction(method: .get,
-                                      route: "/\(swagger.route)/lookupBlock",
+                                      route: "/\(swagger.route)/getBlockByTime",
                                       summary: "",
-                                      description: "Lookup Block",
+                                      description: "Block By Time",
                                       parametersObject: Everscale.LookupBlockRequest(),
                                       responses: [
                                         .init(code: "200",
                                               description: "Description",
-                                              type: .object(JsonRPCResponse<Everscale.LookupBlockResponse>.self, asCollection: false))
+                                              type: .object(JsonRPCResponse<Everscale.BlockByTimeResponse>.self, asCollection: false))
                                       ]),
                           ])
         ).add([
