@@ -173,7 +173,7 @@ extension EverTransactionsController {
             let key: String = "\(blocksTransactionsResponse.shard)-\(blocksTransactionsResponse.workchain_id)"
             cache_responses[key] = blocksTransactionsResponse
             
-            for accBlock in edge.node.account_blocks {
+            for accBlock in edge.node.account_blocks ?? [] {
                 for transaction in accBlock.transactions {
                     cache_transactions[transaction.transaction_id] = key
                     ids.append(transaction.transaction_id)
