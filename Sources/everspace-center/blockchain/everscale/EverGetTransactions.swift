@@ -14,14 +14,14 @@ import Vapor
 extension Everscale {
     struct TransactionHistoryModel: Codable, Content {
         var id: String = "..."
-        var account_addr: String = "..."
-        var now: Double = 1
-        var total_fees: String = "..."
-        var balance_delta: String = "..."
+        var account_addr: String? = "..."
+        var now: Double? = 1
+        var total_fees: String? = "..."
+        var balance_delta: String? = "..."
         var out_msgs: [String] = ["..."]
         var in_message: InMessage? = .init()
         var out_messages: [OutMessage] = [.init()]
-        var lt: String = "..."
+        var lt: String? = "..."
         var cursor: String? = "..."
         
         var isIncomingTransaction: Bool {
@@ -46,17 +46,17 @@ extension Everscale {
     
     struct ExtendedTransactionHistoryModel: Codable, Content {
         var id: String = "..."
-        var account_addr: String = "..."
-        var now: Double = 1
-        var total_fees: String = "..."
-        var balance_delta: String = "..."
+        var account_addr: String? = "..."
+        var now: Double? = 1
+        var total_fees: String? = "..."
+        var balance_delta: String? = "..."
         var out_msgs: [String] = ["..."]
         var in_message: InMessage? = .init()
         var out_messages: [OutMessage] = [.init()]
-        var lt: String = "..."
-        var compute: TransactionCompute = .init()
-        var destroyed: Bool = false
-        var end_status_name: String = "..."
+        var lt: String? = "..."
+        var compute: TransactionCompute? = .init()
+        var destroyed: Bool? = false
+        var end_status_name: String? = "..."
         var ext_in_msg_fee: String? = "..."
         var cursor: String? = "..."
         
@@ -332,7 +332,7 @@ query {
             let tx: TransactionHistoryModel = try transaction.toModel(TransactionHistoryModel.self)
             if
                 let intLt = to_lt?.toDecimalFromHex(),
-                let intLt2 = tx.lt.toDecimalFromHex()
+                let intLt2 = tx.lt?.toDecimalFromHex()
             {
                 if intLt >= intLt2 {
                     resultArray.append(tx)
