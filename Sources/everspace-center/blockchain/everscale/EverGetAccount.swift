@@ -36,7 +36,7 @@ extension Everscale {
     class func getAccount(client: TSDKClientModule,
                           accountAddress: String
     ) async throws -> Account {
-        let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress)
+        let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress.everAddrLowercased)
         let response: [Account] = try await getAccounts(client: client, accountAddresses: [accountAddress])
         if let first = response.first {
             return first
@@ -50,7 +50,7 @@ extension Everscale {
     ) async throws -> [Account] {
         var addresses: [String] = []
         for address in accountAddresses {
-            addresses.append(try await tonConvertAddrToEverFormat(client: client, address))
+            addresses.append(try await tonConvertAddrToEverFormat(client: client, address.everAddrLowercased))
         }
         let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
                                                                          filter: [
@@ -79,7 +79,7 @@ extension Everscale {
     class func getBalance(client: TSDKClientModule,
                           accountAddress: String
     ) async throws -> AccountBalance {
-        let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress)
+        let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress.everAddrLowercased)
         let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
                                                                          filter: [
                                                                             "id": [

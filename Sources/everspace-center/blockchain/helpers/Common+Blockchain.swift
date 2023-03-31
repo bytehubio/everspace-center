@@ -13,7 +13,7 @@ import BigInt
 
 func tonConvertAddrToEverFormat(client: TSDKClientModule, _ address: String) async throws -> String {
     if address[#":"#] {
-        return address
+        return address.everAddrLowercased
     } else {
         let newAddr: TSDKResultOfConvertAddress = try await client.utils.convert_address(
             TSDKParamsOfConvertAddress(address: address,
@@ -30,7 +30,7 @@ func tonConvertAddrToEverFormat(client: TSDKClientModule, _ address: String) asy
 
 func tonConvertAddrToToncoinFormat(client: TSDKClientModule, _ address: String) async throws -> String {
     let model = try await client.utils.convert_address(
-        TSDKParamsOfConvertAddress(address: address,
+        TSDKParamsOfConvertAddress(address: address.everAddrLowercased,
                                    output_format: TSDKAddressStringFormat(type: .Base64,
                                                                           url: true,
                                                                           test: false,

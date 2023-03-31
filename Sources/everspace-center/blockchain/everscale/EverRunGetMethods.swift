@@ -36,7 +36,7 @@ extension Everscale {
                                 method: String,
                                 params: [String]? = nil
     ) async throws -> RunGetMethodFiftResponse {
-        let address: String = try await tonConvertAddrToEverFormat(client: emptyClient, address)
+        let address: String = try await tonConvertAddrToEverFormat(client: emptyClient, address.everAddrLowercased)
         let response = try await everspace_center.runGetMethodFift(client: client,
                                                   emptyClient: emptyClient,
                                                   addr: address,
@@ -52,7 +52,7 @@ extension Everscale {
                                jsonParams: String? = nil,
                                abi: String
     ) async throws -> RunGetMethodFiftResponse {
-        let address: String = try await tonConvertAddrToEverFormat(client: emptyClient, address)
+        let address: String = try await tonConvertAddrToEverFormat(client: emptyClient, address.everAddrLowercased)
         guard let methodParams = jsonParams?.toDictionary() else {
             throw makeError(AppError.mess("Bad json params. Convert params to dictionary failed"))
         }

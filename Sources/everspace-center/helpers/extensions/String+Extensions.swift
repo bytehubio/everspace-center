@@ -143,3 +143,8 @@ extension String {
         Array<UInt8>(Data(base64Encoded: self.base64URLToBase64())!)
     }
 }
+
+
+extension String {
+    var everAddrLowercased: String { self.contains(":") ? self.lowercased() : self }
+}
