@@ -167,7 +167,7 @@ extension Everscale {
                         var seq_no: Double = 0
                         var workchain_id: Int = 0
                         var shard: String = ""
-                        var account_blocks: [AccountBlock] = []
+                        var account_blocks: [AccountBlock]? = []
                         
                         struct AccountBlock: Content {
                             var transactions: [Transaction] = []
