@@ -78,8 +78,17 @@ extension EverAccountsController {
         var address: String = ""
     }
     
+    struct GetAccountByCodeHashRequest: Content {
+        var address: String = ""
+    }
+    
     struct GetAccountsRequest: Content {
-        var addresses: [String] = [""]
+        var addresses: [String]? = [""]
+        var order: TSDKSortDirection? = .ASC
+        var limit: UInt32? = 1
+        var code_hash: String? = nil
+        var from_id: String? = nil
+        var workchain_id: Int? = nil
     }
     
     func getAccount(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> Everscale.Account {
@@ -87,7 +96,13 @@ extension EverAccountsController {
     }
     
     func getAccounts(_ client: TSDKClientModule, _ content: GetAccountsRequest) async throws -> [Everscale.Account] {
-        try await Everscale.getAccounts(client: client, accountAddresses: content.addresses)
+        try await Everscale.getAccounts(client: client,
+                                        accountAddresses: content.addresses,
+                                        order: content.order,
+                                        limit: content.limit,
+                                        code_hash: content.code_hash,
+                                        from_id: content.from_id,
+                                        workchain_id: content.workchain_id)
     }
     
     func getBalance(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> Everscale.AccountBalance {

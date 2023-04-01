@@ -46,18 +46,31 @@ extension Everscale {
     }
     
     class func getAccounts(client: TSDKClientModule,
-                           accountAddresses: [String]
+                           accountAddresses: [String]? = [],
+                           order: TSDKSortDirection? = .ASC,
+                           limit: UInt32? = 1,
+                           code_hash: String? = nil,
+                           from_id: String? = nil,
+                           workchain_id: Int? = nil
     ) async throws -> [Account] {
         var addresses: [String] = []
-        for address in accountAddresses {
+        for address in accountAddresses ?? [] {
             addresses.append(try await tonConvertAddrToEverFormat(client: client, address.everAddrLowercased))
         }
+        var filter: [String: Any] = ["id": ["in": addresses]]
+        if let code_hash = code_hash {
+            filter["code_hash"] = ["eq": code_hash]
+        } else if let from_id = from_id {
+            if order == .ASC {
+                filter["id"] = ["gt": from_id]
+            } else {
+                filter["id"] = ["lt": from_id]
+            }
+        } else if let workchain_id = workchain_id {
+            filter["workchain_id"] = ["eq": workchain_id]
+        }
         let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
-                                                                         filter: [
-                                                                            "id": [
-                                                                                "in": addresses
-                                                                            ]
-                                                                         ].toAnyValue(),
+                                                                         filter: filter.toAnyValue(),
                                                                          result: [
                                                                             "id",
                                                                             "balance(format: DEC)",
@@ -71,7 +84,11 @@ extension Everscale {
                                                                             "library_hash",
                                                                             "due_payment(format: DEC)",
                                                                             "workchain_id",
-                                                                         ].joined(separator: " "))
+                                                                         ].joined(separator: " "),
+                                                                         order: [
+                                                                            .init(path: "id", direction: order ?? .ASC)
+                                                                         ],
+                                                                         limit: limit)
         let response: TSDKResultOfQueryCollection = try await client.net.query_collection(paramsOfQueryCollection)
         return try response.result.toJson().toModel([Account].self)
     }
