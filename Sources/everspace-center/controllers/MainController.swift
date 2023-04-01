@@ -85,7 +85,7 @@ final class MainController: RouteCollection {
                 <br>
                 <div class="footer">
                     Made with ❤️ by <a href="https://everspace.app/" target="_blank">Everspace Wallet Team</a>
-                    | <a href="https://t.me/nerzh">Telegram</a>
+                    | <a href="https://t.me/everspace_center">Telegram</a>
                     | <a href="mailto:admin@bytehub.io">E-mail</a>
                 </div>
             </footer>
