@@ -57,8 +57,10 @@ extension Everscale {
         for address in accountAddresses ?? [] {
             addresses.append(try await tonConvertAddrToEverFormat(client: client, address.everAddrLowercased))
         }
-        var filter: [String: Any] = ["id": ["in": addresses]]
-        if let code_hash = code_hash {
+        var filter: [String: Any] = .init()
+        if accountAddresses != nil {
+            filter["id"] = ["in": addresses]
+        } else if let code_hash = code_hash {
             filter["code_hash"] = ["eq": code_hash]
         } else if let from_id = from_id {
             if order == .ASC {
