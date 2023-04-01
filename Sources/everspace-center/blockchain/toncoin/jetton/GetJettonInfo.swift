@@ -103,6 +103,19 @@ extension Toncoin {
                     jettonInfo.symbol = try catFirstBytes(badString: symbol, bytesCount: 1)
                 }
             }
+            /// image
+            if let symbolBoc = metaData[TONCOIN_JETTON_IMAGE] as? String {
+                let cellB = TvmCellBuilder().storeCellRefFromBoc(value: symbolBoc).build()
+                let newBoc = try await client.boc.encode_boc(.init(builder: cellB)).boc
+                let result: TSDKResultOfDecodeBoc = try await client.abi.decode_boc(
+                    .init(params: [
+                        .init(name: "someName", type: "string")
+                    ], boc: newBoc, allow_partial: true))
+                
+                if let image = (result.toJson()?.toDictionary()?["data"] as? [String: Any])?["someName"] as? String {
+                    jettonInfo.image = try catFirstBytes(badString: image, bytesCount: 1)
+                }
+            }
         } else if tag == "1" {
             /// IF ON-CHAIN TAG == 1
             let cellB = TvmCellBuilder().storeCellRefFromBoc(value: boc).build()
