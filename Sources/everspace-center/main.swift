@@ -12,6 +12,7 @@ let RfldClient: SDKClientPrtcl = try SDKClient(clientConfig: SDKClient.makeClien
 
 let TonClient: SDKClientPrtcl = try SDKClient(clientConfig: SDKClient.makeClientConfig(name: "toncoin_mainnet"))
 
+let VenomClient: SDKClientPrtcl = try SDKClient(clientConfig: SDKClient.makeClientConfig(name: "venom"))
 let VenomDevnetClient: SDKClientPrtcl = try SDKClient(clientConfig: SDKClient.makeClientConfig(name: "venom_devnet"))
 
 defer { app.shutdown() }

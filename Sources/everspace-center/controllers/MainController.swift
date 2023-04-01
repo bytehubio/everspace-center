@@ -25,6 +25,15 @@ final class MainController: RouteCollection {
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Everspace Center. Everscale API. Toncoin API. Venom API.</title>
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-BQS5FC2ZLJ"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-BQS5FC2ZLJ');
+            </script>
 
             <link href='https://fonts.googleapis.com/css?family=JetBrains Mono' rel='stylesheet'>
 
@@ -66,7 +75,8 @@ final class MainController: RouteCollection {
                 <li><a href="\(Domain)/everscale-rfld"><code>Everscale RFLD Devnet</code></a></li>
                 
                 <div class="sep-top"></div>
-                <li><a href="\(Domain)/venom-testnet"><code>VENOM TESTNET</code></a></li>
+                <li><a href="\(Domain)/venom"><code>VENOM Mainnet</code></a></li>
+                <li><a href="\(Domain)/venom-testnet"><code>VENOM Testnet</code></a></li>
 
                 <div class="sep-top"></div>
                 <li><a href="\(Domain)/toncoin"><code>TON Mainnet</code></a></li>

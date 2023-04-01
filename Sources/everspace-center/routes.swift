@@ -36,6 +36,15 @@ let rfldRunGetMethodsController: EverRunGetMethodsController = .init(RfldClient.
 let rfldBlocksController: EverBlocksController = .init(RfldClient.client, rfldSwaggerController)
 
 /// VENOM
+let venomSwaggerController: VenomSwaggerController = .init("venom")
+let venomJsonRpcController: VenomJsonRpcController = .init()
+let venomTransactionsController: EverTransactionsController = .init(VenomClient.client, venomSwaggerController)
+let venomAccountsController: EverAccountsController = .init(VenomClient.client, venomSwaggerController)
+let venomSendController: EverSendController = .init(VenomClient.client, venomSwaggerController)
+let venomRunGetMethodsController: EverRunGetMethodsController = .init(VenomClient.client, venomSwaggerController)
+let venomBlocksController: EverBlocksController = .init(VenomClient.client, venomSwaggerController)
+
+
 let venomDevnetSwaggerController: VenomDevnetSwaggerController = .init("venom-testnet")
 let venomDevnetJsonRpcController: VenomDevnetJsonRpcController = .init()
 let venomDevnetTransactionsController: EverTransactionsController = .init(VenomDevnetClient.client, venomDevnetSwaggerController)

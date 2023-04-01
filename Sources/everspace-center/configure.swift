@@ -18,9 +18,9 @@ public func configure(_ app: Application) throws {
     /// START VAPOR CONFIGURING
     app.http.server.configuration.address = BindAddress.hostname(Vapor_Ip, port: Vapor_Port)
     #if os(Linux)
-        app.logger.logLevel = .warning
+    app.logger.logLevel = .warning
     #else
-        app.logger.logLevel = .debug
+    app.logger.logLevel = .notice
     #endif
     
     /// CUSTOM JSON ENCODER
