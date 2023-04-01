@@ -99,6 +99,16 @@ func routes(_ app: Application) throws {
         try group.register(collection: rfldBlocksController)
     }
     
+    try app.group("venom") { group in
+        try group.register(collection: venomSwaggerController)
+        try group.register(collection: venomJsonRpcController)
+        try group.register(collection: venomTransactionsController)
+        try group.register(collection: venomAccountsController)
+        try group.register(collection: venomSendController)
+        try group.register(collection: venomRunGetMethodsController)
+        try group.register(collection: venomBlocksController)
+    }
+    
     try app.group("venom-testnet") { group in
         try group.register(collection: venomDevnetSwaggerController)
         try group.register(collection: venomDevnetJsonRpcController)
