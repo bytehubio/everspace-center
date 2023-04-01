@@ -256,3 +256,55 @@ public final class TvmCellBuilder {
         case b1
     }
 }
+
+
+func runGetMethod(client: TSDKClientModule,
+                  emptyClient: TSDKClientModule,
+                  addr: String,
+                  method: String,
+                  params: [Any]? = nil
+) async throws -> TSDKResultOfRunGet {
+    let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
+                                                                     filter: [
+                                                                        "id": [
+                                                                            "eq": addr
+                                                                        ]
+                                                                     ].toAnyValue(),
+                                                                     result: "boc")
+    
+    let result = try await client.net.query_collection(paramsOfQueryCollection)
+    var boc: String = ""
+    if let anyResult = result.result.map({ $0.toAny() }).first as? [String: Any] {
+        if let resultBoc: String = anyResult["boc"] as? String {
+            boc = resultBoc
+        } else {
+            throw makeError(TSDKClientError(code: 0, message: "Receive result, but Boc not found"))
+        }
+    } else {
+        throw makeError(TSDKClientError(code: 0, message: "Boc not found"))
+    }
+    
+    let paramsOfRunGet: TSDKParamsOfRunGet = .init(account: boc,
+                                                   function_name: method,
+                                                   input: (params ?? []).toAnyValue(),
+                                                   execution_options: nil,
+                                                   tuple_list_as_array: nil)
+    return try await emptyClient.tvm.run_get(paramsOfRunGet)
+}
+
+func catFirstBytes(badString: String, bytesCount: Int) throws -> String {
+    guard let data = badString.data(using: .utf8) else {
+        throw makeError(TSDKClientError("Convert utf8 string to data failed"))
+    }
+    let arrayBytes: Array<UInt8> = .init(data)
+    if arrayBytes.count == 0 { return badString }
+    if arrayBytes.count > bytesCount {
+        let commentBytes: ArraySlice<UInt8> = arrayBytes[bytesCount..<arrayBytes.count]
+        guard let comment = String(data: Data(commentBytes), encoding: .utf8) else {
+            throw makeError(TSDKClientError("Convert data to utf8 string failed"))
+        }
+        return comment
+    }
+    
+    return ""
+}

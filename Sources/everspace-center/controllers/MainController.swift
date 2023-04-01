@@ -61,24 +61,24 @@ final class MainController: RouteCollection {
 
             <h2 id="available-networks">Available networks</h2>
             <ul>
-                <li><a href="https://everspace.center/everscale"><code>Everscale Mainnet</code></a></li>
-                <li><a href="https://everspace.center/everscale-devnet"><code>Everscale Devnet</code></a></li>
-                <li><a href="https://everspace.center/everscale-rfld"><code>Everscale RFLD Devnet</code></a></li>
+                <li><a href="\(Domain)/everscale"><code>Everscale Mainnet</code></a></li>
+                <li><a href="\(Domain)/everscale-devnet"><code>Everscale Devnet</code></a></li>
+                <li><a href="\(Domain)/everscale-rfld"><code>Everscale RFLD Devnet</code></a></li>
                 
                 <div class="sep-top"></div>
-                <li><a href="https://everspace.center/venom-testnet"><code>VENOM TESTNET</code></a></li>
+                <li><a href="\(Domain)/venom-testnet"><code>VENOM TESTNET</code></a></li>
 
                 <div class="sep-top"></div>
-                <li><a href="https://everspace.center/toncoin"><code>TON Mainnet</code></a></li>
+                <li><a href="\(Domain)/toncoin"><code>TON Mainnet</code></a></li>
                 <!-- <li><code>TON Testnet (soon)</code></li> -->
                 <!-- <div class="sep-top"></div>
-                <li><a href="https://everspace.center/venom-testnet"><code>Venom Testnet</code></a></li>
+                <li><a href="\(Domain)/venom-testnet"><code>Venom Testnet</code></a></li>
                 <div class="sep-top"></div>
 
-                <li><a href="https://everspace.center/everscale-n01-fld-dapp"><code>Everscale n01-fld-dapp</code></a></li>
-                <li><a href="https://everspace.center/everscale-n02-fld-dapp"><code>Everscale n02-fld-dapp</code></a></li>
-                <li><a href="https://everspace.center/everscale-n03-fld-dapp"><code>Everscale n03-fld-dapp</code></a></li>
-                <li><a href="https://everspace.center/everscale-n04-fld-dapp"><code>Everscale n04-fld-dapp</code></a></li> -->
+                <li><a href="\(Domain)/everscale-n01-fld-dapp"><code>Everscale n01-fld-dapp</code></a></li>
+                <li><a href="\(Domain)/everscale-n02-fld-dapp"><code>Everscale n02-fld-dapp</code></a></li>
+                <li><a href="\(Domain)/everscale-n03-fld-dapp"><code>Everscale n03-fld-dapp</code></a></li>
+                <li><a href="\(Domain)/everscale-n04-fld-dapp"><code>Everscale n04-fld-dapp</code></a></li> -->
             </ul>
 
             <footer>
@@ -106,7 +106,7 @@ final class MainController: RouteCollection {
 //        description: """
 //                This is incredible Everscale API.\n
 //        **Now temporarily without authorization.**\n
-//        **Everscale API:** [Everscale API Link](https://everspace.center/everscale)\n
+//        **Everscale API:** [Everscale API Link](\(\(Domain))/everscale)\n
 //        **Contact:** [Telegram](https://t.me/nerzh)\n
 //        """,
 //    //            termsOfService: "http://example.com/terms/",

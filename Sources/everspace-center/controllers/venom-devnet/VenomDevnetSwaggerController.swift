@@ -16,12 +16,12 @@ final class VenomDevnetSwaggerController: RouteCollection, SwaggerControllerPrtc
         title: "VENOM TESTNET API",
         version: "1.0.0",
         description: """
-        [EVERSPACE API CENTER -> MAIN PAGE](https://everspace.center)\n\n
+        [EVERSPACE API CENTER -> MAIN PAGE](\(Domain))\n\n
                 This is incredible Venom Testnet API.\n
         **Now temporarily without authorization.**\n
         \n
         You can use JSON RPC requests:\n
-            https://everspace.center/venom-testnet/jsonRpc\n\n
+            \(Domain)/venom-testnet/jsonRpc\n\n
         Example request:\n
             {\n
                 "id": "1",\n

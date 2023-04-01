@@ -13,15 +13,10 @@ import IkigaJSON
 
 public func configure(_ app: Application) throws {
     /// GET ENV
-    let env = try Environment.detect()
-    app.logger.warning("\(env)")
-    guard let vaporStringPort = Environment.get("vapor_port"), let vaporPort = Int(vaporStringPort) else {
-        fatalError("Set vapor_port to .env.your_evironment")
-    }
-    guard let vaporIp = Environment.get("vapor_ip") else { fatalError("Set vapor_ip to .env.your_evironment") }
+    try getAllEnvConstants()
     
     /// START VAPOR CONFIGURING
-    app.http.server.configuration.address = BindAddress.hostname(vaporIp, port: vaporPort)
+    app.http.server.configuration.address = BindAddress.hostname(Vapor_Ip, port: Vapor_Port)
     #if os(Linux)
         app.logger.logLevel = .warning
     #else

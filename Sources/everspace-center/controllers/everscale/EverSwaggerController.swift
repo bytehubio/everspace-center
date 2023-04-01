@@ -16,12 +16,12 @@ final class EverSwaggerController: RouteCollection, SwaggerControllerPrtcl {
         title: "EVERSCALE API",
         version: "1.0.0",
         description: """
-        [EVERSPACE API CENTER -> MAIN PAGE](https://everspace.center)\n\n
+        [EVERSPACE API CENTER -> MAIN PAGE](\(Domain))\n\n
                 This is incredible Everscale API.\n
         **Now temporarily without authorization.**\n
         \n
         You can use JSON RPC requests:\n
-            https://everspace.center/everscale/jsonRpc\n\n
+            \(Domain)/everscale/jsonRpc\n\n
         Example request:\n
             {\n
                 "id": "1",\n

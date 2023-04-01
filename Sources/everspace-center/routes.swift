@@ -10,6 +10,7 @@ import Swiftgger
 
 let mainController: MainController = .init()
 
+/// EVERSCALE
 let everSwaggerController: EverSwaggerController = .init("everscale")
 let everJsonRpcController: EverJsonRpcController = .init()
 let everTransactionsController: EverTransactionsController = .init(EverClient.client, everSwaggerController)
@@ -34,6 +35,7 @@ let rfldSendController: EverSendController = .init(RfldClient.client, rfldSwagge
 let rfldRunGetMethodsController: EverRunGetMethodsController = .init(RfldClient.client, rfldSwaggerController)
 let rfldBlocksController: EverBlocksController = .init(RfldClient.client, rfldSwaggerController)
 
+/// VENOM
 let venomDevnetSwaggerController: VenomDevnetSwaggerController = .init("venom-testnet")
 let venomDevnetJsonRpcController: VenomDevnetJsonRpcController = .init()
 let venomDevnetTransactionsController: EverTransactionsController = .init(VenomDevnetClient.client, venomDevnetSwaggerController)
@@ -42,7 +44,7 @@ let venomDevnetSendController: EverSendController = .init(VenomDevnetClient.clie
 let venomDevnetRunGetMethodsController: EverRunGetMethodsController = .init(VenomDevnetClient.client, venomDevnetSwaggerController)
 let venomDevnetBlocksController: EverBlocksController = .init(VenomDevnetClient.client, venomDevnetSwaggerController)
 
-
+/// TONCOIN
 let tonSwaggerController: TonSwaggerController = .init("toncoin")
 let tonJsonRpcController: TonJsonRpcController = .init()
 let tonTransactionsController: EverTransactionsController = .init(TonClient.client, tonSwaggerController)
@@ -50,6 +52,7 @@ let tonAccountsController: EverAccountsController = .init(TonClient.client, tonS
 let tonSendController: EverSendController = .init(TonClient.client, tonSwaggerController)
 let tonRunGetMethodsController: EverRunGetMethodsController = .init(TonClient.client, tonSwaggerController)
 let tonBlocksController: EverBlocksController = .init(TonClient.client, tonSwaggerController)
+let tonJettonsController: TonJettonsController = .init(TonClient.client, tonSwaggerController)
 
 func routes(_ app: Application) throws {
 
@@ -105,5 +108,6 @@ func routes(_ app: Application) throws {
         try group.register(collection: tonSendController)
         try group.register(collection: tonRunGetMethodsController)
         try group.register(collection: tonBlocksController)
+        try group.register(collection: tonJettonsController)
     }
 }
