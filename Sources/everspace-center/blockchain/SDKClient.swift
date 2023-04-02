@@ -34,6 +34,11 @@ public class SDKClient: SDKClientPrtcl {
         self.emptyClient = Self.makeEmptyClient()
     }
     
+    public init(_ endpoints: [String]) throws {
+        self.client = try TSDKClientModule(config: Self.makeClientConfig(endpoints))
+        self.emptyClient = Self.makeEmptyClient()
+    }
+    
     public static func makeClientConfig(name: String) -> TSDKClientConfig {
         let networkConfig: TSDKNetworkConfig = .init(endpoints: try! SDKClient.getNetwork(networkName: name),
                                                      out_of_sync_threshold: 90000)

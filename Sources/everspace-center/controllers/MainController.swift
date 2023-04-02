@@ -16,6 +16,8 @@ final class MainController: RouteCollection {
     }
     
     func index(_ req: Request) async throws -> Response {
+        pe("index")
+//        throw AppError("test")
         let html: String = """
         <!DOCTYPE html>
         <html lang="en">

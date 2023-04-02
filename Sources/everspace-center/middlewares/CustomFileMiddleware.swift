@@ -43,6 +43,9 @@ public final class CustomFileMiddleware: Middleware {
     }
     
     public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
+        if (try? Environment.detect().name) ?? "" == "production" {
+            return next.respond(to: request)
+        }
         // make a copy of the percent-decoded path
         guard var path = request.url.path.removingPercentEncoding else {
             return request.eventLoop.makeFailedFuture(Abort(.badRequest))

@@ -13,14 +13,12 @@ import Swiftgger
 
 
 class TonJettonsController: RouteCollection {
-    
     var swagger: SwaggerControllerPrtcl
-    var client: TSDKClientModule
-    var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
+    let network: String
     
-    init(_ client: TSDKClientModule, _ swagger: SwaggerControllerPrtcl) {
-        self.client = client
+    init(_ swagger: SwaggerControllerPrtcl, _ network: String) {
         self.swagger = swagger
+        self.network = network
         prepareSwagger(swagger.openAPIBuilder)
     }
     
@@ -29,14 +27,15 @@ class TonJettonsController: RouteCollection {
     }
     
     func getJettonInfo(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: JsonRPCRequest<TonRPCMethods, JettonInfoRequest> = try req.content.decode(JsonRPCRequest<TonRPCMethods, JettonInfoRequest>.self)
             result = JsonRPCResponse<Toncoin.ToncoinJettonInfo>(id: content.id,
-                                                                     result: try await getJettonInfo(client, emptyClient, content.params)).toJson()
+                                                                result: try await getJettonInfo(sdkClient.client, sdkClient.emptyClient, content.params)).toJson()
         } else {
             let content: JettonInfoRequest = try req.query.decode(JettonInfoRequest.self)
-            result = try await getJettonInfo(client, emptyClient, content).toJson()
+            result = try await getJettonInfo(sdkClient.client, sdkClient.emptyClient, content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }

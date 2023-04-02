@@ -14,9 +14,9 @@ import IkigaJSON
 public func configure(_ app: Application) throws {
     /// GET ENV
     try getAllEnvConstants()
-    
+
     /// START VAPOR CONFIGURING
-    app.http.server.configuration.address = BindAddress.hostname(Vapor_Ip, port: Vapor_Port)
+    app.http.server.configuration.address = BindAddress.hostname(VAPOR_IP, port: VAPOR_PORT)
     #if os(Linux)
     app.logger.logLevel = .warning
     #else
@@ -36,6 +36,7 @@ public func configure(_ app: Application) throws {
     app.middleware.use(RouteLoggingMiddleware()) // 1
     app.middleware.use(CustomFileMiddleware(publicDirectory: "Public"))
     app.middleware.use(CustomErrorMiddleware.default(environment: try Environment.detect()))
+    app.middleware.use(ApiKeyMiddleware())
     /// ROUTES
     try routes(app)
 }

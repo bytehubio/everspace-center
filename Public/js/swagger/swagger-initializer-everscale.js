@@ -17,16 +17,13 @@ window.onload = function() {
     onComplete: function() {
       // console.log("ui");
       // console.log(ui);
-      // ui.preauthorizeApiKey("api_key", "abcde12345");
+       // ui.preauthorizeApiKey("api_key", "b17a652df5d642a6aa6e9dae4601685a");
       // ui.preauthorizeBasic("auth_basic", "username", "password");
       // ui.auth();
     },
     requestInterceptor: function (req) {
       req.headers = {
-        // 'Authorization': 'Bearer ' + document.getElementById('bearer-code-input').value, 
-        'Authorization': 'Bearer ' + 'qwerty', 
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'X-API-KEY': 'b17a652df5d642a6aa6e9dae4601685a',
       };
       return req;
     }

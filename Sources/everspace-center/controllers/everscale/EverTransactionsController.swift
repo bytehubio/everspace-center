@@ -14,12 +14,11 @@ import Swiftgger
 
 class EverTransactionsController: RouteCollection {
     var swagger: SwaggerControllerPrtcl
-    var client: TSDKClientModule
-    var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
+    let network: String
     
-    init(_ client: TSDKClientModule, _ swagger: SwaggerControllerPrtcl) {
-        self.client = client
+    init(_ swagger: SwaggerControllerPrtcl, _ network: String) {
         self.swagger = swagger
+        self.network = network
         prepareSwagger(swagger.openAPIBuilder)
     }
     
@@ -30,40 +29,43 @@ class EverTransactionsController: RouteCollection {
     }
     
     func getTransactions(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: JsonRPCRequest<EverRPCMethods, GetTransactionsRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetTransactionsRequest>.self)
             result = JsonRPCResponse<[Everscale.TransactionHistoryModel]>(id: content.id,
-                                                                          result: try await getTransactions(client, content.params)).toJson()
+                                                                          result: try await getTransactions(sdkClient.client, content.params)).toJson()
         } else {
             let content: GetTransactionsRequest = try req.query.decode(GetTransactionsRequest.self)
-            result = try await getTransactions(client, content).toJson()
+            result = try await getTransactions(sdkClient.client, content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func getTransaction(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: JsonRPCRequest<EverRPCMethods, GetTransactionRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetTransactionRequest>.self)
             result = JsonRPCResponse<Everscale.ExtendedTransactionHistoryModel>(id: content.id,
-                                                                                result: try await getTransaction(client, content.params)).toJson()
+                                                                                result: try await getTransaction(sdkClient.client, content.params)).toJson()
         } else {
             let content: GetTransactionRequest = try req.query.decode(GetTransactionRequest.self)
-            result = try await getTransaction(client, content).toJson()
+            result = try await getTransaction(sdkClient.client, content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func getBlocksTransactions(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: JsonRPCRequest<EverRPCMethods, Everscale.BlocksTransactionsRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.BlocksTransactionsRequest>.self)
             result = JsonRPCResponse<[BlocksTransactionsResponse]>(id: content.id,
-                                                                   result: try await getBlocksTransactions(client, content.params)).toJson()
+                                                                   result: try await getBlocksTransactions(sdkClient.client, content.params)).toJson()
         } else {
             let content: Everscale.BlocksTransactionsRequest = try req.query.decode(Everscale.BlocksTransactionsRequest.self)
-            result = try await getBlocksTransactions(client, content).toJson()
+            result = try await getBlocksTransactions(sdkClient.client, content).toJson()
         }
         
         

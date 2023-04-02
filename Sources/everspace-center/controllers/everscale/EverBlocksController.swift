@@ -15,12 +15,11 @@ import Swiftgger
 class EverBlocksController: RouteCollection {
     
     var swagger: SwaggerControllerPrtcl
-    var client: TSDKClientModule
-    var emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
+    let network: String
     
-    init(_ client: TSDKClientModule, _ swagger: SwaggerControllerPrtcl) {
-        self.client = client
+    init(_ swagger: SwaggerControllerPrtcl, _ network: String) {
         self.swagger = swagger
+        self.network = network
         prepareSwagger(swagger.openAPIBuilder)
     }
     
@@ -34,78 +33,84 @@ class EverBlocksController: RouteCollection {
     }
     
     func getConfigParams(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: JsonRPCRequest<EverRPCMethods, BlockConfigRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, BlockConfigRequest>.self)
             result = JsonRPCResponse<BlockConfigResponse>(id: content.id,
-                                                          result: try await getConfigParams(client, content.params, req)).toJson()
+                                                          result: try await getConfigParams(sdkClient.client, content.params, req)).toJson()
         } else {
             let content: BlockConfigRequest = try req.query.decode(BlockConfigRequest.self)
-            result = try await getConfigParams(client, content, req).toJson()
+            result = try await getConfigParams(sdkClient.client, content, req).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func getLastMasterBlock(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: JsonRPCRequest<EverRPCMethods, [String: String]> = try req.content.decode(JsonRPCRequest<EverRPCMethods, [String: String]>.self)
             result = JsonRPCResponse<Everscale.LastMasterBlockResponse>(id: content.id,
-                                                                        result: try await getLastMasterBlock(client)).toJson()
+                                                                        result: try await getLastMasterBlock(sdkClient.client)).toJson()
         } else {
-            result = try await getLastMasterBlock(client).toJson()
+            result = try await getLastMasterBlock(sdkClient.client).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func getBlock(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest>.self)
             result = JsonRPCResponse<Everscale.BlockResponse>(id: content.id,
-                                                              result: try await getBlock(client, content: content.params)).toJson()
+                                                              result: try await getBlock(sdkClient.client, content: content.params)).toJson()
         } else {
             let content: Everscale.GetBlockRequest = try req.query.decode(Everscale.GetBlockRequest.self)
-            result = try await getBlock(client, content: content).toJson()
+            result = try await getBlock(sdkClient.client, content: content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func getRawBlock(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest>.self)
             result = JsonRPCResponse<Everscale.RawBlockResponse>(id: content.id,
-                                                                 result: try await getRawBlock(client, content: content.params)).toJson()
+                                                                 result: try await getRawBlock(sdkClient.client, content: content.params)).toJson()
         } else {
             let content: Everscale.GetBlockRequest = try req.query.decode(Everscale.GetBlockRequest.self)
-            result = try await getRawBlock(client, content: content).toJson()
+            result = try await getRawBlock(sdkClient.client, content: content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func lookupBlock(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: JsonRPCRequest<EverRPCMethods, Everscale.LookupBlockRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.LookupBlockRequest>.self)
             result = JsonRPCResponse<Everscale.LookupBlockResponse>(id: content.id,
-                                                                    result: try await lookupBlock(client, content: content.params)).toJson()
+                                                                    result: try await lookupBlock(sdkClient.client, content: content.params)).toJson()
         } else {
             let content: Everscale.LookupBlockRequest = try req.query.decode(Everscale.LookupBlockRequest.self)
-            result = try await lookupBlock(client, content: content).toJson()
+            result = try await lookupBlock(sdkClient.client, content: content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func getBlockByTime(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             let content: JsonRPCRequest<EverRPCMethods, Everscale.BlockByTimeRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.BlockByTimeRequest>.self)
             result = JsonRPCResponse<Everscale.BlockByTimeResponse>(id: content.id,
-                                                                    result: try await getBlockByTime(client, content: content.params)).toJson()
+                                                                    result: try await getBlockByTime(sdkClient.client, content: content.params)).toJson()
         } else {
             let content: Everscale.BlockByTimeRequest = try req.query.decode(Everscale.BlockByTimeRequest.self)
-            result = try await getBlockByTime(client, content: content).toJson()
+            result = try await getBlockByTime(sdkClient.client, content: content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }

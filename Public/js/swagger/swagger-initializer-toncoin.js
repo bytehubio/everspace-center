@@ -12,7 +12,13 @@ window.onload = function() {
     plugins: [
       SwaggerUIBundle.plugins.DownloadUrl
     ],
-    layout: "StandaloneLayout"
+    layout: "StandaloneLayout",
+    requestInterceptor: function (req) {
+      req.headers = {
+        'X-API-KEY': 'b17a652df5d642a6aa6e9dae4601685a',
+      };
+      return req;
+    }
   });
 
   //</editor-fold>
