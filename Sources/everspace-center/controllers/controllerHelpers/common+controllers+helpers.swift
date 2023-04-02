@@ -18,7 +18,7 @@ extension RouteCollection {
             throw AppError("\(network) network domain not found")
         }
         var url: String = ""
-        if network == VENOM_SDK_DOMAIN_ENV && network == EVERSCALE_RFLD_SDK_DOMAIN_ENV {
+        if network == VENOM_SDK_DOMAIN_ENV || network == EVERSCALE_RFLD_SDK_DOMAIN_ENV {
             url = "\(sdk_domain)"
         } else {
             url = "\(sdk_domain)/\(apiKey)"
