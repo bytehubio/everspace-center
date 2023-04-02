@@ -65,10 +65,9 @@ final class MainController: RouteCollection {
         </head>
 
         <body>
-            <h1 id="everspace-center-api">Everspace Center API</h1>
+            <h1 id="everspace-center-api" style="text-align: center;">Everspace Center API</h1>
 
             <p>Welcome! We provide access to HTTP API for TVM compatible blockchains.</p>
-            <p>(now temporarily without authorization)</p>
 
             <h2 id="available-networks">Available networks</h2>
             <ul>
@@ -92,13 +91,14 @@ final class MainController: RouteCollection {
                 <li><a href="\(Domain)/everscale-n03-fld-dapp"><code>Everscale n03-fld-dapp</code></a></li>
                 <li><a href="\(Domain)/everscale-n04-fld-dapp"><code>Everscale n04-fld-dapp</code></a></li> -->
             </ul>
-
+            
+            <h2 id="available-networks">Authorization</h2>
+            <p>For authorization you need to get an API-KEY here <a href="https://dashboard.evercloud.dev">https://dashboard.evercloud.dev</a> and add your key to the X-API-KEY request headers.</p>
             <footer>
                 <br>
                 <div class="footer">
-                    Made with ❤️ by <a href="https://everspace.app/" target="_blank">Everspace Wallet Team</a>
-                    | <a href="https://t.me/everspace_center">Telegram</a>
-                    | <a href="mailto:admin@bytehub.io">E-mail</a>
+                    <p>Made on Apple Swift with ❤️ by <a href="https://everspace.app/" target="_blank">Everspace Wallet Team</a></p>
+                    <p><a href="https://t.me/everspace_center">Telegram</a> | <a href="mailto:admin@bytehub.io">E-mail</a></p>
                 </div>
             </footer>
 

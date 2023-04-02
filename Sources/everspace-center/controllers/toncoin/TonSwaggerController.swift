@@ -16,12 +16,10 @@ final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
         title: "TONCOIN API",
         version: "1.0.0",
         description: """
-        [EVERSPACE API CENTER -> MAIN PAGE](\(Domain))\n\n
-                This is incredible Toncoin API.\n
-        **Now temporarily without authorization.**\n
-        \n
+        [ALL TVM BLOCKCHAIN'S API](\(Domain))\n\n\n
+        **Authorization information is on the main page**\n\n\n
         You can use JSON RPC requests:\n
-            \(Domain)/toncoin/jsonRpc\n\n
+            \(Domain)/everscale/jsonRpc\n\n
         Example request:\n
             {\n
                 "id": "1",\n
@@ -35,7 +33,7 @@ final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
                     "hash": "..."\n
                 }\n
             }\n\n
-        **Contact:** [Telegram](https://t.me/nerzh)\n
+        **Contact:** [Telegram TVM API Support](https://t.me/everspace_center)\n
         """,
     //            termsOfService: "http://example.com/terms/",
         contact: APIContact(name: "Mail", email: "admin@bytehub.io", url: URL(string: "https://github.com/nerzh")),
