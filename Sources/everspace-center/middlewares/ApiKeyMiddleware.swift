@@ -18,6 +18,9 @@ public final class ApiKeyMiddleware: Middleware {
         if url.contains("venom") && !url[#"testnet"#] {
             return next.respond(to: request)
         }
+        if url.contains("rfld") {
+            return next.respond(to: request)
+        }
         if url[#"\w\/\w"#] {
             if request.headers[API_KEY_NAME].first == nil {
                 return request.eventLoop.makeFailedFuture(AppError("Authorization failed. Please add X-API-KEY token to headers of request."))
