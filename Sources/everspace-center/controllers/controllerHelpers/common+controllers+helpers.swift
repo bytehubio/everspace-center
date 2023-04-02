@@ -17,6 +17,12 @@ extension RouteCollection {
         guard let sdk_domain = NETWORKS_SDK_DOMAINS[network] else {
             throw AppError("\(network) network domain not found")
         }
-        return try SDKClient(["\(sdk_domain)/\(apiKey)"])
+        var url: String = ""
+        if network == VENOM_SDK_DOMAIN_ENV && network == EVERSCALE_RFLD_SDK_DOMAIN_ENV {
+            url = "\(sdk_domain)"
+        } else {
+            url = "\(sdk_domain)/\(apiKey)"
+        }
+        return try SDKClient([url])
     }
 }
