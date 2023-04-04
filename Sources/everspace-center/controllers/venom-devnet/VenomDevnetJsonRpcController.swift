@@ -28,6 +28,7 @@ public enum VenomDevnetRPCMethods: String, Content {
     case getBlockByTime
     case estimateFee
     case getBlocksTransactions
+    case convertAddress
 }
 
 class VenomDevnetJsonRpcController: RouteCollection {
@@ -74,6 +75,8 @@ class VenomDevnetJsonRpcController: RouteCollection {
             return try await venomDevnetSendController.estimateFee(req)
         case .getBlocksTransactions:
             return try await venomDevnetTransactionsController.getBlocksTransactions(req)
+        case .convertAddress:
+            return try await venomDevnetAccountsController.convertAddress(req)
         }
     }
 }

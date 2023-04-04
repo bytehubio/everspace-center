@@ -245,7 +245,7 @@ extension Everscale {
         let out = try await client.net.query(TSDKParamsOfQuery(query: """
         query {
           blockchain {
-            master_seq_no_range(time_start: 1680165000) {
+            master_seq_no_range(time_start: \(content.time) {
               start
             }
           }

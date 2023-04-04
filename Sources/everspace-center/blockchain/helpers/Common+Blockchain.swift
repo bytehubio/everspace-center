@@ -11,33 +11,6 @@ import EverscaleClientSwift
 import SwiftExtensionsPack
 import BigInt
 
-func tonConvertAddrToEverFormat(client: TSDKClientModule, _ address: String) async throws -> String {
-    if address[#":"#] {
-        return address.everAddrLowercased
-    } else {
-        let newAddr: TSDKResultOfConvertAddress = try await client.utils.convert_address(
-            TSDKParamsOfConvertAddress(address: address,
-                                       output_format: TSDKAddressStringFormat(type: .AccountId))
-        )
-        if newAddr.address[#":"#] {
-            return newAddr.address
-        } else {
-            let wc: UInt8 = address.base64ToByteArray()[1]
-            return "\(wc):\(newAddr.address)"
-        }
-    }
-}
-
-func tonConvertAddrToToncoinFormat(client: TSDKClientModule, _ address: String) async throws -> String {
-    let model = try await client.utils.convert_address(
-        TSDKParamsOfConvertAddress(address: address.everAddrLowercased,
-                                   output_format: TSDKAddressStringFormat(type: .Base64,
-                                                                          url: true,
-                                                                          test: false,
-                                                                          bounce: true)))
-    return model.address
-}
-
 func runGetMethodFift(client: TSDKClientModule,
                       emptyClient: TSDKClientModule,
                       addr: String,
@@ -80,7 +53,7 @@ func runGetMethodAbi(client: TSDKClientModule,
                      params: [String: Any] = [:],
                      abi: String
 ) async throws -> String {
-    let addr: String = try await tonConvertAddrToEverFormat(client: emptyClient, addr)
+    let addr: String = try await Everscale.tonConvertAddrToEverFormat(emptyClient, addr)
     let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
                                                                      filter: [
                                                                         "id": [

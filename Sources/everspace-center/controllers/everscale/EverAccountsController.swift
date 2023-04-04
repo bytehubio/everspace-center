@@ -27,6 +27,7 @@ class EverAccountsController: RouteCollection {
         routes.get("getAccount", use: getAccount)
         routes.get("getAccounts", use: getAccounts)
         routes.get("getBalance", use: getBalance)
+        routes.get("convertAddress", use: convertAddress)
     }
     
     func getAccount(_ req: Request) async throws -> Response {
@@ -76,6 +77,22 @@ class EverAccountsController: RouteCollection {
         }
         return try await encodeResponse(for: req, json: result)
     }
+    
+    func convertAddress(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(req, network)
+        let result: String!
+        if req.url.string.contains("jsonRpc") {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "convertAddress", .jsonRpc)
+            let content: JsonRPCRequest<EverRPCMethods, GetAccountRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetAccountRequest>.self)
+            result = JsonRPCResponse<ConvertAccountResponse>(id: content.id,
+                                                             result: try await convertAddress(sdkClient.emptyClient, content.params)).toJson()
+        } else {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "convertAddress", .queryParams)
+            let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
+            result = try await convertAddress(sdkClient.emptyClient, content).toJson()
+        }
+        return try await encodeResponse(for: req, json: result)
+    }
 }
 
 
@@ -98,6 +115,12 @@ extension EverAccountsController {
         var workchain_id: Int? = nil
     }
     
+    struct ConvertAccountResponse: Content {
+        var hex: String = ""
+        var bounceable: String = ""
+        var nonBounceable: String = ""
+    }
+    
     func getAccount(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> Everscale.Account {
         try await Everscale.getAccount(client: client, accountAddress: content.address)
     }
@@ -114,6 +137,20 @@ extension EverAccountsController {
     
     func getBalance(_ client: TSDKClientModule, _ content: GetAccountRequest) async throws -> Everscale.AccountBalance {
         try await Everscale.getBalance(client: client, accountAddress: content.address)
+    }
+    
+    func convertAddress(_ emptyClient: TSDKClientModule, _ content: GetAccountRequest) async throws -> ConvertAccountResponse {
+        if content.address.contains(":") {
+            let bounceable: String = try await Everscale.tonConvertAddrToToncoinFormat(emptyClient, content.address)
+            let nonBounceable: String = try await Everscale.tonConvertAddrToToncoinFormat(emptyClient, content.address, false)
+            let hex: String = content.address
+            return .init(hex: hex, bounceable: bounceable, nonBounceable: nonBounceable)
+        } else {
+            let hex: String = try await Everscale.tonConvertAddrToEverFormat(emptyClient, content.address)
+            let bounceable: String = try await Everscale.tonConvertAddrToToncoinFormat(emptyClient, hex)
+            let nonBounceable: String = try await Everscale.tonConvertAddrToToncoinFormat(emptyClient, hex, false)
+            return .init(hex: hex, bounceable: bounceable, nonBounceable: nonBounceable)
+        }
     }
     
     @discardableResult
@@ -152,13 +189,25 @@ extension EverAccountsController {
                                               description: "Description",
                                               type: .object(JsonRPCResponse<String>.self, asCollection: false))
                                       ]),
+                            APIAction(method: .get,
+                                      route: "/\(swagger.route)/convertAddress",
+                                      summary: "",
+                                      description: "Convert Account Format",
+                                      parametersObject: GetAccountRequest(),
+                                      responses: [
+                                        .init(code: "200",
+                                              description: "Description",
+                                              type: .object(JsonRPCResponse<ConvertAccountResponse>.self, asCollection: false))
+                                      ]),
                           ])
         ).add([
             APIObject(object: JsonRPCResponse<Everscale.Account>(result: Everscale.Account())),
             APIObject(object: JsonRPCResponse<[Everscale.Account]>(result: [Everscale.Account()])),
             APIObject(object: JsonRPCResponse<Everscale.AccountBalance>(result: Everscale.AccountBalance())),
+            APIObject(object: JsonRPCResponse<ConvertAccountResponse>(result: ConvertAccountResponse())),
             APIObject(object: Everscale.Account()),
-            APIObject(object: Everscale.AccountBalance())
+            APIObject(object: Everscale.AccountBalance()),
+            APIObject(object: ConvertAccountResponse()),
         ])
     }
 }

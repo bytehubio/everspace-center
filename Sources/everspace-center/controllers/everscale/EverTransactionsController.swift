@@ -108,7 +108,7 @@ extension EverTransactionsController {
     func getTransactions(_ client: TSDKClientModule,
                          _ content: GetTransactionsRequest
     ) async throws -> [Everscale.TransactionHistoryModel] {
-        let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, content.address)
+        let accountAddress: String = try await Everscale.tonConvertAddrToEverFormat(client, content.address)
         let transactions = try await Everscale.getTransactions(client: client,
                                                                address: accountAddress,
                                                                limit: content.limit,

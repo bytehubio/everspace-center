@@ -307,7 +307,7 @@ query {
                                hashId: String? = nil,
                                tempArray: [TransactionHistoryModel] = []
     ) async throws -> [TransactionHistoryModel] {
-        let address: String = try await tonConvertAddrToEverFormat(client: client, address.everAddrLowercased)
+        let address: String = try await tonConvertAddrToEverFormat(client, address.everAddrLowercased)
         let defaultLimit: UInt32 = 50
         if tempArray.count >= limit ?? defaultLimit { return tempArray }
         

@@ -26,7 +26,7 @@ extension Toncoin {
     }
     
     class func tonGetJettonInfo(client: TSDKClientModule, emptyClient: TSDKClientModule, rootAddr: String) async throws -> ToncoinJettonInfo {
-        let rootAddr: String = try await tonConvertAddrToEverFormat(client: client, rootAddr)
+        let rootAddr: String = try await Everscale.tonConvertAddrToEverFormat(client, rootAddr)
         let walletInfoResult = try await runGetMethod(client: client, emptyClient: emptyClient, addr: rootAddr, method: "get_jetton_data")
         
         /// (total_supply, -1, admin_address, content, jetton_wallet_code)

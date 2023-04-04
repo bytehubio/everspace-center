@@ -29,6 +29,7 @@ public enum TonRPCMethods: String, Content {
     case estimateFee
     case getBlocksTransactions
     case getJettonInfo
+    case convertAddress
 }
 
 class TonJsonRpcController: RouteCollection {
@@ -77,6 +78,8 @@ class TonJsonRpcController: RouteCollection {
             return try await tonTransactionsController.getBlocksTransactions(req)
         case .getJettonInfo:
             return try await tonJettonsController.getJettonInfo(req)
+        case .convertAddress:
+            return try await tonAccountsController.convertAddress(req)
         }
     }
 }

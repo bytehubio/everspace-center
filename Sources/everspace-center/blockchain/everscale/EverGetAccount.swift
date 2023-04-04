@@ -36,7 +36,7 @@ extension Everscale {
     class func getAccount(client: TSDKClientModule,
                           accountAddress: String
     ) async throws -> Account {
-        let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress.everAddrLowercased)
+        let accountAddress: String = try await Everscale.tonConvertAddrToEverFormat(client, accountAddress.everAddrLowercased)
         let response: [Account] = try await getAccounts(client: client, accountAddresses: [accountAddress])
         if let first = response.first {
             return first
@@ -55,7 +55,7 @@ extension Everscale {
     ) async throws -> [Account] {
         var addresses: [String] = []
         for address in accountAddresses ?? [] {
-            addresses.append(try await tonConvertAddrToEverFormat(client: client, address.everAddrLowercased))
+            addresses.append(try await Everscale.tonConvertAddrToEverFormat(client, address.everAddrLowercased))
         }
         var filter: [String: Any] = .init()
         if accountAddresses != nil {
@@ -98,7 +98,7 @@ extension Everscale {
     class func getBalance(client: TSDKClientModule,
                           accountAddress: String
     ) async throws -> AccountBalance {
-        let accountAddress: String = try await tonConvertAddrToEverFormat(client: client, accountAddress.everAddrLowercased)
+        let accountAddress: String = try await Everscale.tonConvertAddrToEverFormat(client, accountAddress.everAddrLowercased)
         let paramsOfQueryCollection: TSDKParamsOfQueryCollection = .init(collection: "accounts",
                                                                          filter: [
                                                                             "id": [
@@ -117,6 +117,33 @@ extension Everscale {
             return first
         } else {
             throw makeError(TSDKClientError.mess("Account not found"))
+        }
+    }
+    
+    class func tonConvertAddrToToncoinFormat(_ emptyClient: TSDKClientModule, _ address: String, _ bounce: Bool = true) async throws -> String {
+        let model = try await emptyClient.utils.convert_address(
+            TSDKParamsOfConvertAddress(address: address,
+                                       output_format: TSDKAddressStringFormat(type: .Base64,
+                                                                              url: true,
+                                                                              test: false,
+                                                                              bounce: bounce)))
+        return model.address
+    }
+    
+    class func tonConvertAddrToEverFormat(_ emptyClient: TSDKClientModule, _ address: String) async throws -> String {
+        if address[#":"#] {
+            return address
+        } else {
+            let newAddr: TSDKResultOfConvertAddress = try await emptyClient.utils.convert_address(
+                TSDKParamsOfConvertAddress(address: address,
+                                           output_format: TSDKAddressStringFormat(type: .AccountId))
+            )
+            if newAddr.address[#":"#] {
+                return newAddr.address
+            } else {
+                let wc: UInt8 = address.base64ToByteArray()[1]
+                return "\(wc):\(newAddr.address)"
+            }
         }
     }
 }

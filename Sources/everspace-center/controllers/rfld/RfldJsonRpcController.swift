@@ -28,6 +28,7 @@ public enum RfldRPCMethods: String, Content {
     case getBlockByTime
     case estimateFee
     case getBlocksTransactions
+    case convertAddress
 }
 
 class RfldJsonRpcController: RouteCollection {
@@ -74,6 +75,8 @@ class RfldJsonRpcController: RouteCollection {
             return try await rfldSendController.estimateFee(req)
         case .getBlocksTransactions:
             return try await rfldTransactionsController.getBlocksTransactions(req)
+        case .convertAddress:
+            return try await rfldAccountsController.convertAddress(req)
         }
     }
 }
