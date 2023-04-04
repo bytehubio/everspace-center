@@ -65,16 +65,30 @@ extension Statistic {
                                _ count: Int64? = nil
     ) async throws -> Statistic {
         return try await app.postgres.transaction(to: .default) { conn in
-            let currentCount: Int64? = try await SwifQL.select(
+            var statistic: Statistic!
+            statistic = try await SwifQL.select(
+                 \Statistic.$id,
                  \Statistic.$apiKey,
-                 \Statistic.$count
+                 \Statistic.$network,
+                 \Statistic.$method,
+                 \Statistic.$apiType,
+                 \Statistic.$count,
+                 \Statistic.$updatedAt,
+                 \Statistic.$createdAt
             ).from(Statistic.table)
-                .where(\Statistic.$apiKey == apiKey)
+                .where(\Statistic.$apiKey == apiKey &&
+                        \Statistic.$network == network &&
+                        \Statistic.$method == method &&
+                        \Statistic.$apiType == apiType.rawValue
+                )
                 .execute(on: conn)
-                .first?.toDictionary["count"]?.int64
-            let newCount: Int64 = count ?? ((currentCount ?? 0) + 1)
-            let statistic: Statistic = .init(apiKey: apiKey, network: network, method: method, apiType: apiType, count: newCount, updatedAt: Date())
-            return try await statistic.upsert(conflictColumn: \Statistic.$apiKey, on: conn)
+                .first(decoding: Statistic.self)
+            
+            if statistic == nil {
+                statistic = .init(apiKey: apiKey, network: network, method: method, apiType: apiType, count: 0, updatedAt: Date())
+            }
+            statistic.count += 1
+            return try await statistic.upsert(conflictColumn: \Statistic.$id, on: conn)
         }
     }
 }
