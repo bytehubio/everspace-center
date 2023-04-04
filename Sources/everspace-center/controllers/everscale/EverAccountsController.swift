@@ -33,10 +33,12 @@ class EverAccountsController: RouteCollection {
         let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getAccount", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, GetAccountRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetAccountRequest>.self)
             result = JsonRPCResponse<Everscale.Account>(id: content.id,
                                                         result: try await getAccount(sdkClient.client, content.params)).toJson()
         } else {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getAccount", .queryParams)
             let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
             result = try await getAccount(sdkClient.client, content).toJson()
         }
@@ -47,10 +49,12 @@ class EverAccountsController: RouteCollection {
         let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getAccounts", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, GetAccountsRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetAccountsRequest>.self)
             result = JsonRPCResponse<[Everscale.Account]>(id: content.id,
                                                           result: try await getAccounts(sdkClient.client, content.params)).toJson()
         } else {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getAccounts", .queryParams)
             let content: GetAccountsRequest = try req.query.decode(GetAccountsRequest.self)
             result =  try await getAccounts(sdkClient.client, content).toJson()
         }
@@ -61,10 +65,12 @@ class EverAccountsController: RouteCollection {
         let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBalance", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, GetAccountRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetAccountRequest>.self)
             result = JsonRPCResponse<Everscale.AccountBalance>(id: content.id,
                                                                result: try await getBalance(sdkClient.client, content.params)).toJson()
         } else {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBalance", .queryParams)
             let content: GetAccountRequest = try req.query.decode(GetAccountRequest.self)
             result = try await getBalance(sdkClient.client, content).toJson()
         }

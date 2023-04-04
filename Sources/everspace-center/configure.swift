@@ -10,8 +10,10 @@ import Foundation
 import Vapor
 import FileUtils
 import IkigaJSON
+import VaporBridges
+import PostgresBridge
 
-public func configure(_ app: Application) throws {
+public func configure(_ app: Application) async throws {
     /// GET ENV
     try getAllEnvConstants()
 
@@ -37,6 +39,10 @@ public func configure(_ app: Application) throws {
     app.middleware.use(CustomFileMiddleware(publicDirectory: "Public"))
     app.middleware.use(CustomErrorMiddleware.default(environment: try Environment.detect()))
     app.middleware.use(ApiKeyMiddleware())
+    
+    /// POSTGRES
+    try await configureDataBase(app)
+    
     /// ROUTES
     try routes(app)
 }

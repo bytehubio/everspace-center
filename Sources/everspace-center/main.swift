@@ -7,5 +7,5 @@ let evetnLoop: EventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: Sys
 let app: Application = .init(env, Application.EventLoopGroupProvider.shared(evetnLoop))
 
 defer { app.shutdown() }
-try configure(app)
+try await configure(app)
 try app.run()

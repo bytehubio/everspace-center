@@ -33,10 +33,12 @@ class EverSendController: RouteCollection {
         let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendExternalMessage", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest>.self)
             result = JsonRPCResponse<Everscale.SendExternalMessage>(id: content.id,
                                                                     result: try await sendExternalMessage(sdkClient.client, content.params)).toJson()
         } else {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendExternalMessage", .queryParams)
             let content: SendExternalMessageRequest = try req.query.decode(SendExternalMessageRequest.self)
             result = try await sendExternalMessage(sdkClient.client, content).toJson()
         }
@@ -47,10 +49,12 @@ class EverSendController: RouteCollection {
         let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "waitForTransaction", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, WaitForTransactionRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, WaitForTransactionRequest>.self)
             result = JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
                                                                  result: try await waitForTransaction(sdkClient.client, content.params)).toJson()
         } else {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "waitForTransaction", .queryParams)
             let content: WaitForTransactionRequest = try req.query.decode(WaitForTransactionRequest.self)
             result = try await waitForTransaction(sdkClient.client, content).toJson()
         }
@@ -61,10 +65,12 @@ class EverSendController: RouteCollection {
         let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendAndWaitTransaction", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest>.self)
             result = JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
                                                                  result: try await sendAndWaitTransaction(sdkClient.client, content.params)).toJson()
         } else {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendAndWaitTransaction", .queryParams)
             let content: SendExternalMessageRequest = try req.query.decode(SendExternalMessageRequest.self)
             result = try await sendAndWaitTransaction(sdkClient.client, content).toJson()
         }
@@ -75,10 +81,12 @@ class EverSendController: RouteCollection {
         let sdkClient: SDKClient = try getSDKClient(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "estimateFee", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, Everscale.EstimateFeeRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.EstimateFeeRequest>.self)
             result = JsonRPCResponse<Everscale.EstimateFeeResponse>(id: content.id,
                                                                     result: try await estimateFee(sdkClient.client, content.params)).toJson()
         } else {
+            Stat.methodUse(req.headers[API_KEY_NAME].first, network, "estimateFee", .queryParams)
             let content: Everscale.EstimateFeeRequest = try req.query.decode(Everscale.EstimateFeeRequest.self)
             result = try await estimateFee(sdkClient.client, content).toJson()
         }

@@ -30,6 +30,14 @@ var TONCOIN_SDK_DOMAIN_ENV: String = "toncoin_mainnet"
 
 var NETWORKS_SDK_DOMAINS: [String: String] = .init()
 
+var PG_HOST: String = ""
+var PG_PORT: Int = 0
+var PG_USER: String = ""
+var PG_PSWD: String = ""
+var PG_DB_NAME: String = ""
+var PG_DB_CONNECTIONS: Int = Int(Double(80) / Double(System.coreCount))
+
+
 func getAllEnvConstants() throws {
     let env = try Environment.detect()
     if env.name != "production" {
@@ -37,31 +45,49 @@ func getAllEnvConstants() throws {
     }
     app.logger.warning("\(env)")
     guard let vaporStringPort = Environment.get("vapor_port"), let variable_1 = Int(vaporStringPort) else {
-        fatalError("Set vapor_port to .env.your_evironment")
+        fatalError("Set vapor_port to .env.\(env)")
     }
     VAPOR_PORT = variable_1
     
-    guard let variable_2 = Environment.get("vapor_ip") else { fatalError("Set vapor_ip to .env.your_evironment") }
+    guard let variable_2 = Environment.get("vapor_ip") else { fatalError("Set vapor_ip to .env.\(env)") }
     VAPOR_IP = variable_2
     
-    guard let variable_3 = Environment.get("TONCOIN_JETTON_IPFS") else { fatalError("Set TONCOIN_JETTON_IPFS to .env.your_evironment") }
+    guard let variable_3 = Environment.get("TONCOIN_JETTON_IPFS") else { fatalError("Set TONCOIN_JETTON_IPFS to .env.\(env)") }
     TONCOIN_JETTON_IPFS = variable_3
     
-    guard let variable_4 = Environment.get(EVERSCALE_SDK_DOMAIN_ENV) else { fatalError("Set everscale_mainnet to .env.your_evironment") }
+    guard let variable_4 = Environment.get(EVERSCALE_SDK_DOMAIN_ENV) else { fatalError("Set everscale_mainnet to .env.\(env)") }
     NETWORKS_SDK_DOMAINS[EVERSCALE_SDK_DOMAIN_ENV] = variable_4
     
-    guard let variable_5 = Environment.get(EVERSCALE_DEVNET_SDK_DOMAIN_ENV) else { fatalError("Set everscale_devnet to .env.your_evironment") }
+    guard let variable_5 = Environment.get(EVERSCALE_DEVNET_SDK_DOMAIN_ENV) else { fatalError("Set everscale_devnet to .env.\(env)") }
     NETWORKS_SDK_DOMAINS[EVERSCALE_DEVNET_SDK_DOMAIN_ENV] = variable_5
     
-    guard let variable_6 = Environment.get(EVERSCALE_RFLD_SDK_DOMAIN_ENV) else { fatalError("Set everscale_rfld to .env.your_evironment") }
+    guard let variable_6 = Environment.get(EVERSCALE_RFLD_SDK_DOMAIN_ENV) else { fatalError("Set everscale_rfld to .env.\(env)") }
     NETWORKS_SDK_DOMAINS[EVERSCALE_RFLD_SDK_DOMAIN_ENV] = variable_6
     
-    guard let variable_7 = Environment.get(VENOM_SDK_DOMAIN_ENV) else { fatalError("Set venom to .env.your_evironment") }
+    guard let variable_7 = Environment.get(VENOM_SDK_DOMAIN_ENV) else { fatalError("Set venom to .env.\(env)") }
     NETWORKS_SDK_DOMAINS[VENOM_SDK_DOMAIN_ENV] = variable_7
     
-    guard let variable_8 = Environment.get(VENOM_TESTNET_SDK_DOMAIN_ENV) else { fatalError("Set venom_testnet to .env.your_evironment") }
+    guard let variable_8 = Environment.get(VENOM_TESTNET_SDK_DOMAIN_ENV) else { fatalError("Set venom_testnet to .env.\(env)") }
     NETWORKS_SDK_DOMAINS[VENOM_TESTNET_SDK_DOMAIN_ENV] = variable_8
     
-    guard let variable_9 = Environment.get(TONCOIN_SDK_DOMAIN_ENV) else { fatalError("Set toncoin_mainnet to .env.your_evironment") }
+    guard let variable_9 = Environment.get(TONCOIN_SDK_DOMAIN_ENV) else { fatalError("Set toncoin_mainnet to .env.\(env)") }
     NETWORKS_SDK_DOMAINS[TONCOIN_SDK_DOMAIN_ENV] = variable_9
+    
+    guard let variable_10 = Environment.get("PG_HOST") else { fatalError("Set PG_HOST to .env.\(env)") }
+    PG_HOST = variable_10
+    
+    guard
+            let dbPortString = Environment.get("PG_PORT"),
+            let variable_11 = Int(dbPortString)
+    else { fatalError("Set PG_PORT to \((try? Environment.detect().name) ?? ".env.\(env)")") }
+    PG_PORT = variable_11
+    
+    guard let variable_12 = Environment.get("PG_USER") else { fatalError("Set PG_USER to .env.\(env)") }
+    PG_USER = variable_12
+    
+    guard let variable_13 = Environment.get("PG_PSWD") else { fatalError("Set PG_PSWD to .env.\(env)") }
+    PG_PSWD = variable_13
+    
+    guard let variable_14 = Environment.get("PG_DB_NAME") else { fatalError("Set PG_DB_NAME to .env.\(env)") }
+    PG_DB_NAME = variable_14
 }

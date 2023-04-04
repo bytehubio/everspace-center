@@ -91,9 +91,6 @@ public final class CustomErrorMiddleware: Middleware {
     }
     
     public func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
-        pe("ERROR")
-        pe(request.headers["X-API-KEY"])
-        pe(request.url)
         return next.respond(to: request).flatMapErrorThrowing { error in
             return self.closure(request, error)
         }
