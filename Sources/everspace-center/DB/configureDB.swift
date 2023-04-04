@@ -25,17 +25,21 @@ extension DatabaseIdentifier {
 ///// End Postgres config
 
 func configureDataBase(_ app: Application) async throws {
-    /// PostgreSQL config
-    app.bridges.logger.logLevel = .error
-    app.postgres.register(.init(host: DatabaseHost.myDefaultHost))
-    
-    let postgreSQLBase: PostgreSQLBase = .init(app)
-    try await postgreSQLBase.dataBaseCreate(dbName: PG_DB_NAME)
-    
-    ///TEST REQUEST
-//    let aaa: PostgresQueryResult = try await app.postgres.connection(to: .default, { con in
-//        return try await con.query("SELECT datname FROM pg_database")
-//    })
-    
-    try await migrations(app)
+    do {
+        /// PostgreSQL config
+        app.bridges.logger.logLevel = .error
+        app.postgres.register(.init(host: DatabaseHost.myDefaultHost))
+        
+        let postgreSQLBase: PostgreSQLBase = .init(app)
+        try await postgreSQLBase.dataBaseCreate(dbName: PG_DB_NAME)
+        
+        ///TEST REQUEST
+    //    let aaa: PostgresQueryResult = try await app.postgres.connection(to: .default, { con in
+    //        return try await con.query("SELECT datname FROM pg_database")
+    //    })
+        
+        try await migrations(app)
+    } catch {
+        app.logger.critical("\(#function) \(#line) \(error.localizedDescription)")
+    }
 }

@@ -48,7 +48,12 @@ let package = Package(
     ],
     dependencies: packageDependencies,
     targets: [
-        .executableTarget(name: name, dependencies: mainTarget, swiftSettings: []),
+        .executableTarget(
+            name: name,
+            dependencies: mainTarget,
+            swiftSettings: [
+                .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
+            ]),
     ]
 )
 
