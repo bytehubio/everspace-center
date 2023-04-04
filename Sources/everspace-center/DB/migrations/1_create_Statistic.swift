@@ -14,7 +14,7 @@ struct Сreate_Statistic_1: TableMigration {
     static func prepare(on conn: BridgeConnection) async throws {
         let builder: CreateTableBuilder<Table> = createBuilder
         _ = builder.column("id", .bigserial, .primaryKey, .notNull)
-        _ = builder.column("api_key", .text, .unique, .notNull)
+        _ = builder.column("api_key", .text, .notNull)
         _ = builder.column("network", .text, .default(""), .notNull)
         _ = builder.column("method", .text, .default(""), .notNull)
         _ = builder.column("api_type", .text, .default(Statistic.ApiType.queryParams.rawValue), .notNull)

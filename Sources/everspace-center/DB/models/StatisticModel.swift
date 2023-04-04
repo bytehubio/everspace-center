@@ -85,10 +85,12 @@ extension Statistic {
                 .first(decoding: Statistic.self)
             
             if statistic == nil {
-                statistic = .init(apiKey: apiKey, network: network, method: method, apiType: apiType, count: 0, updatedAt: Date())
+                statistic = .init(apiKey: apiKey, network: network, method: method, apiType: apiType, count: 1, updatedAt: Date())
+                return try await statistic.insert(on: conn)
+            } else {
+                statistic.count += 1
+                return try await statistic.upsert(conflictColumn: \Statistic.$id, on: conn)
             }
-            statistic.count += 1
-            return try await statistic.upsert(conflictColumn: \Statistic.$id, on: conn)
         }
     }
 }
