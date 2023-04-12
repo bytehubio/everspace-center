@@ -136,12 +136,15 @@ extension Everscale {
         } else {
             let newAddr: TSDKResultOfConvertAddress = try await emptyClient.utils.convert_address(
                 TSDKParamsOfConvertAddress(address: address,
-                                           output_format: TSDKAddressStringFormat(type: .AccountId))
+                                           output_format: TSDKAddressStringFormat(type: .Hex))
             )
             if newAddr.address[#":"#] {
                 return newAddr.address
             } else {
-                let wc: UInt8 = address.base64ToByteArray()[1]
+                if address.base64ToByteArray()[1] > Int8.max || address.base64ToByteArray()[1] < Int8.min {
+                    throw makeError(AppError("\(address.base64ToByteArray()[1]) overflow"))
+                }
+                let wc: Int8 = Int8(bitPattern: address.base64ToByteArray()[1])
                 return "\(wc):\(newAddr.address)"
             }
         }

@@ -8,11 +8,15 @@
 import Foundation
 import Vapor
 import Swiftgger
+import EverscaleClientSwift
+import SwiftExtensionsPack
+import BigInt
 
 final class MainController: RouteCollection {
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("", use: index)
+        routes.get("test", use: test)
     }
     
     func index(_ req: Request) async throws -> Response {
@@ -98,7 +102,7 @@ final class MainController: RouteCollection {
                 <br>
                 <div class="footer">
                     <p>Made on Apple Swift with ❤️ by <a href="https://everspace.app/" target="_blank">Everspace Wallet Team</a></p>
-                    <p><a href="https://t.me/everspace_center">Telegram</a> | <a href="mailto:admin@bytehub.io">E-mail</a></p>
+                    <p><a href="https://t.me/everspace_center">Support</a> | <a href="mailto:admin@bytehub.io">E-mail</a></p>
                 </div>
             </footer>
 
@@ -109,7 +113,40 @@ final class MainController: RouteCollection {
         return try await encodeResponse(for: req, html: html)
     }
 }
-//
+
+#if DEBUG
+extension MainController {
+    
+    func test(_ req: Request) async throws -> Response {
+        let sdkClient: SDKClient = try getSDKClient(apiKey: "b17a652df5d642a6aa6e9dae4601685a", network: EVERSCALE_SDK_DOMAIN_ENV)
+        let version = try await sdkClient.emptyClient.version()
+        pe(version.version)
+        
+        
+        let addr = "Uf82RDKWzkyabxdMwg-WROan8fXx3QVC1Y6C7lRLMlKxsjb_"
+        let AccountId = try await sdkClient.emptyClient.utils.convert_address(TSDKParamsOfConvertAddress(address: addr, output_format: TSDKAddressStringFormat(type: .AccountId)))
+        pe("AccountId", AccountId)
+        
+        let hex = try await sdkClient.emptyClient.utils.convert_address(TSDKParamsOfConvertAddress(address: addr, output_format: TSDKAddressStringFormat(type: .Hex)))
+        pe("Hex", hex)
+        
+        
+        return try await encodeResponse(for: req, json: "{}")
+    }
+}
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
 //extension SwaggerController {
 //
 //    static let openAPIBuilder: OpenAPIBuilder = .init(
