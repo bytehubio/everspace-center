@@ -16,7 +16,9 @@ final class MainController: RouteCollection {
     
     func boot(routes: Vapor.RoutesBuilder) throws {
         routes.get("", use: index)
+        #if DEBUG
         routes.get("test", use: test)
+        #endif
     }
     
     func index(_ req: Request) async throws -> Response {
