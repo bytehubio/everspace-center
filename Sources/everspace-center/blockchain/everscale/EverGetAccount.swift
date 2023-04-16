@@ -26,6 +26,7 @@ extension Everscale {
         var library: String? = ""
         var data: String? = ""
         var data_hash: String? = ""
+        var boc: String? = ""
     }
     
     public struct AccountBalance: Codable {
@@ -82,6 +83,7 @@ extension Everscale {
                                                                             "code_hash",
                                                                             "data",
                                                                             "data_hash",
+                                                                            "boc",
                                                                             "library",
                                                                             "library_hash",
                                                                             "due_payment(format: DEC)",
