@@ -16,7 +16,7 @@ extension Everscale {
     public struct RunGetMethodFift: Codable, Content {
         var address: String = "..."
         var method: String = "..."
-        var params: [String]? = []
+        var params: [AnyValue]? = []
     }
     
     public struct RunGetMethodAbi: Codable, Content {
@@ -34,14 +34,14 @@ extension Everscale {
                                 emptyClient: TSDKClientModule,
                                 address: String,
                                 method: String,
-                                params: [String]? = nil
+                                params: [AnyValue]? = nil
     ) async throws -> RunGetMethodFiftResponse {
         let address: String = try await Everscale.tonConvertAddrToEverFormat(emptyClient, address.everAddrLowercased)
         let response = try await everspace_center.runGetMethodFift(client: client,
-                                                  emptyClient: emptyClient,
-                                                  addr: address,
-                                                  method: method,
-                                                  params: params)
+                                                                   emptyClient: emptyClient,
+                                                                   addr: address,
+                                                                   method: method,
+                                                                   params: params?.map { $0.toAny() })
         return .init(result: response.output.toJSON())
     }
     

@@ -8,8 +8,6 @@ let name: String = "everspace-center"
 let packageDependencies: [Package.Dependency] = [
     .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "4.45.0")),
     .package(url: "https://github.com/nerzh/VaporBridges.git", branch: "master"),
-//    .package(url: "https://github.com/SwifQL/PostgresBridge.git", .upToNextMajor(from:"1.0.0-rc")),
-//    .package(url: "https://github.com/SwifQL/Bridges.git", .upToNextMajor(from: "1.0.0-rc.4.13.1")),
     .package(url: "https://github.com/nerzh/PostgresBridge.git", branch: "master"),
     .package(url: "https://github.com/nerzh/Bridges.git", branch: "master"),
     .package(url: "https://github.com/nerzh/swift-regular-expression.git", .upToNextMajor(from: "0.2.3")),
@@ -19,8 +17,6 @@ let packageDependencies: [Package.Dependency] = [
     .package(url: "https://github.com/orlandos-nl/IkigaJSON.git", from: "2.0.0"),
     .package(url: "https://github.com/bytehubio/BigInt.git", exact: "5.3.0"),
     .package(url: "https://github.com/nerzh/Swiftgger", .upToNextMajor(from: "2.0.2")),
-//    .package(url: "https://github.com/tonkeeper/ton-swift", .branch("main")),
-//    .package(path: "/Users/nerzh/mydata/swift_projects/ton-swift")
 ]
 
 let mainTarget: [Target.Dependency] = [
