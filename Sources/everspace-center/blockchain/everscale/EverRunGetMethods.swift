@@ -41,7 +41,7 @@ extension Everscale {
                                                                    emptyClient: emptyClient,
                                                                    addr: address,
                                                                    method: method,
-                                                                   params: params?.map { $0.toAny() })
+                                                                   params: params?.map { $0.toAny() as Any })
         return .init(result: response.output.toJSON())
     }
     

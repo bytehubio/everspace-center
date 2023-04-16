@@ -21,7 +21,7 @@ final class Statistic: Table {
     var network: String
     
     @Column("api_type")
-    var apiType: ApiType
+    var apiType: String
     
     @Column("method")
     var method: String
@@ -42,7 +42,7 @@ final class Statistic: Table {
         self.apiKey = apiKey
         self.network = network
         self.method = method
-        self.apiType = apiType
+        self.apiType = apiType.rawValue
         self.count = count
         self.updatedAt = updatedAt
     }

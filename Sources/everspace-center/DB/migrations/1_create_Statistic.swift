@@ -17,7 +17,7 @@ struct Сreate_Statistic_1: TableMigration {
         _ = builder.column("api_key", .text, .notNull)
         _ = builder.column("network", .text, .default(""), .notNull)
         _ = builder.column("method", .text, .default(""), .notNull)
-        _ = builder.column("api_type", .text, .default(Statistic.ApiType.queryParams.rawValue), .notNull)
+        _ = builder.column("api_type", .text, .notNull)
         _ = builder.column("count", .bigint, .default(0), .notNull)
         
         _ = builder.column("created_at", .timestamptz, .default(Fn.now()), .notNull)
