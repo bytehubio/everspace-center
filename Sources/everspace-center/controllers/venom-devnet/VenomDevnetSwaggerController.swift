@@ -19,7 +19,7 @@ final class VenomDevnetSwaggerController: RouteCollection, SwaggerControllerPrtc
         [ALL TVM BLOCKCHAIN'S API](\(Domain))\n\n\n
         **Authorization information is on the main page**\n\n\n
         You can use JSON RPC requests:\n
-            \(Domain)/everscale/jsonRpc\n\n
+            \(Domain)/venom-testnet/jsonRpc\n\n
         Example request:\n
             {\n
                 "id": "1",\n
