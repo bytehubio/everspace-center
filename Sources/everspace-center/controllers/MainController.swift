@@ -114,6 +114,14 @@ final class MainController: RouteCollection {
         
         return try await encodeResponse(for: req, html: html)
     }
+    
+    #if DEBUG
+    init() {
+        Task {
+            try await testFile()
+        }
+    }
+    #endif
 }
 
 #if DEBUG
