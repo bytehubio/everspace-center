@@ -5,21 +5,18 @@ import PackageDescription
 /// Rename this name + Root Folder + Target Folder inside Source
 let name: String = "everspace-center"
 
-let packageDependencies: [Package.Dependency] = [
+var packageDependencies: [Package.Dependency] = [
     .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "4.45.0")),
     .package(url: "https://github.com/nerzh/VaporBridges.git", branch: "master"),
     .package(url: "https://github.com/nerzh/PostgresBridge.git", branch: "master"),
     .package(url: "https://github.com/nerzh/Bridges.git", branch: "master"),
     .package(url: "https://github.com/nerzh/swift-regular-expression.git", .upToNextMajor(from: "0.2.3")),
-    .package(url: "https://github.com/nerzh/everscale-client-swift", .upToNextMajor(from: "1.4.1")),
     .package(url: "https://github.com/nerzh/SwiftFileUtils", .upToNextMinor(from: "1.3.0")),
-    .package(url: "https://github.com/nerzh/swift-extensions-pack", .upToNextMajor(from: "1.2.0")),
     .package(url: "https://github.com/orlandos-nl/IkigaJSON.git", from: "2.0.0"),
     .package(url: "https://github.com/bytehubio/BigInt.git", exact: "5.3.0"),
-    .package(url: "https://github.com/nerzh/Swiftgger", .upToNextMajor(from: "2.0.2")),
 ]
 
-let mainTarget: [Target.Dependency] = [
+var mainTarget: [Target.Dependency] = [
     .product(name: "Vapor", package: "vapor"),
     .product(name: "PostgresBridge", package: "PostgresBridge"),
     .product(name: "VaporBridges", package: "VaporBridges"),
@@ -31,13 +28,23 @@ let mainTarget: [Target.Dependency] = [
     .product(name: "IkigaJSON", package: "IkigaJSON"),
     .product(name: "BigInt", package: "BigInt"),
     .product(name: "Swiftgger", package: "Swiftgger"),
-//    .product(name: "TonSwift", package: "ton-swift"),
 ]
+
+#if os(Linux)
+packageDependencies.append(.package(url: "https://github.com/nerzh/Swiftgger", branch: "master"))
+packageDependencies.append(.package(url: "https://github.com/nerzh/swift-extensions-pack", .upToNextMajor(from: "1.2.0")))
+packageDependencies.append(.product(name: "EverscaleClientSwift", package: "everscale-client-swift"))
+#else
+packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/Swiftgger"))
+packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/swift-extensions-pack"))
+packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/everscale-client-swift"))
+#endif
 
 let package = Package(
     name: name,
     platforms: [
-        .macOS(.v12)
+        .macOS(.v12),
+        .iOS(.v11)
     ],
     products: [
         .executable(name: name, targets: [name])

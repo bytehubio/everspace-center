@@ -10,6 +10,7 @@ import SwiftExtensionsPack
 import Vapor
 import EverscaleClientSwift
 import Swiftgger
+import SwiftRegularExpression
 
 
 class EverRunGetMethodsController: RouteCollection {
@@ -36,10 +37,28 @@ class EverRunGetMethodsController: RouteCollection {
             result = JsonRPCResponse<Everscale.RunGetMethodFiftResponse>(id: content.id,
                                                                          result: try await runGetMethodFift(sdkClient.client,
                                                                                                             sdkClient.emptyClient,
-                                                                                                               content: content.params)).toJson()
+                                                                                                            content: content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "runGetMethodFift", .queryParams)
-            let content: Everscale.RunGetMethodFift = try req.query.decode(Everscale.RunGetMethodFift.self)
+            var content: Everscale.RunGetMethodFift = try req.query.decode(Everscale.RunGetMethodFift.self)
+            let params: [AnyValue] = (content.params ?? []).map { element in
+                guard let str = element.toAny() as? String else { return element }
+                if str[#"^\{.+\}$"#] {
+                    if let newAnyValue = str.toDictionary()?.toAnyValue() {
+                        return newAnyValue
+                    }
+                    return element
+                } else if str[#"^\[.+\]$"#] {
+                    if let newAnyValue = str.toArray()?.toAnyValue() {
+                        return newAnyValue
+                    }
+                    return element
+                } else {
+                    return element
+                }
+            }
+            content.params = params
+            
             result = try await runGetMethodFift(sdkClient.client, sdkClient.emptyClient, content: content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
@@ -54,7 +73,7 @@ class EverRunGetMethodsController: RouteCollection {
             result = JsonRPCResponse<Everscale.RunGetMethodFiftResponse>(id: content.id,
                                                                          result: try await runGetMethodAbi(sdkClient.client,
                                                                                                            sdkClient.emptyClient,
-                                                                                                              content: content.params)).toJson()
+                                                                                                           content: content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "runGetMethodAbi", .queryParams)
             let content: Everscale.RunGetMethodAbi = try req.query.decode(Everscale.RunGetMethodAbi.self)
@@ -75,10 +94,10 @@ extension EverRunGetMethodsController {
                           content: Everscale.RunGetMethodFift
     ) async throws -> Everscale.RunGetMethodFiftResponse {
         try await Everscale.runGetMethodFift(client: client,
-                                              emptyClient: emptyClient,
-                                              address: content.address,
-                                              method: content.method,
-                                              params: content.params)
+                                             emptyClient: emptyClient,
+                                             address: content.address,
+                                             method: content.method,
+                                             params: content.params)
     }
     
     func runGetMethodAbi(_ client: TSDKClientModule,
@@ -86,11 +105,11 @@ extension EverRunGetMethodsController {
                          content: Everscale.RunGetMethodAbi
     ) async throws -> Everscale.RunGetMethodFiftResponse {
         try await Everscale.runGetMethodAbi(client: client,
-                                             emptyClient: emptyClient,
-                                             address: content.address,
-                                             method: content.method,
-                                             jsonParams: content.jsonParams,
-                                             abi: content.abi)
+                                            emptyClient: emptyClient,
+                                            address: content.address,
+                                            method: content.method,
+                                            jsonParams: content.jsonParams,
+                                            abi: content.abi)
     }
     
     @discardableResult
