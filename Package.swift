@@ -33,7 +33,7 @@ var mainTarget: [Target.Dependency] = [
 #if os(Linux)
 packageDependencies.append(.package(url: "https://github.com/nerzh/Swiftgger", branch: "master"))
 packageDependencies.append(.package(url: "https://github.com/nerzh/swift-extensions-pack", .upToNextMajor(from: "1.2.0")))
-packageDependencies.append(.product(name: "EverscaleClientSwift", package: "everscale-client-swift"))
+packageDependencies.append(.package(url: "https://github.com/nerzh/everscale-client-swift", branch: "master"))
 #else
 packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/Swiftgger"))
 packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/swift-extensions-pack"))
