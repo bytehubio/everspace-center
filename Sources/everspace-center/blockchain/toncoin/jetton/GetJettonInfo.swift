@@ -23,6 +23,7 @@ extension Toncoin {
         public var symbol: String = ""
         public var decimals: Int? = nil
         public var image: String? = nil
+        public var image_data: String? = nil
     }
     
     class func tonGetJettonInfo(client: TSDKClientModule, emptyClient: TSDKClientModule, rootAddr: String) async throws -> ToncoinJettonInfo {
@@ -139,7 +140,9 @@ extension Toncoin {
                     jettonInfo.name = model.name
                     jettonInfo.symbol = model.symbol
                     jettonInfo.decimals = model.decimals ?? 9
-                    jettonInfo.image = model.image != nil ? "\(TONCOIN_JETTON_IPFS)/\(model.image!.replace(#"^ipfs://"#, ""))" : nil
+                    if (model.image ?? model.image_data) != nil {
+                        jettonInfo.image = "\(TONCOIN_JETTON_IPFS)/\((model.image ?? model.image_data)!.replace(#"^ipfs://"#, ""))"
+                    }
                 } else {
                     throw makeError(TSDKClientError("Jetton meta data not found"))
                 }
