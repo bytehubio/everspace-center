@@ -29,49 +29,49 @@ class EverTransactionsController: RouteCollection {
     }
     
     func getTransactions(_ req: Request) async throws -> Response {
-        let sdkClient: SDKClient = try getSDKClient(req, network)
+        let sdkClient: TSDKClientModule = try await sdkClientActor.client(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getTransactions", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, GetTransactionsRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetTransactionsRequest>.self)
             result = JsonRPCResponse<[Everscale.TransactionHistoryModel]>(id: content.id,
-                                                                          result: try await getTransactions(sdkClient.client, content.params)).toJson()
+                                                                          result: try await getTransactions(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getTransactions", .queryParams)
             let content: GetTransactionsRequest = try req.query.decode(GetTransactionsRequest.self)
-            result = try await getTransactions(sdkClient.client, content).toJson()
+            result = try await getTransactions(sdkClient, content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func getTransaction(_ req: Request) async throws -> Response {
-        let sdkClient: SDKClient = try getSDKClient(req, network)
+        let sdkClient: TSDKClientModule = try await sdkClientActor.client(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getTransaction", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, GetTransactionRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetTransactionRequest>.self)
             result = JsonRPCResponse<Everscale.ExtendedTransactionHistoryModel>(id: content.id,
-                                                                                result: try await getTransaction(sdkClient.client, content.params)).toJson()
+                                                                                result: try await getTransaction(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getTransaction", .queryParams)
             let content: GetTransactionRequest = try req.query.decode(GetTransactionRequest.self)
-            result = try await getTransaction(sdkClient.client, content).toJson()
+            result = try await getTransaction(sdkClient, content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func getBlocksTransactions(_ req: Request) async throws -> Response {
-        let sdkClient: SDKClient = try getSDKClient(req, network)
+        let sdkClient: TSDKClientModule = try await sdkClientActor.client(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBlocksTransactions", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, Everscale.BlocksTransactionsRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.BlocksTransactionsRequest>.self)
             result = JsonRPCResponse<[BlocksTransactionsResponse]>(id: content.id,
-                                                                   result: try await getBlocksTransactions(sdkClient.client, content.params)).toJson()
+                                                                   result: try await getBlocksTransactions(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBlocksTransactions", .queryParams)
             let content: Everscale.BlocksTransactionsRequest = try req.query.decode(Everscale.BlocksTransactionsRequest.self)
-            result = try await getBlocksTransactions(sdkClient.client, content).toJson()
+            result = try await getBlocksTransactions(sdkClient, content).toJson()
         }
         
         

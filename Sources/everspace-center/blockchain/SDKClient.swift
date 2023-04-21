@@ -9,12 +9,12 @@ import Foundation
 import EverscaleClientSwift
 import Vapor
 
-protocol SDKClientPrtcl {
-    var client: TSDKClientModule { get }
-    var emptyClient: TSDKClientModule { get }
-}
+//protocol SDKClientPrtcl {
+//    var client: TSDKClientModule { get }
+//    var emptyClient: TSDKClientModule { get }
+//}
 
-public class SDKClient: SDKClientPrtcl {
+public final class SDKClient {
     
     private class func getNetwork(networkName: String) throws -> [String] {
         guard let json = Environment.get(networkName) else { throw AppError(reason: "\(networkName) is not defined for env \(try Environment.detect().name)")  }
@@ -26,18 +26,18 @@ public class SDKClient: SDKClientPrtcl {
         return arr
     }
     
-    var client: TSDKClientModule
-    var emptyClient: TSDKClientModule
+//    var client: TSDKClientModule! = nil
+//    var emptyClient: TSDKClientModule! = nil
     
-    public init(clientConfig: TSDKClientConfig) throws {
-        self.client = try TSDKClientModule(config: clientConfig)
-        self.emptyClient = Self.makeEmptyClient()
-    }
-    
-    public init(_ endpoints: [String]) throws {
-        self.client = try TSDKClientModule(config: Self.makeClientConfig(endpoints))
-        self.emptyClient = Self.makeEmptyClient()
-    }
+//    public init(clientConfig: TSDKClientConfig) throws {
+//        self.client = try TSDKClientModule(config: clientConfig)
+//        self.emptyClient = Self.makeEmptyClient()
+//    }
+//
+//    public init(_ endpoints: [String]) throws {
+//        self.client = try TSDKClientModule(config: Self.makeClientConfig(endpoints))
+//        self.emptyClient = Self.makeEmptyClient()
+//    }
     
     public static func makeClientConfig(name: String) -> TSDKClientConfig {
         let networkConfig: TSDKNetworkConfig = .init(endpoints: try! SDKClient.getNetwork(networkName: name),
@@ -58,4 +58,28 @@ public class SDKClient: SDKClientPrtcl {
     public static func makeEmptyClient() -> TSDKClientModule {
         try! TSDKClientModule(config: SDKClient.makeEmptyClientConfig())
     }
+    
+    public static func getSDKClient(_ req: Request, _ network: String) throws -> TSDKClientModule {
+        guard let apiKey = req.headers[API_KEY_NAME].first else {
+            throw AppError("\(API_KEY_NAME) not found.")
+        }
+        return try makeClient(apiKey: apiKey, network: network)
+    }
+    
+    public static func makeClient(apiKey: String?, network: String) throws -> TSDKClientModule {
+        guard let sdk_domain = NETWORKS_SDK_DOMAINS[network] else {
+            throw AppError("\(network) network domain not found")
+        }
+        var url: String = ""
+        if network == VENOM_SDK_DOMAIN_ENV || network == EVERSCALE_RFLD_SDK_DOMAIN_ENV {
+            url = "\(sdk_domain)"
+        } else {
+            guard let apiKey = apiKey else {
+                throw AppError("apiKey not found.")
+            }
+            url = "\(sdk_domain)/\(apiKey)"
+        }
+        return try TSDKClientModule(config: Self.makeClientConfig([url]))
+    }
 }
+

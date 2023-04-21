@@ -128,17 +128,17 @@ final class MainController: RouteCollection {
 extension MainController {
     
     func test(_ req: Request) async throws -> Response {
-        let sdkClient: SDKClient = try getSDKClient(apiKey: "b17a652df5d642a6aa6e9dae4601685a", network: EVERSCALE_SDK_DOMAIN_ENV)
-        let version = try await sdkClient.emptyClient.version()
-        pe(version.version)
-        
-        
-        let addr = "Uf82RDKWzkyabxdMwg-WROan8fXx3QVC1Y6C7lRLMlKxsjb_"
-        let AccountId = try await sdkClient.emptyClient.utils.convert_address(TSDKParamsOfConvertAddress(address: addr, output_format: TSDKAddressStringFormat(type: .AccountId)))
-        pe("AccountId", AccountId)
-        
-        let hex = try await sdkClient.emptyClient.utils.convert_address(TSDKParamsOfConvertAddress(address: addr, output_format: TSDKAddressStringFormat(type: .Hex)))
-        pe("Hex", hex)
+//        let sdkClient: SDKClient = try getSDKClient(apiKey: "b17a652df5d642a6aa6e9dae4601685a", network: EVERSCALE_SDK_DOMAIN_ENV)
+//        let version = try await sdkClient.emptyClient.version()
+//        pe(version.version)
+//        
+//        
+//        let addr = "Uf82RDKWzkyabxdMwg-WROan8fXx3QVC1Y6C7lRLMlKxsjb_"
+//        let AccountId = try await sdkClient.emptyClient.utils.convert_address(TSDKParamsOfConvertAddress(address: addr, output_format: TSDKAddressStringFormat(type: .AccountId)))
+//        pe("AccountId", AccountId)
+//        
+//        let hex = try await sdkClient.emptyClient.utils.convert_address(TSDKParamsOfConvertAddress(address: addr, output_format: TSDKAddressStringFormat(type: .Hex)))
+//        pe("Hex", hex)
         
         
         return try await encodeResponse(for: req, json: "{}")

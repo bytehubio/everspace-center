@@ -29,14 +29,14 @@ class EverRunGetMethodsController: RouteCollection {
     }
     
     func runGetMethodFift(_ req: Request) async throws -> Response {
-        let sdkClient: SDKClient = try getSDKClient(req, network)
+        let sdkClient: TSDKClientModule = try await sdkClientActor.client(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "runGetMethodFift", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, Everscale.RunGetMethodFift> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.RunGetMethodFift>.self)
             result = JsonRPCResponse<Everscale.RunGetMethodFiftResponse>(id: content.id,
-                                                                         result: try await runGetMethodFift(sdkClient.client,
-                                                                                                            sdkClient.emptyClient,
+                                                                         result: try await runGetMethodFift(sdkClient,
+                                                                                                            sdkClientActor.emptyClient(),
                                                                                                             content: content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "runGetMethodFift", .queryParams)
@@ -59,25 +59,25 @@ class EverRunGetMethodsController: RouteCollection {
             }
             content.params = params
             
-            result = try await runGetMethodFift(sdkClient.client, sdkClient.emptyClient, content: content).toJson()
+            result = try await runGetMethodFift(sdkClient, sdkClientActor.emptyClient(), content: content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func runGetMethodAbi(_ req: Request) async throws -> Response {
-        let sdkClient: SDKClient = try getSDKClient(req, network)
+        let sdkClient: TSDKClientModule = try await sdkClientActor.client(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "runGetMethodAbi", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, Everscale.RunGetMethodAbi> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.RunGetMethodAbi>.self)
             result = JsonRPCResponse<Everscale.RunGetMethodFiftResponse>(id: content.id,
-                                                                         result: try await runGetMethodAbi(sdkClient.client,
-                                                                                                           sdkClient.emptyClient,
+                                                                         result: try await runGetMethodAbi(sdkClient,
+                                                                                                           sdkClientActor.emptyClient(),
                                                                                                            content: content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "runGetMethodAbi", .queryParams)
             let content: Everscale.RunGetMethodAbi = try req.query.decode(Everscale.RunGetMethodAbi.self)
-            result = try await runGetMethodAbi(sdkClient.client, sdkClient.emptyClient, content: content).toJson()
+            result = try await runGetMethodAbi(sdkClient, sdkClientActor.emptyClient(), content: content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }

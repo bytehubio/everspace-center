@@ -30,65 +30,65 @@ class EverSendController: RouteCollection {
     }
     
     func sendExternalMessage(_ req: Request) async throws -> Response {
-        let sdkClient: SDKClient = try getSDKClient(req, network)
+        let sdkClient: TSDKClientModule = try await sdkClientActor.client(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendExternalMessage", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest>.self)
             result = JsonRPCResponse<Everscale.SendExternalMessage>(id: content.id,
-                                                                    result: try await sendExternalMessage(sdkClient.client, content.params)).toJson()
+                                                                    result: try await sendExternalMessage(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendExternalMessage", .queryParams)
             let content: SendExternalMessageRequest = try req.query.decode(SendExternalMessageRequest.self)
-            result = try await sendExternalMessage(sdkClient.client, content).toJson()
+            result = try await sendExternalMessage(sdkClient, content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func waitForTransaction(_ req: Request) async throws -> Response {
-        let sdkClient: SDKClient = try getSDKClient(req, network)
+        let sdkClient: TSDKClientModule = try await sdkClientActor.client(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "waitForTransaction", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, WaitForTransactionRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, WaitForTransactionRequest>.self)
             result = JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
-                                                                 result: try await waitForTransaction(sdkClient.client, content.params)).toJson()
+                                                                 result: try await waitForTransaction(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "waitForTransaction", .queryParams)
             let content: WaitForTransactionRequest = try req.query.decode(WaitForTransactionRequest.self)
-            result = try await waitForTransaction(sdkClient.client, content).toJson()
+            result = try await waitForTransaction(sdkClient, content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func sendAndWaitTransaction(_ req: Request) async throws -> Response {
-        let sdkClient: SDKClient = try getSDKClient(req, network)
+        let sdkClient: TSDKClientModule = try await sdkClientActor.client(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendAndWaitTransaction", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest>.self)
             result = JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
-                                                                 result: try await sendAndWaitTransaction(sdkClient.client, content.params)).toJson()
+                                                                 result: try await sendAndWaitTransaction(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendAndWaitTransaction", .queryParams)
             let content: SendExternalMessageRequest = try req.query.decode(SendExternalMessageRequest.self)
-            result = try await sendAndWaitTransaction(sdkClient.client, content).toJson()
+            result = try await sendAndWaitTransaction(sdkClient, content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
     
     func estimateFee(_ req: Request) async throws -> Response {
-        let sdkClient: SDKClient = try getSDKClient(req, network)
+        let sdkClient: TSDKClientModule = try await sdkClientActor.client(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "estimateFee", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, Everscale.EstimateFeeRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.EstimateFeeRequest>.self)
             result = JsonRPCResponse<Everscale.EstimateFeeResponse>(id: content.id,
-                                                                    result: try await estimateFee(sdkClient.client, content.params)).toJson()
+                                                                    result: try await estimateFee(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "estimateFee", .queryParams)
             let content: Everscale.EstimateFeeRequest = try req.query.decode(Everscale.EstimateFeeRequest.self)
-            result = try await estimateFee(sdkClient.client, content).toJson()
+            result = try await estimateFee(sdkClient, content).toJson()
         }
         return try await encodeResponse(for: req, json: result)
     }
