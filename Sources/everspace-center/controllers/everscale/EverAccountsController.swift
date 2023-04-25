@@ -79,7 +79,6 @@ class EverAccountsController: RouteCollection {
     }
     
     func convertAddress(_ req: Request) async throws -> Response {
-        let sdkClient: TSDKClientModule = try await sdkClientActor.client(req, network)
         let result: String!
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "convertAddress", .jsonRpc)

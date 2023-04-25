@@ -99,7 +99,14 @@ final class MainController: RouteCollection {
             </ul>
             
             <h2 id="available-networks">Authorization</h2>
-            <p>For authorization you need to get an API-KEY here <a href="https://dashboard.evercloud.dev">https://dashboard.evercloud.dev</a> and add your key to the X-API-KEY request headers.</p>
+            <p>For authorization you need to get an API-KEY here <a href="https://dashboard.evercloud.dev">https://dashboard.evercloud.dev</a> and add your key to the <b>X-API-KEY</b> request headers.</p>
+        
+            <iframe width="650"
+                    height="780"
+                    frameborder="0"
+                    src="https://networkload.everscale.repl.co/">
+            </iframe>
+
             <footer>
                 <br>
                 <div class="footer">

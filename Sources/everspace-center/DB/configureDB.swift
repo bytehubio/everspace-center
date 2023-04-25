@@ -27,7 +27,7 @@ extension DatabaseIdentifier {
 func configureDataBase(_ app: Application) async throws {
     do {
         /// PostgreSQL config
-        app.bridges.logger.logLevel = .error
+        app.bridges.logger.logLevel = app.logger.logLevel
         app.postgres.register(.init(host: DatabaseHost.myDefaultHost))
         
         let postgreSQLBase: PostgreSQLBase = .init(app)
