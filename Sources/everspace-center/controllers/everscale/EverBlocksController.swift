@@ -141,8 +141,8 @@ extension EverBlocksController {
     }
     
     func getConfigParams(_ client: TSDKClientModule, _ content: BlockConfigRequest, _ req: Request) async throws -> BlockConfigResponse {
-        if content.number > 34 || content.number < 0 {
-            throw makeError(AppError.mess("Number out of range"))
+        if content.number > 100 || content.number < 0 {
+            throw makeError(AppError.mess("Number out of range, max 100"))
         }
         let queryResult = try await client.net.query(TSDKParamsOfQuery(query: "query{ blocks(filter: {workchain_id: {eq: -1}, key_block: {eq: true}}, limit: 1) {master{config_addr}}}"))
         guard let address = ((((queryResult.result.toDictionary()?["data"] as? [String: Any])?["blocks"] as? [Any])?.first as? [String: Any])?["master"] as? [String: Any])?["config_addr"] as? String
