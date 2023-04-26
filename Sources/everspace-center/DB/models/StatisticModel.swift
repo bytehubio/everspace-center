@@ -89,6 +89,7 @@ extension Statistic {
                 return try await statistic.insert(on: conn)
             } else {
                 statistic.count += 1
+                statistic.updatedAt = Date()
                 return try await statistic.upsert(conflictColumn: \Statistic.$id, on: conn)
             }
         }
