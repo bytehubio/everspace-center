@@ -26,6 +26,8 @@ actor SDKClientActor {
             return everVenomTestClient
         case TONCOIN_SDK_DOMAIN_ENV:
             return everToncoinClient
+        case TONCOIN_TESTNET_SDK_DOMAIN_ENV:
+            return everToncoinTestnetClient
         default:
             return try SDKClient.makeClient(apiKey: apiKey, network: network)
         }

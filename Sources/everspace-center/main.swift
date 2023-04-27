@@ -17,5 +17,6 @@ let everFLDClient: TSDKClientModule = try SDKClient.makeClient(apiKey: "b17a652d
 let everVenomClient: TSDKClientModule = try SDKClient.makeClient(apiKey: "b17a652df5d642a6aa6e9dae4601685a", network: VENOM_SDK_DOMAIN_ENV)
 let everVenomTestClient: TSDKClientModule = try SDKClient.makeClient(apiKey: "b17a652df5d642a6aa6e9dae4601685a", network: VENOM_TESTNET_SDK_DOMAIN_ENV)
 let everToncoinClient: TSDKClientModule = try SDKClient.makeClient(apiKey: "b17a652df5d642a6aa6e9dae4601685a", network: TONCOIN_SDK_DOMAIN_ENV)
+let everToncoinTestnetClient: TSDKClientModule = try SDKClient.makeClient(apiKey: "b17a652df5d642a6aa6e9dae4601685a", network: TONCOIN_TESTNET_SDK_DOMAIN_ENV)
 
 try app.run()

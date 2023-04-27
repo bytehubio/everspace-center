@@ -87,15 +87,7 @@ final class MainController: RouteCollection {
 
                 <div class="sep-top"></div>
                 <li><a href="\(Domain)/toncoin"><code>TON Mainnet</code></a></li>
-                <!-- <li><code>TON Testnet (soon)</code></li> -->
-                <!-- <div class="sep-top"></div>
-                <li><a href="\(Domain)/venom-testnet"><code>Venom Testnet</code></a></li>
-                <div class="sep-top"></div>
-
-                <li><a href="\(Domain)/everscale-n01-fld-dapp"><code>Everscale n01-fld-dapp</code></a></li>
-                <li><a href="\(Domain)/everscale-n02-fld-dapp"><code>Everscale n02-fld-dapp</code></a></li>
-                <li><a href="\(Domain)/everscale-n03-fld-dapp"><code>Everscale n03-fld-dapp</code></a></li>
-                <li><a href="\(Domain)/everscale-n04-fld-dapp"><code>Everscale n04-fld-dapp</code></a></li> -->
+                <li><a href="\(Domain)/toncoin-testnet"><code>TON Testnet</code></a></li>
             </ul>
             
             <h2 id="available-networks">Authorization</h2>

@@ -63,6 +63,15 @@ let tonRunGetMethodsController: EverRunGetMethodsController = .init(tonSwaggerCo
 let tonBlocksController: EverBlocksController = .init(tonSwaggerController, TONCOIN_SDK_DOMAIN_ENV)
 let tonJettonsController: TonJettonsController = .init(tonSwaggerController, TONCOIN_SDK_DOMAIN_ENV)
 
+let tonTestnetSwaggerController: ToncoinTestnetSwaggerController = .init("toncoin-testnet")
+let tonTestnetJsonRpcController: ToncoinTestnetJsonRpcController = .init()
+let tonTestnetTransactionsController: EverTransactionsController = .init(tonTestnetSwaggerController, TONCOIN_TESTNET_SDK_DOMAIN_ENV)
+let tonTestnetAccountsController: EverAccountsController = .init(tonTestnetSwaggerController, TONCOIN_TESTNET_SDK_DOMAIN_ENV)
+let tonTestnetSendController: EverSendController = .init(tonTestnetSwaggerController, TONCOIN_TESTNET_SDK_DOMAIN_ENV)
+let tonTestnetRunGetMethodsController: EverRunGetMethodsController = .init(tonTestnetSwaggerController, TONCOIN_TESTNET_SDK_DOMAIN_ENV)
+let tonTestnetBlocksController: EverBlocksController = .init(tonTestnetSwaggerController, TONCOIN_TESTNET_SDK_DOMAIN_ENV)
+let tonTestnetJettonsController: TonJettonsController = .init(tonTestnetSwaggerController, TONCOIN_TESTNET_SDK_DOMAIN_ENV)
+
 func routes(_ app: Application) throws {
 
     try app.group("") { group in
@@ -128,5 +137,16 @@ func routes(_ app: Application) throws {
         try group.register(collection: tonRunGetMethodsController)
         try group.register(collection: tonBlocksController)
         try group.register(collection: tonJettonsController)
+    }
+    
+    try app.group("toncoin-testnet") { group in
+        try group.register(collection: tonTestnetSwaggerController)
+        try group.register(collection: tonTestnetJsonRpcController)
+        try group.register(collection: tonTestnetTransactionsController)
+        try group.register(collection: tonTestnetAccountsController)
+        try group.register(collection: tonTestnetSendController)
+        try group.register(collection: tonTestnetRunGetMethodsController)
+        try group.register(collection: tonTestnetBlocksController)
+        try group.register(collection: tonTestnetJettonsController)
     }
 }
