@@ -23,7 +23,9 @@ actor SDKClientActor {
         case VENOM_SDK_DOMAIN_ENV:
             return everVenomClient
         case VENOM_TESTNET_SDK_DOMAIN_ENV:
-            return everVenomTestClient
+            return everVenomTestnetClient
+        case VENOM_DEVNET_SDK_DOMAIN_ENV:
+            return everVenomDevnetClient
         case TONCOIN_SDK_DOMAIN_ENV:
             return everToncoinClient
         case TONCOIN_TESTNET_SDK_DOMAIN_ENV:
