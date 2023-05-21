@@ -45,13 +45,21 @@ let venomRunGetMethodsController: EverRunGetMethodsController = .init(venomSwagg
 let venomBlocksController: EverBlocksController = .init(venomSwaggerController, VENOM_SDK_DOMAIN_ENV)
 
 
-let venomDevnetSwaggerController: VenomDevnetSwaggerController = .init("venom-testnet")
+let venomTestnetSwaggerController: VenomTestnetSwaggerController = .init("venom-testnet")
+let venomTestnetJsonRpcController: VenomTestnetJsonRpcController = .init()
+let venomTestnetTransactionsController: EverTransactionsController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
+let venomTestnetAccountsController: EverAccountsController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
+let venomTestnetSendController: EverSendController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
+let venomTestnetRunGetMethodsController: EverRunGetMethodsController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
+let venomTestnetBlocksController: EverBlocksController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
+
+let venomDevnetSwaggerController: VenomDevnetSwaggerController = .init("venom-devnet")
 let venomDevnetJsonRpcController: VenomDevnetJsonRpcController = .init()
-let venomDevnetTransactionsController: EverTransactionsController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
-let venomDevnetAccountsController: EverAccountsController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
-let venomDevnetSendController: EverSendController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
-let venomDevnetRunGetMethodsController: EverRunGetMethodsController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
-let venomDevnetBlocksController: EverBlocksController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
+let venomDevnetTransactionsController: EverTransactionsController = .init(venomDevnetSwaggerController, VENOM_DEVNET_SDK_DOMAIN_ENV)
+let venomDevnetAccountsController: EverAccountsController = .init(venomDevnetSwaggerController, VENOM_DEVNET_SDK_DOMAIN_ENV)
+let venomDevnetSendController: EverSendController = .init(venomDevnetSwaggerController, VENOM_DEVNET_SDK_DOMAIN_ENV)
+let venomDevnetRunGetMethodsController: EverRunGetMethodsController = .init(venomDevnetSwaggerController, VENOM_DEVNET_SDK_DOMAIN_ENV)
+let venomDevnetBlocksController: EverBlocksController = .init(venomDevnetSwaggerController, VENOM_DEVNET_SDK_DOMAIN_ENV)
 
 /// TONCOIN
 let tonSwaggerController: TonSwaggerController = .init("toncoin")
@@ -119,6 +127,16 @@ func routes(_ app: Application) throws {
     }
     
     try app.group("venom-testnet") { group in
+        try group.register(collection: venomTestnetSwaggerController)
+        try group.register(collection: venomTestnetJsonRpcController)
+        try group.register(collection: venomTestnetTransactionsController)
+        try group.register(collection: venomTestnetAccountsController)
+        try group.register(collection: venomTestnetSendController)
+        try group.register(collection: venomTestnetRunGetMethodsController)
+        try group.register(collection: venomTestnetBlocksController)
+    }
+    
+    try app.group("venom-devnet") { group in
         try group.register(collection: venomDevnetSwaggerController)
         try group.register(collection: venomDevnetJsonRpcController)
         try group.register(collection: venomDevnetTransactionsController)

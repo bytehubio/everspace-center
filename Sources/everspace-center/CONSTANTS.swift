@@ -26,8 +26,10 @@ let EVERSCALE_DEVNET_SDK_DOMAIN_ENV: String = "everscale_devnet"
 let EVERSCALE_RFLD_SDK_DOMAIN_ENV: String = "everscale_rfld"
 let VENOM_SDK_DOMAIN_ENV: String = "venom"
 let VENOM_TESTNET_SDK_DOMAIN_ENV: String = "venom_testnet"
+let VENOM_DEVNET_SDK_DOMAIN_ENV: String = "venom_devnet"
 let TONCOIN_SDK_DOMAIN_ENV: String = "toncoin_mainnet"
 let TONCOIN_TESTNET_SDK_DOMAIN_ENV: String = "toncoin_testnet"
+let TONCOIN_DEVNET_SDK_DOMAIN_ENV: String = "toncoin_devnet"
 
 var NETWORKS_SDK_DOMAINS: [String: String] = .init()
 
@@ -95,4 +97,7 @@ func getAllEnvConstants() throws {
     
     guard let variable_15 = Environment.get(TONCOIN_TESTNET_SDK_DOMAIN_ENV) else { fatalError("Set \(TONCOIN_TESTNET_SDK_DOMAIN_ENV) to .env.\(env)") }
     NETWORKS_SDK_DOMAINS[TONCOIN_TESTNET_SDK_DOMAIN_ENV] = variable_15
+    
+    guard let variable_16 = Environment.get(VENOM_DEVNET_SDK_DOMAIN_ENV) else { fatalError("Set \(VENOM_DEVNET_SDK_DOMAIN_ENV) to .env.\(env)") }
+    NETWORKS_SDK_DOMAINS[VENOM_DEVNET_SDK_DOMAIN_ENV] = variable_16
 }

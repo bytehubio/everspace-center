@@ -7,7 +7,8 @@
 
 import Foundation
 import EverscaleClientSwift
-import SwiftExtensionsPack
+import func SwiftExtensionsPack.makeError
+import class SwiftExtensionsPack.Net
 import Vapor
 
 extension Toncoin {

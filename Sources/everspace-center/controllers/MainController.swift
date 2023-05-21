@@ -84,6 +84,7 @@ final class MainController: RouteCollection {
                 <div class="sep-top"></div>
                 <li><a href="\(Domain)/venom"><code>VENOM Mainnet</code></a></li>
                 <li><a href="\(Domain)/venom-testnet"><code>VENOM Testnet</code></a></li>
+                <li><a href="\(Domain)/venom-devnet"><code>VENOM Devnet</code></a></li>
 
                 <div class="sep-top"></div>
                 <li><a href="\(Domain)/toncoin"><code>TON Mainnet</code></a></li>

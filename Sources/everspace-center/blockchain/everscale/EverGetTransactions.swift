@@ -8,7 +8,7 @@
 import Foundation
 import EverscaleClientSwift
 import BigInt
-import SwiftExtensionsPack
+import func SwiftExtensionsPack.makeError
 import Vapor
 
 extension Everscale {
