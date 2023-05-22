@@ -47,11 +47,11 @@ let venomBlocksController: EverBlocksController = .init(venomSwaggerController, 
 
 let venomTestnetSwaggerController: VenomTestnetSwaggerController = .init("venom-testnet")
 let venomTestnetJsonRpcController: VenomTestnetJsonRpcController = .init()
-let venomTestnetTransactionsController: EverTransactionsController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
-let venomTestnetAccountsController: EverAccountsController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
-let venomTestnetSendController: EverSendController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
-let venomTestnetRunGetMethodsController: EverRunGetMethodsController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
-let venomTestnetBlocksController: EverBlocksController = .init(venomDevnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
+let venomTestnetTransactionsController: EverTransactionsController = .init(venomTestnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
+let venomTestnetAccountsController: EverAccountsController = .init(venomTestnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
+let venomTestnetSendController: EverSendController = .init(venomTestnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
+let venomTestnetRunGetMethodsController: EverRunGetMethodsController = .init(venomTestnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
+let venomTestnetBlocksController: EverBlocksController = .init(venomTestnetSwaggerController, VENOM_TESTNET_SDK_DOMAIN_ENV)
 
 let venomDevnetSwaggerController: VenomDevnetSwaggerController = .init("venom-devnet")
 let venomDevnetJsonRpcController: VenomDevnetJsonRpcController = .init()

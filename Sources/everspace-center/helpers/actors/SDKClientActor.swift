@@ -13,6 +13,7 @@ actor SDKClientActor {
     private var _emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
 
     func client(_ apiKey: String?, _ network: String) throws -> TSDKClientModule {
+        #warning("ADD Enum")
         switch network {
         case EVERSCALE_SDK_DOMAIN_ENV:
             return everClient
