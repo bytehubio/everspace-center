@@ -97,7 +97,7 @@ final class MainController: RouteCollection {
             <iframe width="650"
                     height="795"
                     frameborder="0"
-                    src="https://networkload.everscale.repl.co/">
+                    src="https://ever-guild.github.io/network-load/widget.html">
             </iframe>
 
             <footer>
