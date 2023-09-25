@@ -36,7 +36,7 @@ class EverAccountsController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getAccount", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, GetAccountRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetAccountRequest>.self)
-            result = JsonRPCResponse<Everscale.Account>(id: content.id,
+            result = try JsonRPCResponse<Everscale.Account>(id: content.id,
                                                         result: try await getAccount(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getAccount", .queryParams)
@@ -52,7 +52,7 @@ class EverAccountsController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getAccounts", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, GetAccountsRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetAccountsRequest>.self)
-            result = JsonRPCResponse<[Everscale.Account]>(id: content.id,
+            result = try JsonRPCResponse<[Everscale.Account]>(id: content.id,
                                                           result: try await getAccounts(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getAccounts", .queryParams)
@@ -68,7 +68,7 @@ class EverAccountsController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBalance", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, GetAccountRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetAccountRequest>.self)
-            result = JsonRPCResponse<Everscale.AccountBalance>(id: content.id,
+            result = try JsonRPCResponse<Everscale.AccountBalance>(id: content.id,
                                                                result: try await getBalance(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBalance", .queryParams)
@@ -83,7 +83,7 @@ class EverAccountsController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "convertAddress", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, GetAccountRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetAccountRequest>.self)
-            result = JsonRPCResponse<ConvertAccountResponse>(id: content.id,
+            result = try JsonRPCResponse<ConvertAccountResponse>(id: content.id,
                                                              result: try await convertAddress(sdkClientActor.emptyClient(), content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "convertAddress", .queryParams)

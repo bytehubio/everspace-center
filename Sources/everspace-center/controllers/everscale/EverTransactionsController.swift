@@ -34,7 +34,7 @@ class EverTransactionsController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getTransactions", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, GetTransactionsRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetTransactionsRequest>.self)
-            result = JsonRPCResponse<[Everscale.TransactionHistoryModel]>(id: content.id,
+            result = try JsonRPCResponse<[Everscale.TransactionHistoryModel]>(id: content.id,
                                                                           result: try await getTransactions(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getTransactions", .queryParams)
@@ -50,7 +50,7 @@ class EverTransactionsController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getTransaction", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, GetTransactionRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, GetTransactionRequest>.self)
-            result = JsonRPCResponse<Everscale.ExtendedTransactionHistoryModel>(id: content.id,
+            result = try JsonRPCResponse<Everscale.ExtendedTransactionHistoryModel>(id: content.id,
                                                                                 result: try await getTransaction(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getTransaction", .queryParams)
@@ -66,7 +66,7 @@ class EverTransactionsController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBlocksTransactions", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, Everscale.BlocksTransactionsRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.BlocksTransactionsRequest>.self)
-            result = JsonRPCResponse<[BlocksTransactionsResponse]>(id: content.id,
+            result = try JsonRPCResponse<[BlocksTransactionsResponse]>(id: content.id,
                                                                    result: try await getBlocksTransactions(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBlocksTransactions", .queryParams)

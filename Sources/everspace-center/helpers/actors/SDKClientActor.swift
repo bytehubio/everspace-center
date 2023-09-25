@@ -13,28 +13,28 @@ actor SDKClientActor {
     private var _emptyClient: TSDKClientModule = SDKClient.makeEmptyClient()
 
     func client(_ apiKey: String?, _ network: String) throws -> TSDKClientModule {
-        #warning("ADD Enum")
-        switch network {
-        case EVERSCALE_SDK_DOMAIN_ENV:
-            return everClient
-        case EVERSCALE_DEVNET_SDK_DOMAIN_ENV:
-            return everDevClient
-        case EVERSCALE_RFLD_SDK_DOMAIN_ENV:
-            return everFLDClient
-        case VENOM_SDK_DOMAIN_ENV:
-            return everVenomClient
-        case VENOM_TESTNET_SDK_DOMAIN_ENV:
-            return everVenomTestnetClient
-        case VENOM_DEVNET_SDK_DOMAIN_ENV:
-            return everVenomDevnetClient
-        case TONCOIN_SDK_DOMAIN_ENV:
-            return everToncoinClient
-        case TONCOIN_TESTNET_SDK_DOMAIN_ENV:
-            return everToncoinTestnetClient
-        default:
-            return try SDKClient.makeClient(apiKey: apiKey, network: network)
-        }
-//        return try SDKClient.makeClient(apiKey: apiKey, network: network)
+        #warning("DELETE SWITCH IF NOT MEMORY LEAKS")
+//        switch network {
+//        case EVERSCALE_SDK_DOMAIN_ENV:
+//            return everClient
+//        case EVERSCALE_DEVNET_SDK_DOMAIN_ENV:
+//            return everDevClient
+//        case EVERSCALE_RFLD_SDK_DOMAIN_ENV:
+//            return everFLDClient
+//        case VENOM_SDK_DOMAIN_ENV:
+//            return everVenomClient
+//        case VENOM_TESTNET_SDK_DOMAIN_ENV:
+//            return everVenomTestnetClient
+//        case VENOM_DEVNET_SDK_DOMAIN_ENV:
+//            return everVenomDevnetClient
+//        case TONCOIN_SDK_DOMAIN_ENV:
+//            return everToncoinClient
+//        case TONCOIN_TESTNET_SDK_DOMAIN_ENV:
+//            return everToncoinTestnetClient
+//        default:
+//            return try SDKClient.makeClient(apiKey: apiKey, network: network)
+//        }
+        return try SDKClient.makeClient(apiKey: apiKey, network: network)
     }
     
     func client(_ req: Request, _ network: String) async throws -> TSDKClientModule {

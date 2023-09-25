@@ -38,7 +38,7 @@ class EverBlocksController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getConfigParams", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, BlockConfigRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, BlockConfigRequest>.self)
-            result = JsonRPCResponse<BlockConfigResponse>(id: content.id,
+            result = try JsonRPCResponse<BlockConfigResponse>(id: content.id,
                                                           result: try await getConfigParams(sdkClient, content.params, req)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getConfigParams", .queryParams)
@@ -54,7 +54,7 @@ class EverBlocksController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getLastMasterBlock", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, [String: String]> = try req.content.decode(JsonRPCRequest<EverRPCMethods, [String: String]>.self)
-            result = JsonRPCResponse<Everscale.LastMasterBlockResponse>(id: content.id,
+            result = try JsonRPCResponse<Everscale.LastMasterBlockResponse>(id: content.id,
                                                                         result: try await getLastMasterBlock(sdkClient)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getLastMasterBlock", .queryParams)
@@ -69,7 +69,7 @@ class EverBlocksController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBlock", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest>.self)
-            result = JsonRPCResponse<Everscale.BlockResponse>(id: content.id,
+            result = try JsonRPCResponse<Everscale.BlockResponse>(id: content.id,
                                                               result: try await getBlock(sdkClient, content: content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBlock", .queryParams)
@@ -85,7 +85,7 @@ class EverBlocksController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getRawBlock", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.GetBlockRequest>.self)
-            result = JsonRPCResponse<Everscale.RawBlockResponse>(id: content.id,
+            result = try JsonRPCResponse<Everscale.RawBlockResponse>(id: content.id,
                                                                  result: try await getRawBlock(sdkClient, content: content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getRawBlock", .queryParams)
@@ -101,7 +101,7 @@ class EverBlocksController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "lookupBlock", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, Everscale.LookupBlockRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.LookupBlockRequest>.self)
-            result = JsonRPCResponse<Everscale.LookupBlockResponse>(id: content.id,
+            result = try JsonRPCResponse<Everscale.LookupBlockResponse>(id: content.id,
                                                                     result: try await lookupBlock(sdkClient, content: content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "lookupBlock", .queryParams)
@@ -117,7 +117,7 @@ class EverBlocksController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBlockByTime", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, Everscale.BlockByTimeRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.BlockByTimeRequest>.self)
-            result = JsonRPCResponse<Everscale.BlockByTimeResponse>(id: content.id,
+            result = try JsonRPCResponse<Everscale.BlockByTimeResponse>(id: content.id,
                                                                     result: try await getBlockByTime(sdkClient, content: content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getBlockByTime", .queryParams)

@@ -32,7 +32,7 @@ class TonJettonsController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getJettonInfo", .jsonRpc)
             let content: JsonRPCRequest<TonRPCMethods, JettonInfoRequest> = try req.content.decode(JsonRPCRequest<TonRPCMethods, JettonInfoRequest>.self)
-            result = JsonRPCResponse<Toncoin.ToncoinJettonInfo>(id: content.id,
+            result = try JsonRPCResponse<Toncoin.ToncoinJettonInfo>(id: content.id,
                                                                 result: try await getJettonInfo(sdkClient, sdkClientActor.emptyClient(), content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "getJettonInfo", .queryParams)

@@ -35,7 +35,7 @@ class EverSendController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendExternalMessage", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest>.self)
-            result = JsonRPCResponse<Everscale.SendExternalMessage>(id: content.id,
+            result = try JsonRPCResponse<Everscale.SendExternalMessage>(id: content.id,
                                                                     result: try await sendExternalMessage(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendExternalMessage", .queryParams)
@@ -51,7 +51,7 @@ class EverSendController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "waitForTransaction", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, WaitForTransactionRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, WaitForTransactionRequest>.self)
-            result = JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
+            result = try JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
                                                                  result: try await waitForTransaction(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "waitForTransaction", .queryParams)
@@ -67,7 +67,7 @@ class EverSendController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendAndWaitTransaction", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, SendExternalMessageRequest>.self)
-            result = JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
+            result = try JsonRPCResponse<TSDKResultOfProcessMessage>(id: content.id,
                                                                  result: try await sendAndWaitTransaction(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "sendAndWaitTransaction", .queryParams)
@@ -83,7 +83,7 @@ class EverSendController: RouteCollection {
         if req.url.string.contains("jsonRpc") {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "estimateFee", .jsonRpc)
             let content: JsonRPCRequest<EverRPCMethods, Everscale.EstimateFeeRequest> = try req.content.decode(JsonRPCRequest<EverRPCMethods, Everscale.EstimateFeeRequest>.self)
-            result = JsonRPCResponse<Everscale.EstimateFeeResponse>(id: content.id,
+            result = try JsonRPCResponse<Everscale.EstimateFeeResponse>(id: content.id,
                                                                     result: try await estimateFee(sdkClient, content.params)).toJson()
         } else {
             Stat.methodUse(req.headers[API_KEY_NAME].first, network, "estimateFee", .queryParams)

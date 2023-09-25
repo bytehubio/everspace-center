@@ -33,7 +33,7 @@ extension Toncoin {
         /// (total_supply, -1, admin_address, content, jetton_wallet_code)
         let contentPosition: Int = 3
         guard
-            let arr = walletInfoResult.toJson()?.toDictionary()?["output"] as? [Any],
+            let arr = try walletInfoResult.toJson().toDictionary()?["output"] as? [Any],
             arr.count >= contentPosition + 1,
             let boc = (arr[contentPosition] as? [String: Any])?["value"] as? String
         else {
@@ -45,7 +45,7 @@ extension Toncoin {
                 .init(name: "tag", type: "uint8")
             ], boc: boc, allow_partial: true))
         guard
-            let tag = (tagResult.toJson()!.toDictionary()?["data"] as? [String: Any])?["tag"] as? String
+            let tag = (try tagResult.toJson().toDictionary()?["data"] as? [String: Any])?["tag"] as? String
         else {
             throw makeError(TSDKClientError("Jetton tag not found"))
         }
@@ -59,7 +59,7 @@ extension Toncoin {
             ], boc: boc, allow_partial: true)
             let result: TSDKResultOfDecodeBoc = try await client.abi.decode_boc(params)
             guard
-                let metaData = ((result.toJson()!.toDictionary()?["data"] as? [String: Any])?["data"] as? [String: Any])
+                let metaData = ((try result.toJson().toDictionary()?["data"] as? [String: Any])?["data"] as? [String: Any])
             else {
                 throw makeError(TSDKClientError("Jetton meta data not found"))
             }
@@ -73,7 +73,7 @@ extension Toncoin {
                     ], boc: newBoc, allow_partial: true))
                 
                 if
-                    let decimalsString = (result.toJson()?.toDictionary()?["data"] as? [String: Any])?["someName"] as? String,
+                    let decimalsString = (try result.toJson().toDictionary()?["data"] as? [String: Any])?["someName"] as? String,
                     let decimals = Int(try catFirstBytes(badString: decimalsString, bytesCount: 1))
                 {
                     jettonInfo = .init(decimals: decimals)
@@ -87,7 +87,7 @@ extension Toncoin {
                     .init(params: [
                         .init(name: "someName", type: "string")
                     ], boc: newBoc, allow_partial: true))
-                if let name = (result.toJson()?.toDictionary()?["data"] as? [String: Any])?["someName"] as? String {
+                if let name = (try result.toJson().toDictionary()?["data"] as? [String: Any])?["someName"] as? String {
                     jettonInfo.name = try catFirstBytes(badString: name, bytesCount: 1)
                 }
             }
@@ -100,7 +100,7 @@ extension Toncoin {
                         .init(name: "someName", type: "string")
                     ], boc: newBoc, allow_partial: true))
                 
-                if let symbol = (result.toJson()?.toDictionary()?["data"] as? [String: Any])?["someName"] as? String {
+                if let symbol = (try result.toJson().toDictionary()?["data"] as? [String: Any])?["someName"] as? String {
                     jettonInfo.symbol = try catFirstBytes(badString: symbol, bytesCount: 1)
                 }
             }
@@ -113,7 +113,7 @@ extension Toncoin {
                         .init(name: "someName", type: "string")
                     ], boc: newBoc, allow_partial: true))
                 
-                if let image = (result.toJson()?.toDictionary()?["data"] as? [String: Any])?["someName"] as? String {
+                if let image = (try result.toJson().toDictionary()?["data"] as? [String: Any])?["someName"] as? String {
                     jettonInfo.image = try catFirstBytes(badString: image, bytesCount: 1)
                 }
             }
@@ -127,7 +127,7 @@ extension Toncoin {
                 ], boc: newBoc, allow_partial: true))
             
             guard
-                let value = (result.toJson()!.toDictionary()?["data"] as? [String: Any])?["someName"] as? String
+                let value = (try result.toJson().toDictionary()?["data"] as? [String: Any])?["someName"] as? String
             else {
                 throw makeError(TSDKClientError("Jetton URL not found"))
             }

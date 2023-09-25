@@ -55,7 +55,7 @@ public func resultWrapperToModel<T, T2: Decodable, T3: ErrorCommonMessage>(_ res
     if let error = response.error {
         try? function(.failure(makeError(error, funcName, line)))
     } else if let result = response.result {
-        if let model = result.toJson()?.toModel(T2.self) {
+        if let model = try result.toJson().toModel(T2.self) {
             try function(.success(model))
         } else {
             try function(.failure(makeError(T3.mess("\(#function) line: \(#line) Can not decode model"))))
@@ -76,7 +76,7 @@ public func resultWrapperToModel<T, T2, T3: Decodable, T4: ErrorCommonMessage>(_
     if let error = response.error {
         try? function(.failure(makeError(error, funcName, line)))
     } else if let result = response.result {
-        if let model = result.toJson()?.toModel(T3.self) {
+        if let model = try result.toJson().toModel(T3.self) {
             try handler(model, function)
         } else {
             try function(.failure(makeError(T4.mess("\(#function) line: \(#line) Can not decode model"))))

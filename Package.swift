@@ -1,4 +1,4 @@
-// swift-tools-version:5.8
+// swift-tools-version:5.9
 
 import PackageDescription
 
@@ -35,7 +35,7 @@ packageDependencies.append(.package(url: "https://github.com/nerzh/Swiftgger", b
 packageDependencies.append(.package(url: "https://github.com/nerzh/swift-extensions-pack", branch: "master"))
 packageDependencies.append(.package(url: "https://github.com/nerzh/everscale-client-swift", branch: "master"))
 #else
-packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/Swiftgger"))
+packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/test/Swiftgger"))
 packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/swift-extensions-pack"))
 packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/everscale-client-swift"))
 #endif
@@ -43,8 +43,7 @@ packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/ev
 let package = Package(
     name: name,
     platforms: [
-        .macOS(.v12),
-        .iOS(.v11)
+        .macOS(.v13)
     ],
     products: [
         .executable(name: name, targets: [name])
@@ -53,10 +52,8 @@ let package = Package(
     targets: [
         .executableTarget(
             name: name,
-            dependencies: mainTarget,
-            swiftSettings: [
-                .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
-            ]),
+            dependencies: mainTarget
+        ),
     ]
 )
 
