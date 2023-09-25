@@ -147,23 +147,22 @@ extension EverTransactionsController {
     }
     
     
-    //    blockchain {
-    //      blocks(master_seq_no_range: {start: \(content.seq_no), end: \(content.seq_no + 1)}) {
-    //        edges {
-    //          node {
-    //            id
-    //            workchain_id
-    //            shard
-    //            account_blocks {
-    //              transactions {
-    //                transaction_id
-    //              }
-    //            }
-    //          }
-    //        }
-    //      }
-    //    }
-    
+    ///    blockchain {
+    ///      blocks(master_seq_no_range: {start: \(content.seq_no), end: \(content.seq_no + 1)}) {
+    ///        edges {
+    ///          node {
+    ///            id
+    ///            workchain_id
+    ///            shard
+    ///            account_blocks {
+    ///              transactions {
+    ///                transaction_id
+    ///              }
+    ///            }
+    ///          }
+    ///        }
+    ///      }
+    ///    }
     func getBlocksTransactions(_ client: TSDKClientModule,
                                _ content: Everscale.BlocksTransactionsRequest
     ) async throws -> [BlocksTransactionsResponse] {
