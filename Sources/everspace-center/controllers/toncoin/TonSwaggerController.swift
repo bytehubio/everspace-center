@@ -25,7 +25,7 @@ final class TonSwaggerController: RouteCollection, SwaggerControllerPrtcl {
                 "id": "1",\n
                 "jsonrpc": "2.0",\n
                 "method": "getTransactions",\n
-                "params" {\n
+                "params": {\n
                     "address": "...",\n
                     "limit": 1,\n
                     "lt": "...",\n
