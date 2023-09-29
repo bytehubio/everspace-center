@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 current_file_path = File.expand_path(File.dirname(__FILE__))
-ssh_key_name = "everspace.center"
+ssh_key_name = "tvm.center"
 system("swift package resolve")
 #system("swift package update")
 system("swift build -c debug")
