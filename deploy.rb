@@ -10,7 +10,5 @@ system("swift build -c release -Xswiftc -Ounchecked -Xswiftc -whole-module-optim
 system("cd #{current_file_path}/get_congig_params && npm install")
 system("sudo pkill -9 -f #{ssh_key_name}")
 # system("/home/devton/swift/#{name}/.build/release/#{name} --env production > /home/devton/swift/#{name}/log.txt 2>&1 &")
-system("sudo supervisorctl stop #{ssh_key_name}-app")
-sleep 1
-system("sudo supervisorctl start #{ssh_key_name}-app")
+system("sudo supervisorctl restart #{ssh_key_name}-app")
 system("sudo supervisorctl status")
