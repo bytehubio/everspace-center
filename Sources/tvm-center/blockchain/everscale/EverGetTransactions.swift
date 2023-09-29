@@ -192,16 +192,16 @@ extension Everscale {
         let defaultLimit: UInt32 = 50
         do {
             var query: String = .init()
-            if let cursor = cursor {
-                query = """
+            query = """
 query {
     blockchain {
         account(
             address: "\(address.everAddrLowercased)"
         ) {
             transactions(
+                \(cursor.isNil ? "" : "before: \"\(cursor!)\",")
                 last: \(limit ?? defaultLimit),
-                before: "\(cursor)"
+                archive: true
             ) {
                 pageInfo {
                     startCursor
@@ -210,41 +210,21 @@ query {
                 edges {
                     cursor
                     node {
+                        id
                         hash
+                        account_addr
+                        balance_delta(format: DEC)
+                        in_message{ id hash value(format: DEC) src body}
+                        out_messages{ id hash dst value(format: DEC) body}
+                        now
+                        lt
                     }
                 }
             }
         }
     }
 }
-"""
-            } else {
-                query = """
-query {
-    blockchain {
-        account(
-            address: "\(address.everAddrLowercased)"
-        ) {
-            transactions(
-                last: \(limit ?? defaultLimit)
-            ) {
-                pageInfo {
-                    startCursor
-                    endCursor
-                },
-                edges {
-                    cursor
-                    node {
-                        hash
-                    }
-                }
-            }
-        }
-    }
-}
-"""
-            }
-            
+"""            
             let paramsOfQuery: TSDKParamsOfQuery = .init(query: query, variables: nil)
             try client.net.query(paramsOfQuery) { response in
                 if response.finished {
