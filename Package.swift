@@ -3,7 +3,7 @@
 import PackageDescription
 
 /// Rename this name + Root Folder + Target Folder inside Source
-let name: String = "everspace-center"
+let name: String = "tvm-center"
 
 var packageDependencies: [Package.Dependency] = [
     .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "4.45.0")),

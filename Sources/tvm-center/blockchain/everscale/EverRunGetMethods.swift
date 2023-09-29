@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Oleh Hudeichuk on 27.03.2023.
 //
@@ -37,11 +37,11 @@ extension Everscale {
                                 params: [AnyValue]? = nil
     ) async throws -> RunGetMethodFiftResponse {
         let address: String = try await Everscale.tonConvertAddrToEverFormat(emptyClient, address.everAddrLowercased)
-        let response = try await everspace_center.runGetMethodFift(client: client,
-                                                                   emptyClient: emptyClient,
-                                                                   addr: address,
-                                                                   method: method,
-                                                                   params: params?.map { $0.toAny() as Any })
+        let response = try await tvm_center.runGetMethodFift(client: client,
+                                                             emptyClient: emptyClient,
+                                                             addr: address,
+                                                             method: method,
+                                                             params: params?.map { $0.toAny() as Any })
         return .init(result: response.output.toJSON())
     }
     
@@ -56,12 +56,12 @@ extension Everscale {
         guard let methodParams = jsonParams?.toDictionary() else {
             throw makeError(AppError.mess("Bad json params. Convert params to dictionary failed"))
         }
-        let response = try await everspace_center.runGetMethodAbi(client: client,
-                                                                  emptyClient: emptyClient,
-                                                                  addr: address,
-                                                                  method: method,
-                                                                  params: methodParams,
-                                                                  abi: abi)
+        let response = try await tvm_center.runGetMethodAbi(client: client,
+                                                            emptyClient: emptyClient,
+                                                            addr: address,
+                                                            method: method,
+                                                            params: methodParams,
+                                                            abi: abi)
         return .init(result: response)
     }
 }

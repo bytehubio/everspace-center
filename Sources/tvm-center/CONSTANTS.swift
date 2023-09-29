@@ -9,7 +9,7 @@ import Foundation
 import Vapor
 
 
-var Domain: String = "https://everspace.center"
+var Domain: String = "https://tvm.center"
 var VAPOR_PORT: Int!
 var VAPOR_IP: String!
 var TONCOIN_JETTON_IPFS: String = ""

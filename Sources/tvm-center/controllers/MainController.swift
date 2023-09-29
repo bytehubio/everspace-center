@@ -32,7 +32,7 @@ final class MainController: RouteCollection {
             <meta charset="UTF-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Everspace Center. Everscale API. Toncoin API. Venom API.</title>
+            <title>TVM Center. Everscale API. Toncoin API. Venom API. GOSH API</title>
             <!-- Google tag (gtag.js) -->
             <script async src="https://www.googletagmanager.com/gtag/js?id=G-BQS5FC2ZLJ"></script>
             <script>
@@ -71,7 +71,7 @@ final class MainController: RouteCollection {
         </head>
 
         <body>
-            <h1 id="everspace-center-api" style="text-align: center;">Everspace Center API</h1>
+            <h1 id="everspace-center-api" style="text-align: center;">TVM Center API</h1>
 
             <p>Welcome! We provide access to HTTP API for TVM compatible blockchains.</p>
 
@@ -104,7 +104,7 @@ final class MainController: RouteCollection {
                 <br>
                 <div class="footer">
                     <p>Made on Apple Swift with ❤️ by <a href="https://everspace.app/" target="_blank">Everspace Wallet Team</a></p>
-                    <p><a href="https://t.me/everspace_center">Support</a> | <a href="mailto:admin@bytehub.io">E-mail</a></p>
+                    <p><a href="https://t.me/tvmcenter">Support</a> | <a href="mailto:admin@bytehub.io">E-mail</a></p>
                 </div>
             </footer>
 

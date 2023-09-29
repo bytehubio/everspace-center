@@ -8,5 +8,5 @@ system("swift build -c debug")
 system("cd #{current_file_path}/get_congig_params && npm install")
 system("pkill -9 -f #{ssh_key_name}")
 # system("sudo supervisorctl stop #{ssh_key_name}-app")
-system("/home/devton/swift/#{ssh_key_name}/.build/debug/everspace-center --env production")
+system("/home/devton/swift/#{ssh_key_name}/.build/debug/tvm-center --env production")
 

@@ -9,17 +9,17 @@ import Foundation
 import Vapor
 import Swiftgger
 
-final class VenomDevnetSwaggerController: RouteCollection, SwaggerControllerPrtcl {
+final class RfldSwaggerController: RouteCollection, SwaggerControllerPrtcl {
     
     var route: String
     let openAPIBuilder: OpenAPIBuilder = .init(
-        title: "VENOM DEVNET API",
+        title: "EVERSCALE RFLD DEVNET API",
         version: "1.0.0",
         description: """
         [ALL TVM BLOCKCHAIN'S API](\(Domain))\n\n\n
         **Authorization information is on the main page**\n\n\n
         You can use JSON RPC requests:\n
-            \(Domain)/venom-devnet/jsonRpc\n\n
+            \(Domain)/everscale-rfld/jsonRpc\n\n
         Example request:\n
             {\n
                 "id": "1",\n
@@ -33,7 +33,7 @@ final class VenomDevnetSwaggerController: RouteCollection, SwaggerControllerPrtc
                     "hash": "..."\n
                 }\n
             }\n\n
-        **Contact:** [Telegram TVM API Support](https://t.me/everspace_center)\n
+        **Contact:** [Telegram TVM API Support](https://t.me/tvmcenter)\n
         """,
     //            termsOfService: "http://example.com/terms/",
         contact: APIContact(name: "Mail", email: "admin@bytehub.io", url: URL(string: "https://github.com/nerzh")),
@@ -69,7 +69,7 @@ final class VenomDevnetSwaggerController: RouteCollection, SwaggerControllerPrtc
             <div id="swagger-ui"></div>
             <script src="/js/swagger/swagger-ui-bundle.js" charset="UTF-8"> </script>
             <script src="/js/swagger/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-            <script src="/js/swagger/swagger-initializer-venom-devnet.js" charset="UTF-8"> </script>
+            <script src="/js/swagger/swagger-initializer-everscale-rfld.js" charset="UTF-8"> </script>
           </body>
         </html>
         """

@@ -9,17 +9,17 @@ import Foundation
 import Vapor
 import Swiftgger
 
-final class VenomSwaggerController: RouteCollection, SwaggerControllerPrtcl {
+final class EverSwaggerController: RouteCollection, SwaggerControllerPrtcl {
     
     var route: String
     let openAPIBuilder: OpenAPIBuilder = .init(
-        title: "VENOM MAINNET API",
+        title: "EVERSCALE API",
         version: "1.0.0",
         description: """
         [ALL TVM BLOCKCHAIN'S API](\(Domain))\n\n\n
         **Authorization information is on the main page**\n\n\n
         You can use JSON RPC requests:\n
-            \(Domain)/venom/jsonRpc\n\n
+            \(Domain)/everscale/jsonRpc\n\n
         Example request:\n
             {\n
                 "id": "1",\n
@@ -33,12 +33,15 @@ final class VenomSwaggerController: RouteCollection, SwaggerControllerPrtcl {
                     "hash": "..."\n
                 }\n
             }\n\n
-        **Contact:** [Telegram TVM API Support](https://t.me/everspace_center)\n
+        **Contact:** [Telegram TVM API Support](https://t.me/tvmcenter)\n
         """,
     //            termsOfService: "http://example.com/terms/",
         contact: APIContact(name: "Mail", email: "admin@bytehub.io", url: URL(string: "https://github.com/nerzh")),
     //            license: APILicense(name: "MIT", url: URL(string: "http://mit.license")),
         authorizations: [
+            .apiKey(description: "b17a652df5d642a6aa6e9dae4601685a"),
+//            .basic(description: "BASIC"),
+//            .jwt(description: "JWT")
     //        .jwt(description: "You can get token from *sign-in* action from *Account* controller.")
         ]
     )
@@ -69,7 +72,7 @@ final class VenomSwaggerController: RouteCollection, SwaggerControllerPrtcl {
             <div id="swagger-ui"></div>
             <script src="/js/swagger/swagger-ui-bundle.js" charset="UTF-8"> </script>
             <script src="/js/swagger/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-            <script src="/js/swagger/swagger-initializer-venom.js" charset="UTF-8"> </script>
+            <script src="/js/swagger/swagger-initializer-everscale.js" charset="UTF-8"> </script>
           </body>
         </html>
         """
