@@ -227,7 +227,7 @@ else
     sudo rm ${LINUX_LIB_INCLUDE_DIR}/include/tonclient.h
     echo "OK: ${LINUX_LIB_INCLUDE_DIR}/include/tonclient.h old symlink already deleted and will create new"
   fi
-  sudo ln -s $HEADER ${LINUX_LIB_INCLUDE_DIR}/include/tonclient.h || echo "ERROR: symbolic link tonclient.h already exist"
+  sudo cp $HEADER ${LINUX_LIB_INCLUDE_DIR}/include/tonclient.h || echo "ERROR: symbolic link tonclient.h already exist"
 
   DYLIB="$(pwd)/target/release/libton_client.so"
   echo ""
@@ -236,7 +236,7 @@ else
     sudo rm ${LINUX_LIB_INCLUDE_DIR}/lib/libton_client.so
     echo "OK: ${LINUX_LIB_INCLUDE_DIR}/lib/libton_client.so old symlink already deleted and will create new"
   fi
-  sudo ln -s $DYLIB ${LINUX_LIB_INCLUDE_DIR}/lib/libton_client.so || echo "ERROR: symbolic link libton_client.so already exist"
+  sudo cp $DYLIB ${LINUX_LIB_INCLUDE_DIR}/lib/libton_client.so || echo "ERROR: symbolic link libton_client.so already exist"
 
   
   echo "$LINUX_PKG_CONFIG" >> libton_client.pc
@@ -244,7 +244,7 @@ else
 fi
 
 
-
+rm -rf ./Dependencies
 echo $'\nINSTALLATION TON-SDK COMPLETE'
 
 
