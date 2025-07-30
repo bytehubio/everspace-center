@@ -37,7 +37,8 @@ packageDependencies.append(.package(url: "https://github.com/nerzh/swift-extensi
 packageDependencies.append(.package(url: "https://github.com/nerzh/everscale-client-swift", .upToNextMajor(from: "1.12.0")))
 #else
 packageDependencies.append(.package(path: "/Users/nerzh/Documents/mydata/code/swift_projects/test/Swiftgger"))
-packageDependencies.append(.package(path: "/Users/nerzh/Documents/mydata/code/swift_projects/swift-extensions-pack"))
+//packageDependencies.append(.package(path: "/Users/nerzh/Documents/mydata/code/swift_projects/swift-extensions-pack"))
+packageDependencies.append(.package(url: "https://github.com/nerzh/swift-extensions-pack", exact: "1.26.0"))
 packageDependencies.append(.package(path: "/Users/nerzh/Documents/mydata/code/swift_projects/everscale-client-swift"))
 #endif
 

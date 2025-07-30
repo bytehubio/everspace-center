@@ -18,6 +18,6 @@ func migrateDB(app: Application) async throws {
         try await app.autoMigrate()
     } catch {
         print(String(reflecting: error))
-        throw AppError(error, errorLevel: .debug)
+        throw AppError(error)
     }
 }
