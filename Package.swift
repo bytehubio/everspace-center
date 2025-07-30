@@ -13,6 +13,7 @@ var packageDependencies: [Package.Dependency] = [
     .package(url: "https://github.com/nerzh/SwiftFileUtils", .upToNextMinor(from: "1.3.0")),
     .package(url: "https://github.com/orlandos-nl/IkigaJSON.git", from: "2.0.0"),
     .package(url: "https://github.com/bytehubio/BigInt.git", exact: "5.3.0"),
+    .package(url: "https://github.com/vapor/postgres-nio", exact: "1.25.0"),
 ]
 
 var mainTarget: [Target.Dependency] = [
@@ -27,6 +28,7 @@ var mainTarget: [Target.Dependency] = [
     .product(name: "EverscaleClientSwift", package: "everscale-client-swift"),
     .product(name: "SwiftExtensionsPack", package: "swift-extensions-pack"),
     .product(name: "Swiftgger", package: "Swiftgger"),
+    .product(name: "PostgresNIO", package: "postgres-nio"),
 ]
 
 #if os(Linux)
