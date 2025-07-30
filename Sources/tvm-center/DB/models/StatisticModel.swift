@@ -104,7 +104,7 @@ extension Statistic {
         query.appendInterpolation(unsafeRaw: "count = statistic.count + EXCLUDED.count, ")
         query.appendInterpolation(unsafeRaw: "updated_at = now();")
         
-        guard let sqlDataBase = db as? SQLDatabase else { throw AdvageError("Not custing SQLDatabase") }
+        guard let sqlDataBase = db as? SQLDatabase else { throw AppError("Not custing SQLDatabase") }
         try await sqlDataBase.raw(query).run()
     }
 }
