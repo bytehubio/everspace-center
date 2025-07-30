@@ -18,7 +18,14 @@ actor ActorStat: GlobalActor {
     ) async {
         if let apiKey = apiKey {
             do {
-                try await Statistic.updateOrCreate(apiKey, network, method, apiType)
+                Task {
+                    do {
+                        try await Statistic.updateOrCreate(apiKey: apiKey, network: network, method: method, apiType: apiType, db: app.db)
+                    } catch {
+                        
+                    }
+                }
+//                try await Statistic.updateOrCreate(apiKey: apiKey, network: network, method: method, apiType: apiType, db: app.db)
             } catch {
                 app.logger.warning("\(Self.self) \(#file) \(error.localizedDescription)")
             }
