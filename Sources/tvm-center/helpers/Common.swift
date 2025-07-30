@@ -9,6 +9,15 @@ import Foundation
 import Vapor
 //import SwiftExtensionsPack
 
+func baseDateFormater() -> DateFormatter {
+    let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(identifier: "UTC")
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.dateFormat = "yyyy-MM-dd"
+    return formatter
+}
+
+
 var pathToRootDirectory: String {
     /// Please, set custom working directory to project folder for your xcode scheme. This is necessary for the relative path "./" to the project folders to work.
     /// You may change it with the xcode edit scheme menu.

@@ -7,9 +7,8 @@ let name: String = "tvm-center"
 
 var packageDependencies: [Package.Dependency] = [
     .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "4.45.0")),
-    .package(url: "https://github.com/nerzh/VaporBridges.git", branch: "master"),
-    .package(url: "https://github.com/nerzh/PostgresBridge.git", branch: "master"),
-    .package(url: "https://github.com/nerzh/Bridges.git", branch: "master"),
+    .package(url: "https://github.com/vapor/fluent", from: "4.0.0"),
+    .package(url: "https://github.com/vapor/fluent-postgres-driver", .upToNextMajor(from: "2.9.2")),
     .package(url: "https://github.com/nerzh/swift-regular-expression.git", .upToNextMajor(from: "0.2.3")),
     .package(url: "https://github.com/nerzh/SwiftFileUtils", .upToNextMinor(from: "1.3.0")),
     .package(url: "https://github.com/orlandos-nl/IkigaJSON.git", from: "2.0.0"),
@@ -18,15 +17,15 @@ var packageDependencies: [Package.Dependency] = [
 
 var mainTarget: [Target.Dependency] = [
     .product(name: "Vapor", package: "vapor"),
-    .product(name: "PostgresBridge", package: "PostgresBridge"),
-    .product(name: "VaporBridges", package: "VaporBridges"),
-    .product(name: "Bridges", package: "Bridges"),
+    .product(name: "Fluent", package: "fluent"),
+    .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
     .product(name: "SwiftRegularExpression", package: "swift-regular-expression"),
-    .product(name: "EverscaleClientSwift", package: "everscale-client-swift"),
     .product(name: "FileUtils", package: "SwiftFileUtils"),
-    .product(name: "SwiftExtensionsPack", package: "swift-extensions-pack"),
     .product(name: "IkigaJSON", package: "IkigaJSON"),
     .product(name: "BigInt", package: "BigInt"),
+    
+    .product(name: "EverscaleClientSwift", package: "everscale-client-swift"),
+    .product(name: "SwiftExtensionsPack", package: "swift-extensions-pack"),
     .product(name: "Swiftgger", package: "Swiftgger"),
 ]
 
@@ -35,9 +34,9 @@ packageDependencies.append(.package(url: "https://github.com/nerzh/Swiftgger", b
 packageDependencies.append(.package(url: "https://github.com/nerzh/swift-extensions-pack", branch: "master"))
 packageDependencies.append(.package(url: "https://github.com/nerzh/everscale-client-swift", branch: "master"))
 #else
-packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/test/Swiftgger"))
-packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/swift-extensions-pack"))
-packageDependencies.append(.package(path: "/Users/nerzh/mydata/swift_projects/everscale-client-swift"))
+packageDependencies.append(.package(path: "/Users/nerzh/Documents/mydata/code/swift_projects/test/Swiftgger"))
+packageDependencies.append(.package(path: "/Users/nerzh/Documents/mydata/code/swift_projects/swift-extensions-pack"))
+packageDependencies.append(.package(path: "/Users/nerzh/Documents/mydata/code/swift_projects/everscale-client-swift"))
 #endif
 
 let package = Package(

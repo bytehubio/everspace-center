@@ -6,15 +6,18 @@
 //
 
 import Foundation
+import Fluent
+import FluentPostgresDriver
 import Vapor
-import PostgresBridge
 
-func migrations(_ app: Application) async throws {
-    let migrator = app.postgres.migrator(for: .default)
-
-    migrator.add(Сreate_Statistic_1.self)
-
-    try await migrator.migrate()
-//    try await migrator.revertLast()
-//    try await migrator.revertAll()
+func migrateDB(app: Application) async throws {
+    do {
+        let dbIdentifier: String = "default"
+        app.migrations.add(Сreate_Statistic_1(), to: .init(string: dbIdentifier))
+        
+        try await app.autoMigrate()
+    } catch {
+        print(String(reflecting: error))
+        throw AdvageError(error, errorLevel: .debug)
+    }
 }

@@ -6,45 +6,54 @@
 //
 
 import Foundation
-import PostgresBridge
-import Vapor
+import Fluent
+import FluentPostgresDriver
+import SwiftExtensionsPack
 
-final class Statistic: Table {
+final class Statistic: Model, @unchecked Sendable {
     
-    @Column("id")
-    var id: Int64
+    static var schema: String { "Statistic".lowercased() }
     
-    @Column("api_key")
+    @ID(custom: "id", generatedBy: .database)
+    var id: Int64?
+    
+    @Timestamp(key: "created_at", on: .create)
+    var createdAt: Date?
+    
+    @Timestamp(key: "updated_at", on: .update)
+    var updatedAt: Date?
+    
+    @Field(key: "api_key")
     var apiKey: String
     
-    @Column("network")
+    @Field(key: "network")
     var network: String
     
-    @Column("api_type")
+    @Field(key: "api_type")
     var apiType: String
     
-    @Column("method")
+    @Field(key: "method")
     var method: String
     
-    @Column("count")
+    @Field(key: "count")
     var count: Int64
     
-    @Column("created_at")
-    public var createdAt: Date
-    
-    @Column("updated_at")
-    public var updatedAt: Date
-    
-    /// See `Table`
     init() {}
     
-    init(apiKey: String, network: String, method: String, apiType: ApiType, count: Int64, updatedAt: Date) {
+    init(
+        id: Int64? = nil,
+        apiKey: String,
+        network: String,
+        method: String,
+        apiType: ApiType,
+        count: Int64
+    ) {
+        self.id = id
         self.apiKey = apiKey
         self.network = network
         self.method = method
         self.apiType = apiType.rawValue
         self.count = count
-        self.updatedAt = updatedAt
     }
     
     enum ApiType: String, Codable {
@@ -57,41 +66,45 @@ final class Statistic: Table {
 //// MARK: Queries
 extension Statistic {
     
+//    static func create(
+//        apiKey: String,
+//        network: String,
+//        method: String,
+//        apiType: ApiType,
+//        count: Int64,
+//        db: any Database
+//    ) async throws {
+//        let object: Statistic = .init(
+//            apiKey: apiKey,
+//            network: network,
+//            method: method,
+//            apiType: apiType,
+//            count: count
+//        )
+//        try await object.create(on: db)
+//    }
+    
     @discardableResult
-    static func updateOrCreate(_ apiKey: String,
-                               _ network: String,
-                               _ method: String,
-                               _ apiType: ApiType,
-                               _ count: Int64? = nil
-    ) async throws -> Statistic {
-        return try await app.postgres.transaction(to: .default) { conn in
-            var statistic: Statistic!
-            statistic = try await SwifQL.select(
-                 \Statistic.$id,
-                 \Statistic.$apiKey,
-                 \Statistic.$network,
-                 \Statistic.$method,
-                 \Statistic.$apiType,
-                 \Statistic.$count,
-                 \Statistic.$updatedAt,
-                 \Statistic.$createdAt
-            ).from(Statistic.table)
-                .where(\Statistic.$apiKey == apiKey &&
-                        \Statistic.$network == network &&
-                        \Statistic.$method == method &&
-                        \Statistic.$apiType == apiType.rawValue
-                )
-                .execute(on: conn)
-                .first(decoding: Statistic.self)
-            
-            if statistic == nil {
-                statistic = .init(apiKey: apiKey, network: network, method: method, apiType: apiType, count: 1, updatedAt: Date())
-                return try await statistic.insert(on: conn)
-            } else {
-                statistic.count += 1
-                statistic.updatedAt = Date()
-                return try await statistic.upsert(conflictColumn: \Statistic.$id, on: conn)
-            }
-        }
+    static func updateOrCreate(
+        apiKey: String,
+        network: String,
+        method: String,
+        apiType: ApiType,
+        count: Int64? = nil,
+        db: any Database
+    ) async throws {
+        let currentDate = Date()
+        let formatter = baseDateFormater()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss+00"
+        
+        var query: SQLQueryString = "INSERT INTO \(unsafeRaw: Self.schema) (api_key, network, method, apiType, count, created_at, updated_at) VALUES "
+        query.appendInterpolation(unsafeRaw: "('\(apiKey)', '\(network)', '\(method)', \(apiType.rawValue), \(count ?? 1), '\(formatter.string(from: currentDate))', '\(formatter.string(from: currentDate))')")
+        query.appendInterpolation(unsafeRaw: " ")
+        query.appendInterpolation(unsafeRaw: "ON CONFLICT (api_key, network, method, api_type) DO UPDATE SET ")
+        query.appendInterpolation(unsafeRaw: "count = statistic.count + EXCLUDED.count, ")
+        query.appendInterpolation(unsafeRaw: "updated_at = now();")
+        
+        guard let sqlDataBase = db as? SQLDatabase else { throw AdvageError("Not custing SQLDatabase") }
+        try await sqlDataBase.raw(query).run()
     }
 }
