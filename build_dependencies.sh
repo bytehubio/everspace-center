@@ -51,7 +51,7 @@ cd ./ever-sdk && git reset --hard HEAD && git pull --ff-only
 # git reset --hard 3cfcb2516aa5e64e8cb9992605838e2f90bfe789
 cargo update
 
-HEADER="$(pwd)/ton_client/tonclient.h"
+HEADER="$(pwd)/ever_client/tonclient.h"
 DYLIB="$(pwd)/target/release/libton_client.dylib"
 
 # BUILD ARCHITECTURES
@@ -204,7 +204,7 @@ else
   Cflags: -I${includedir}
   Libs: -L${libdir} -lton_client'
 
-  HEADER="$(pwd)/ton_client/tonclient.h"
+  HEADER="$(pwd)/ever_client/tonclient.h"
 
   echo ""
   if [[ -f "$HEADER" ]]; then
