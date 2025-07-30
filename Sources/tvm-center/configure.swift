@@ -10,8 +10,6 @@ import Foundation
 import Vapor
 import FileUtils
 import IkigaJSON
-import VaporBridges
-import PostgresBridge
 
 public func configure(_ app: Application) async throws {
     /// GET ENV
