@@ -77,19 +77,11 @@ final class MainController: RouteCollection {
 
             <h2 id="available-networks">Available networks</h2>
             <ul>
-        
-                <li><s><a href="\(Domain)/toncoin"><code>TON (Toncoin) JRPC API Mainnet</code></a></s></li>
-                <li><s><a href="\(Domain)/toncoin-testnet"><code>TON (Toncoin) JRPC API Testnet</code></a></s></li>
-                
                 <div class="sep-top"></div>
                 <li><a href="\(Domain)/venom"><code>VENOM JRPC API Mainnet</code></a></li>
-                <li><a href="\(Domain)/venom-testnet"><code>VENOM JRPC API Testnet</code></a></li>
-                <li><s><a href="\(Domain)/venom-devnet"><code>VENOM JRPC API Devnet</code></a></s></li>
 
                 <div class="sep-top"></div>
                 <li><a href="\(Domain)/everscale"><code>Everscale (EVER) JRPC API Mainnet</code></a></li>
-                <li><a href="\(Domain)/everscale-devnet"><code>Everscale (EVER) JRPC API Devnet</code></a></li>
-                <li><a href="\(Domain)/everscale-rfld"><code>Everscale (EVER) JRPC API RFLD Devnet</code></a></li>
                 
             </ul>
             
