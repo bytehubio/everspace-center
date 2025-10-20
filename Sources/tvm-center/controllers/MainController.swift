@@ -88,7 +88,7 @@ final class MainController: RouteCollection {
             <p>For authorization you need to get an API-KEY here <a href="https://dashboard.evercloud.dev">https://dashboard.evercloud.dev</a> and add your key to the <b>X-API-KEY</b> request headers.</p>
         
             <iframe width="650"
-                    height="795"
+                    height="400"
                     frameborder="0"
                     src="https://ever-guild.github.io/network-load/widget.html">
             </iframe>
