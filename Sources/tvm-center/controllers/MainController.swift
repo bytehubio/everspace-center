@@ -96,7 +96,7 @@ final class MainController: RouteCollection {
             <footer>
                 <br>
                 <div class="footer">
-                    <p>Made on Apple Swift with ❤️ by <a href="https://everspace.app/" target="_blank">Everspace Wallet Team</a></p>
+                    <p>Made on Apple Swift with ❤️ by <a href="https://custwallet.app/" target="_blank">Cust Wallet Team</a></p>
                     <p><a href="https://t.me/tvmcenter">Support</a> | <a href="mailto:admin@bytehub.io">E-mail</a></p>
                 </div>
             </footer>
