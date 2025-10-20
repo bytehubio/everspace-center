@@ -78,11 +78,10 @@ final class MainController: RouteCollection {
             <h2 id="available-networks">Available networks</h2>
             <ul>
                 <div class="sep-top"></div>
-                <li><a href="\(Domain)/venom"><code>VENOM JRPC API Mainnet</code></a></li>
-
-                <div class="sep-top"></div>
                 <li><a href="\(Domain)/everscale"><code>Everscale (EVER) JRPC API Mainnet</code></a></li>
-                
+        
+                <div class="sep-top"></div>
+                <li><a href="\(Domain)/venom"><code>VENOM JRPC API Mainnet</code></a></li>
             </ul>
             
             <h2 id="available-networks">Authorization</h2>
